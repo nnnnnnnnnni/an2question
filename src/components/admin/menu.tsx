@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Menu } from "antd";
 import { AppstoreOutlined, PieChartOutlined, DesktopOutlined, ContainerOutlined, MailOutlined } from "@ant-design/icons";
@@ -8,7 +8,7 @@ const { SubMenu } = Menu;
 export default () => {
   return (
     <div style={{ maxWidth: "100%" }}>
-      <div className='admin-logo'>asdasdasd</div>
+      <div className='admin-logo'>QN2QU-ADMIN</div>
       <Menu mode="inline" theme="dark">
         <Menu.Item key="1" icon={<PieChartOutlined />}>
           Option 1
