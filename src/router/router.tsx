@@ -1,10 +1,7 @@
 import React, { ReactNode } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import App from "../pages/App";
-import Page2 from "../pages/page2";
-import Page1 from "../pages/page1";
-import Error from "../pages/error404";
-
+import Admin from "../pages/admin/admin";
+import User from "../pages/user/user";
 export interface IRoute {
   path: string;
   name: string;
@@ -14,42 +11,29 @@ export interface IRoute {
 }
 const routes: IRoute[] = [
   {
-    path: "/",
-    name: "APP",
+    path: "/admin",
+    name: "ADMIN",
     exact: false,
-    component: App,
+    component: Admin,
     children: [
       {
-        path: "/page1",
-        exact: true,
-        name: 'PAGE1',
-        component: Page1
+        path: "/admin/user",
+        name: "USER",
+        exact: false,
+        component: User,
       },
-      {
-        path: "/page2",
-        exact: true,
-        name: "PAGE2",
-        component: Page2
-      },
-      {
-        path: "*",
-        name: "Error",
-        component: Error
-      }
-    ]
+    ],
   },
 ];
 
-export default function RouteConfigExample() {
+export default function ConfigRouteMap() {
   return (
     <Router>
-      <div>
-        <Switch>
-          {routes.map((route, i) => (
-            <RouteWithSubRoutes key={i} {...route} />
-          ))}
-        </Switch>
-      </div>
+      <Switch>
+        {routes.map((route, i) => (
+          <RouteWithSubRoutes key={i} {...route} />
+        ))}
+      </Switch>
     </Router>
   );
 }
@@ -58,11 +42,11 @@ export const RouteWithSubRoutes = (route: IRoute) => {
   return (
     <Route
       path={route.path}
-      exact={route.exact??false}
-      render={props => (
+      exact={route.exact ?? false}
+      render={(props) => (
         // pass the sub-routes down to keep nesting
         <route.component {...props} children={route.children} />
       )}
     />
   );
-}
+};
