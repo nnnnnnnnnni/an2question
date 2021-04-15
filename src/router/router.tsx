@@ -30,8 +30,8 @@ export default function ConfigRouteMap() {
   return (
     <Router>
       <Switch>
-        {routes.map((route, i) => (
-          <RouteWithSubRoutes key={i} {...route} />
+        {routes.map((route) => (
+          <RouteWithSubRoutes key={route.name} {...route} />
         ))}
       </Switch>
     </Router>

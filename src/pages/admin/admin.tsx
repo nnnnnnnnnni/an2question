@@ -3,6 +3,7 @@ import "./admin.css";
 import { Switch } from "react-router-dom";
 import { IRoute, RouteWithSubRoutes } from "../../router/router";
 import MenuCom from "../../components/admin/menu";
+import NavCom from "../../components/admin/nav";
 import { Layout } from "antd";
 const { Header, Content, Sider } = Layout;
 
@@ -14,11 +15,13 @@ function Admin(props: any) {
           <MenuCom />
         </Sider>
         <Layout className="site-layout" style={{ marginLeft: 200, height:'100vh' }}>
-          <Header style={{ height: 80 }}>12312312</Header>
+          <Header style={{ height: 80 }}>
+            <NavCom />
+          </Header>
           <Content style={{ padding: "20px", overflow: "initial", overflowY: "auto", maxHeight: '100%' }}>
             <Switch>
-              {props.children.map((route: IRoute, i: number) => (
-                <RouteWithSubRoutes key={i} {...route} />
+              {props.children.map((route: IRoute) => (
+                <RouteWithSubRoutes key={route.name} {...route} />
               ))}
             </Switch>
           </Content>
