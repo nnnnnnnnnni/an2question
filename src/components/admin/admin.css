@@ -1,0 +1,18 @@
+.admin-nav {
+  height: 100%;
+  color: #fff;
+  line-height: 80px;
+  display: flex;
+  justify-content: flex-end;
+}
+.admin-nav-container {
+  height: 100%;
+  display: flex;
+}
+.admin-nav-container-item {
+  padding: 0px 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

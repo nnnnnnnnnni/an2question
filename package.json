@@ -8,12 +8,14 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.5.0",
+    "@loadable/component": "^5.14.1",
     "antd": "^4.14.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@types/loadable__component": "^5.13.3",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",

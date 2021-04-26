@@ -1,7 +1,11 @@
 import React, { ReactNode } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import loadable from '@loadable/component'
 import Admin from "../pages/admin/admin";
-import User from "../pages/user/user";
+import Question from "../pages/admin/question/question";
+import QuestionDetail from "../pages/admin/question/question_detail";
+import QuestionAdd from "../pages/admin/question/question_add";
+import User from "../pages/admin/user";
 export interface IRoute {
   path: string;
   name: string;
@@ -17,10 +21,28 @@ const routes: IRoute[] = [
     component: Admin,
     children: [
       {
+        path: "/admin/question",
+        name: "QUESTION",
+        exact: true,
+        component:  loadable(() => import ('../pages/admin/question/question')),
+      },
+      {
+        path: "/admin/question/add",
+        name: "QUESTION_ADD",
+        exact: true,
+        component: loadable(() => import ('../pages/admin/question/question_add')),
+      },
+      {
+        path: "/admin/question/:id",
+        name: "QUESTION_DETAIL",
+        exact: false,
+        component: loadable(() => import ('../pages/admin/question/question_detail')),
+      },
+      {
         path: "/admin/user",
         name: "USER",
-        exact: false,
-        component: User,
+        exact: true,
+        component: loadable(() => import ('../pages/admin/user')),
       },
     ],
   },

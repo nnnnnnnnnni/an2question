@@ -1,15 +1,8 @@
 import React from "react";
-
 import { Menu } from "antd";
 import { AreaChartOutlined, UsergroupDeleteOutlined, TableOutlined, ContainerOutlined, BarsOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 const { SubMenu } = Menu;
-export interface MenuInfo {
-  key: React.Key;
-  keyPath: React.Key[];
-  item: React.ReactInstance;
-  domEvent: React.MouseEvent<HTMLElement>;
-}
 
 export default () => {
   return (
@@ -17,7 +10,7 @@ export default () => {
       <div className="admin-logo">QN2QU-ADMIN</div>
       <Menu mode="inline" theme="dark">
         <Menu.Item key="ADMIN_QUESTION" icon={<BarsOutlined />}>
-          <Link to="/admin/question">题目库管理</Link>
+          <Link to="/admin/question">题目管理</Link>
         </Menu.Item>
         <Menu.Item key="ADMIN_PAPER" icon={<ContainerOutlined />}>
           <Link to="/admin/paper">套题管理</Link>
