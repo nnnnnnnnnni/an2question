@@ -1,11 +1,13 @@
 import React from "react";
 import { Table, Tag, Space, Button } from "antd";
 import { DeleteOutlined, EditOutlined, EllipsisOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router";
 
 // 问题页面列表
 export default function () {
+  const history = useHistory();
   const jumpClick = (reacd: any) => {
-    console.log(reacd)
+    history.push(`/admin/question/${reacd.key}`)
   };
   const columns = [
     {
