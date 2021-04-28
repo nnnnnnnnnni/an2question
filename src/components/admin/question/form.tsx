@@ -2,7 +2,6 @@ import React from "react";
 import { Form, FormProps, Input, Select, Button } from "antd";
 import { SearchOutlined, PlusOutlined, UndoOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router";
-import { SelectValue } from "antd/lib/tree-select";
 import * as _ from "lodash";
 const { Option } = Select;
 
