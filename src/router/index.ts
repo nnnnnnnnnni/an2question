@@ -54,6 +54,31 @@ const router = createRouter({
           component: () => import("@/pages/admin/competition/competition_detail.vue"),
         },
         {
+          path: "user/auth",
+          name: "ADMIN_USER_AUTH",
+          component: () => import("@/pages/admin/user/auth.vue"),
+        },
+        {
+          path: "user/manager",
+          name: "ADMIN_USER_MANAGER",
+          component: () => import("@/pages/admin/user/manager.vue"),
+        },
+        {
+          path: "statistics/question",
+          name: "ADMIN_STATISTICS_QUESTION",
+          component: () => import("@/pages/admin/statistics/question.vue"),
+        },
+        {
+          path: "statistics/add",
+          name: "ADMIN_STATISTICS_COMPETITION",
+          component: () => import("@/pages/admin/statistics/competition.vue"),
+        },
+        {
+          path: "statistics/:id",
+          name: "ADMIN_STATISTICS_TESTPAPER",
+          component: () => import("@/pages/admin/statistics/testpaper.vue"),
+        },
+        {
           path: "setting",
           name: "ADMIN_SETTING",
           component: () => import("@/pages/admin/setting/setting.vue"),

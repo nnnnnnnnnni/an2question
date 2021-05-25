@@ -46,7 +46,7 @@
         </a-menu-item>
         <a-menu-item key="ADMIN_CHART_PAPER">
           <span>套题统计</span>
-          <router-link to="/admin/statistics/paper">套题统计</router-link>
+          <router-link to="/admin/statistics/testpaper">套题统计</router-link>
         </a-menu-item>
         <a-menu-item key="ADMIN_CHART_COMPETITION">
           <span>竞赛统计</span>

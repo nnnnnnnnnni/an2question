@@ -58,7 +58,7 @@ export default defineComponent({
       router.push({ name: "ADMIN_QUESTION_ADD" });
     };
     const reset = () => {
-      console.log(formState);
+      resetFields();
     };
     const search = () => {
       console.log(toRaw(formState));
