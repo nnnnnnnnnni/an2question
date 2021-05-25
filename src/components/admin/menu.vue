@@ -64,7 +64,8 @@
 
 <script lang="ts">
 import { BarsOutlined, SettingOutlined, ContainerOutlined, TableOutlined, UsergroupDeleteOutlined, AreaChartOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted, toRaw } from "vue";
+import { useRoute } from "vue-router";
 export default defineComponent({
   components: {
     BarsOutlined,
@@ -75,7 +76,7 @@ export default defineComponent({
     AreaChartOutlined,
   },
   setup() {
-    const selectedKeys = ref<string[]>(["ADMIN_SETTING"]);
+    const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
     return { selectedKeys };
   },
 });
