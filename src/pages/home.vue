@@ -1,6 +1,11 @@
 <template>
   <div class="home">
-    home page1,{{ count }}, <a-button @click="count++">123</a-button>
+    优学
+    <div>
+      <a-button type="primary">
+        <router-link to="/admin">管理端</router-link>
+      </a-button>
+    </div>
   </div>
 </template>
 
@@ -8,9 +13,9 @@
 import { defineComponent, ref } from "vue";
 
 export default defineComponent({
-  setup() {
+  setup(props) {
     const count = ref(0);
-    return count;
+    return { count };
   },
 });
 </script>
