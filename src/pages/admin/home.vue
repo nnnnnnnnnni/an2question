@@ -36,6 +36,7 @@ export default defineComponent({
   overflow-x: hidden;
   overflow-y: auto;
   height: calc(100vh - 64px);
+  min-width: 900px;
 }
 .content-view {
   background-color: #fff;

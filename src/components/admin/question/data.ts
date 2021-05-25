@@ -1,5 +1,5 @@
 export interface IFormState {
-  name?: string;
+  title?: string;
   type?: number;
   level?: number;
   status?: number;

@@ -2,7 +2,7 @@
   <div class="search_form">
     <a-form layout="inline">
       <a-form-item>
-        <a-input v-model:value="formState.name" placeholder="标题" style="width: 150px" />
+        <a-input v-model:value="formState.title" placeholder="标题" style="width: 150px" />
       </a-form-item>
       <a-form-item>
         <a-select v-model:value="formState.level" placeholder="题目难度" allowClear style="width: 150px">
@@ -45,7 +45,7 @@ import router from "../../../router";
 export default defineComponent({
   setup() {
     const formState: UnwrapRef<IFormState> = reactive({
-      name: undefined,
+      title: undefined,
       type: undefined,
       level: undefined,
       status: undefined,
