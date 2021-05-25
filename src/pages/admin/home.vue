@@ -5,7 +5,7 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="header">
-        <Nav />
+        <Navbar />
       </a-layout-header>
       <a-layout-content class="content">
         <router-view class="content-view" />
@@ -15,12 +15,12 @@
 </template>
 <script lang="ts">
 import Menu from "@/components/admin/menu.vue";
-import Nav from "@/components/admin/nav.vue";
+import Navbar from "@/components/admin/nav.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
   components: {
     Menu,
-    Nav,
+    Navbar,
   },
   setup() {},
 });
@@ -40,5 +40,7 @@ export default defineComponent({
 .content-view {
   background-color: #fff;
   box-shadow: 0px, 5px 12px 4px rgba(0, 0, 0, 0.09);
+  box-sizing: border-box;
+  padding: 20px;
 }
 </style>

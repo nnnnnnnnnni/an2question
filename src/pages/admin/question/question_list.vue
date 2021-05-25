@@ -1,36 +1,19 @@
 <template>
   <div class='question_list'>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
-    <div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div><div>question_list</div>
+    <div class="form">
+      <SearchForm />
+    </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { defineComponent } from 'vue';
+import SearchForm from '@/components/admin/question/search_form.vue'
 export default defineComponent({
-  setup() {} 
+  setup() {},
+  components: {
+    SearchForm
+  }
 });
 </script>
 
