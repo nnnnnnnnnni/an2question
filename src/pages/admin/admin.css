@@ -23,8 +23,6 @@
 .admin-list {
   width: 100%;
   flex: 1;
-  height: calc(100% - 70px);
-  overflow-y: auto;
 }
 .admin-center {
   display: flex;

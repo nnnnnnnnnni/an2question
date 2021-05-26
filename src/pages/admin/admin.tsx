@@ -22,7 +22,7 @@ function Admin(props: any) {
           <Header style={{ height: 80 }}>
             <NavCom />
           </Header>
-          <Content style={{ padding: "0px 20px 20px", overflow: "initial", overflowY: "hidden", maxHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+          <Content style={{ margin: "20px", padding: '10px', overflow: "initial", overflowY: "auto", maxHeight: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#fff' }}>
             <Switch>
               {props.children.map((route: IRoute) => (
                 <RouteWithSubRoutes key={route.name} {...route} />

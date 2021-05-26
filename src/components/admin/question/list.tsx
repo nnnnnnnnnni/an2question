@@ -7,7 +7,7 @@ import { useHistory } from "react-router";
 export default function () {
   const history = useHistory();
   const jumpClick = (reacd: any) => {
-    history.push(`/admin/question/${reacd.key}`)
+    history.push(`/admin/question/${reacd.key}`);
   };
   const columns = [
     {
@@ -65,6 +65,11 @@ export default function () {
       },
     },
     {
+      title: "分数",
+      dataIndex: "score",
+      key: "score"
+    },
+    {
       title: "操作",
       key: "action",
       render: (text: any, record: any) => (
@@ -91,6 +96,7 @@ export default function () {
       level: 0,
       difficulty: 0,
       status: 2,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -99,6 +105,7 @@ export default function () {
       level: 1,
       difficulty: 1,
       status: 3,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -107,6 +114,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 0,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -115,6 +123,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 1,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -123,6 +132,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 2,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -131,6 +141,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 1,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -139,6 +150,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 1,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -147,6 +159,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 1,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -155,6 +168,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 3,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -163,6 +177,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 1,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
     {
@@ -171,6 +186,7 @@ export default function () {
       level: 2,
       difficulty: 2,
       status: 3,
+      score: 10,
       createAt: "2021-1-1 0:0:1",
     },
   ];

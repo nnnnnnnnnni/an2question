@@ -18,17 +18,22 @@ export default () => {
         <Menu.Item key="ADMIN_COMPETITION" icon={<TableOutlined />}>
           <Link to="/admin/competition">竞赛管理</Link>
         </Menu.Item>
-        <Menu.Item key="ADMIN_USER" icon={<UsergroupDeleteOutlined />}>
-          <Link to="/admin/user">人员管理</Link>
-        </Menu.Item>
-        <SubMenu key="CHART" icon={<AreaChartOutlined />} title="统计">
-          <Menu.Item key="CHART_QUESTION">
+        <SubMenu key="USER" icon={<AreaChartOutlined />} title="人员管理">
+          <Menu.Item key="ADMIN_USER_AUTH" icon={<UsergroupDeleteOutlined />}>
+            <Link to="/admin/user/auth">权限管理</Link>
+          </Menu.Item>
+          <Menu.Item key="ADMIN_USER_MANAGER" icon={<UsergroupDeleteOutlined />}>
+            <Link to="/admin/user/manager">人员管理</Link>
+          </Menu.Item>
+        </SubMenu>
+        <SubMenu key="STATUSTICS" icon={<AreaChartOutlined />} title="统计">
+          <Menu.Item key="STATUSTICS_QUESTION">
             <Link to="/admin/statistics/question">题目统计</Link>
           </Menu.Item>
-          <Menu.Item key="CHART_PAPER">
+          <Menu.Item key="STATUSTICS_PAPER">
             <Link to="/admin/statistics/paper">套题统计</Link>
           </Menu.Item>
-          <Menu.Item key="CHART_COMPETITION">
+          <Menu.Item key="STATUSTICS_COMPETITION">
             <Link to="/admin/statistics/competition">竞赛统计</Link>
           </Menu.Item>
         </SubMenu>

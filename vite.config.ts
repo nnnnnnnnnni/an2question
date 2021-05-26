@@ -4,6 +4,9 @@ import vitePluginImp from "vite-plugin-imp";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: 4000
+  },
   plugins: [reactRefresh(), vitePluginImp({
     libList: [
       {
