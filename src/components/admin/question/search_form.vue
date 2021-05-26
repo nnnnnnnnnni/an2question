@@ -20,17 +20,17 @@
         </a-select>
       </a-form-item>
       <a-form-item>
-        <a-button-group>
+        <a-space>
           <a-button type="primary" @click="search">
-            <template #icon> <SearchOutlined /> </template>
+            <template #icon> <SearchOutlined /></template>搜索
           </a-button>
           <a-button type="primary" @click="reset">
-            <template #icon> <UndoOutlined /> </template>
+            <template #icon> <UndoOutlined /></template>清空
           </a-button>
           <a-button type="primary" @click="add">
-            <template #icon> <PlusOutlined /> </template>
+            <template #icon> <PlusOutlined /></template>添加
           </a-button>
-        </a-button-group>
+        </a-space>
       </a-form-item>
     </a-form>
   </div>

@@ -1,5 +1,10 @@
 <template>
   <a-table :columns="columns" rowKey="_id" :data-source="data">
+    <template #type="{ text }">
+      <span>
+        <a-tag :color='getTypeTag(text).color'>{{getTypeTag(text).label}}</a-tag>
+      </span>
+    </template>
     <template #level="{ text }">
       <span>
         <a-tag :color='getLevelTag(text).color'>{{getLevelTag(text).label}}</a-tag>
@@ -31,11 +36,11 @@
 import { EllipsisOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { defineComponent } from "vue";
 import router from "../../../router";
-import { columns, IData, getLevelTag, getStatusTag } from "./data";
+import { columns, IQuestion, getLevelTag, getStatusTag, getTypeTag } from "./data";
 const data = [
   {
     _id: "1",
-    name: "测试题目1",
+    title: "测试题目1",
     type: 1,
     status: 1,
     level: 1,
@@ -43,7 +48,7 @@ const data = [
   },
   {
     _id: "2",
-    name: "测试题目2",
+    title: "测试题目2",
     type: 2,
     status: 2,
     level: 2,
@@ -51,7 +56,7 @@ const data = [
   },
   {
     _id: "3",
-    name: "测试题目3",
+    title: "测试题目3",
     type: 3,
     status: 3,
     level: 3,
@@ -59,7 +64,7 @@ const data = [
   },
   {
     _id: "4",
-    name: "测试题目4",
+    title: "测试题目4",
     type: 4,
     status: 4,
     level: 3,
@@ -69,13 +74,14 @@ const data = [
 
 export default defineComponent({
   setup() {
-    const detail = (reacrd: IData) => {
+    const detail = (reacrd: IQuestion) => {
       router.push({ name: "ADMIN_QUESTION_DETAIL", params: { id: reacrd._id } });
     };
-    const del = (reacrd: IData) => {};
+    const del = (reacrd: IQuestion) => {};
     return {
       data,
       getLevelTag,
+      getTypeTag,
       getStatusTag,
       columns,
       detail,

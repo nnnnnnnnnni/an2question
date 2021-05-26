@@ -5,13 +5,20 @@ export interface IFormState {
   status?: number;
 }
 
-export interface IData {
-  _id: string;
-  name: string;
-  type: number;
-  status: number;
-  level: number;
+export interface IQuestion extends IFormState {
+  _id?: string;
   score: number;
+  answerTime: number;
+  options: {
+    isSpace: boolean;
+    isCase: boolean;
+    isKeywords: boolean;
+  };
+  answer: string;
+  examples: {
+    input: string;
+    output: string;
+  }[];
 }
 
 export interface ISelectOptions {
@@ -21,80 +28,90 @@ export interface ISelectOptions {
 }
 
 export const level: ISelectOptions[] = [
-  { label: "初级", key: 1, color: '#52c41a' },
-  { label: "中级", key: 2, color: '#faad14' },
-  { label: "高级", key: 3, color: '#f5222d' },
+  { label: "初级", key: 1, color: "#52c41a" },
+  { label: "中级", key: 2, color: "#faad14" },
+  { label: "高级", key: 3, color: "#f5222d" },
 ];
 
 export const type: ISelectOptions[] = [
-  { label: "选择题", key: 1 },
-  { label: "多选题", key: 2 },
-  { label: "填空题", key: 3 },
-  { label: "代码题", key: 4 },
+  { label: "选择题", key: 1, color: "success" },
+  { label: "多选题", key: 2, color: "processing" },
+  { label: "填空题", key: 3, color: "error" },
+  { label: "代码题", key: 4, color: "warning" },
 ];
 
 export const status: ISelectOptions[] = [
-  { label: "未发布", key: 1, color: '#bfbfbf' },
-  { label: "已发布", key: 2, color: '#52c41a' },
-  { label: "未使用", key: 3, color: '#1890ff' },
-  { label: "已使用", key: 4, color: '#faad14' },
+  { label: "未发布", key: 1, color: "#bfbfbf" },
+  { label: "已发布", key: 2, color: "#52c41a" },
+  { label: "未使用", key: 3, color: "#1890ff" },
+  { label: "已使用", key: 4, color: "#faad14" },
 ];
 
-export const getLevelTag = (key: number): ISelectOptions => {
-  for(let i=0;i< level.length; i++) {
-    if(level[i].key == key) {
-      return (level[i])
+export const getTypeTag = (key: number): ISelectOptions => {
+  for (let i = 0; i < type.length; i++) {
+    if (type[i].key == key) {
+      return type[i];
     }
   }
-  return {label: "未知", key: 1}
-}
+  return { label: "未知", key: 1 };
+};
+
+export const getLevelTag = (key: number): ISelectOptions => {
+  for (let i = 0; i < level.length; i++) {
+    if (level[i].key == key) {
+      return level[i];
+    }
+  }
+  return { label: "未知", key: 1 };
+};
 
 export const getStatusTag = (key: number): ISelectOptions => {
-  for(let i=0;i< status.length; i++) {
-    if(status[i].key == key) {
-      return (status[i])
+  for (let i = 0; i < status.length; i++) {
+    if (status[i].key == key) {
+      return status[i];
     }
   }
-  return {label: "未知", key: 1}
-}
+  return { label: "未知", key: 1 };
+};
 
 export const columns = [
   {
-    dataIndex: "name",
+    dataIndex: "title",
     title: "标题",
-    key: "name",
-    align: 'left'
+    key: "title",
+    align: "left",
   },
   {
     title: "题型",
     dataIndex: "type",
     key: "type",
-    align: 'center'
+    slots: { customRender: "type" },
+    align: "center",
   },
   {
     title: "等级",
     dataIndex: "level",
     key: "level",
-    slots: { title: 'customTitle', customRender: 'level' },
-    align: 'center'
+    slots: { customRender: "level" },
+    align: "center",
   },
   {
     title: "状态",
     key: "status",
     dataIndex: "status",
-    slots: { title: 'customTitle', customRender: 'status' },
-    align: 'center'
+    slots: { customRender: "status" },
+    align: "center",
   },
   {
     title: "分数",
     key: "score",
     dataIndex: "score",
-    align: 'center'
+    align: "center",
   },
   {
     title: "其他",
     key: "action",
     slots: { customRender: "action" },
-    align: 'center'
+    align: "center",
   },
 ];
