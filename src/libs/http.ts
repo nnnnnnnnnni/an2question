@@ -4,18 +4,19 @@ import router from "../router";
 
 axios.interceptors.response.use(
   async (response) => {
-    const code = response.data.code;
-    if (code == 200) {
+    if (response.status == 200) {
       return Promise.resolve(response.data);
-    } else if (code == 403 || code == 401) {
+    } else if (response.status == 400) {
+      return message.warn(response.data.message);
+    } else if (response.status == 403) {
       message.warn(response.data.message);
-      router.push({ name: "login" });
-    } else if (response.status == 404 || code == 404) {
-      message.warn("NOT FOUND");
-      return Promise.resolve(response.data);
-    } else {
-      message.error(response.data.msg);
-      return Promise.resolve(response.data);
+      return router.push({ name: "login" });
+    } else if (response.status == 404) {
+      return message.error("not found");
+    } else if (response.status == 405) {
+      return message.error("method not allow");
+    } else if (response.status == 429) {
+      return message.error("接口请求频繁");
     }
   },
   (error) => {
@@ -23,7 +24,10 @@ axios.interceptors.response.use(
   }
 );
 
-const baseURL = 'http://localhost:8081'
+const baseURL =
+  import.meta.env.VITE_ENV == "dev"
+    ? "http://localhost:8081"
+    : "http://localhost:8081";
 
 interface IData {
   [key: string]: any;
@@ -39,13 +43,13 @@ export default {
         data: data,
         timeout: 10000,
         headers: {
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       })
-        .then(response => {
+        .then((response) => {
           reslove(response);
         })
-        .catch(err => {
+        .catch((err) => {
           reject(err);
         });
     });
@@ -59,13 +63,13 @@ export default {
         params, // get 请求时带的参数
         timeout: 10000,
         headers: {
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       })
-        .then(response => {
+        .then((response) => {
           reslove(response);
         })
-        .catch(err => {
+        .catch((err) => {
           reject(err);
         });
     });
@@ -79,13 +83,13 @@ export default {
         data: data,
         timeout: 10000,
         headers: {
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       })
-        .then(response => {
+        .then((response) => {
           reslove(response);
         })
-        .catch(err => {
+        .catch((err) => {
           reject(err);
         });
     });
@@ -99,15 +103,15 @@ export default {
         data: data,
         timeout: 10000,
         headers: {
-          Authorization: localStorage.getItem("token")
-        }
+          Authorization: localStorage.getItem("token"),
+        },
       })
-        .then(response => {
+        .then((response) => {
           reslove(response);
         })
-        .catch(err => {
+        .catch((err) => {
           reject(err);
         });
     });
-  }
+  },
 };
