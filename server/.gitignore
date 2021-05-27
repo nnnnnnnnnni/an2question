@@ -1,0 +1,9 @@
+.vscode/
+node_modules/
+dist/
+backend/config.ts
+.idea
+_*.ts
+logs/APP*
+logs/MONGO*
+logs/REDIS*
