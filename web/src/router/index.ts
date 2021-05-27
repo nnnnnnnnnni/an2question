@@ -152,8 +152,9 @@ router.beforeEach((to, from, next) => {
     name: to.name,
     path: to.path
   })
-  if(store.state.user == null && to.meta.needLogin) {
-    return router.replace({name: 'LOGIN'})
+  if(store.state.user == null && to.meta.needLogin && to.name != 'ADMIN_HOME') {
+    router.push({name: 'LOGIN', query: {from: encodeURIComponent(to.path)}})
+    return next();
   }
   next();
 })

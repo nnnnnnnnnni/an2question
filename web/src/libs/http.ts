@@ -11,14 +11,10 @@ export interface IResponse extends AxiosResponse {
 
 axios.interceptors.response.use(
   async (response) => {
-    console.log(response)
     if (response.status == 200) {
       return Promise.resolve(response.data);
     } else if (response.status == 400) {
       return message.warn(response.data.message);
-    } else if (response.status == 403) {
-      message.warn(response.data.message);
-      return router.push({ name: "login" });
     } else if (response.status == 404) {
       return message.error("Not Fund");
     } else if (response.status == 405) {
@@ -28,11 +24,16 @@ axios.interceptors.response.use(
     }
   },
   (error) => {
-    return Promise.resolve(error.response);
+    if (error.response.status == 403) {
+      message.warn(error.response.data.message);
+      return router.push({ name: "LOGIN" });
+    }
+    return message.error("服务器错误");
   }
 );
 
-const baseURL = import.meta.env.VITE_ENV == "dev" ? "/api" : "http://localhost:3001";
+const baseURL =
+  import.meta.env.VITE_ENV == "dev" ? "/api" : "http://localhost:3001";
 
 interface IData {
   [key: string]: any;

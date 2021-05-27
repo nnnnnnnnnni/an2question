@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="container">
       <div class="container-item">
-        <a-avatar shape="circle" size="large" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+        <a-avatar shape="circle" size="large" :src="store.state?.user?.avator">{{store.state?.user?.name}}</a-avatar>
       </div>
       <div class="container-item">
         <MessageOutlined style="font-size: 20px"/>
@@ -12,17 +12,16 @@
 </template>
 
 <script lang="ts">
-import img from "@/assets/logo.png";
 import { MessageOutlined } from "@ant-design/icons-vue";
 import { defineComponent } from "vue";
+import store from '../../vuex/index'
 export default defineComponent({
-  data() {
-    return {
-      img: img,
-    };
-  },
   components: { MessageOutlined },
-  setup() {},
+  setup() {
+    return {
+      store
+    }
+  },
 });
 </script>
 

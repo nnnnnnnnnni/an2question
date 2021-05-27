@@ -46,6 +46,7 @@ import { message } from "ant-design-vue";
 import { IUser } from "./interface";
 import router from "../router";
 import store from "../vuex";
+import { useRoute, useRouter } from "vue-router";
 export default defineComponent({
   setup() {
     const activeTab = ref<number>(1);
@@ -59,12 +60,18 @@ export default defineComponent({
         if (formState.email && formState.password) {
           if (isEmail(formState.email)) {
             http
-              .post("/register", {
+              .post("/login", {
                 email: formState.email,
                 password: formState.password,
               })
               .then((res) => {
-                console.log(res);
+                if(res.code == 1) {
+                  message.success("登录成功");
+                  store.commit('setUser', res.data)
+                  router.push({ name: 'ADMIN_HOME' });
+                } else {
+                  return message.error(res.message);
+                }
               });
           } else {
             message.error("邮箱格式错误");
@@ -91,11 +98,9 @@ export default defineComponent({
                 if (res.code == 1) {
                   message.success("注册成功");
                   store.commit('setUser', res.data)
-                  setTimeout(() => {
-                    router.push({ name: "LOGIN" });
-                  }, 2000);
+                  router.push({ name: 'ADMIN_HOME' });
                 } else {
-                  return message.error(res.message);
+                  return message.error(res?.message);
                 }
               });
           } else {

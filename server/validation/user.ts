@@ -1,11 +1,17 @@
-import { IValidation } from "interface/validation";
 import Joi from "joi";
 
-export const userValidation: {[key: string]: IValidation} = {
+export const userValidation = {
   login: {
     body: {
-      email: Joi.string().required(),
-      password: Joi.string().required()
-    }
-  }
-}
+      email: Joi.string(),
+      password: Joi.string(),
+    },
+  },
+  register: {
+    body: {
+      email: Joi.string(),
+      password: Joi.string(),
+      phone: Joi.string(),
+    },
+  },
+};

@@ -12,7 +12,6 @@ import redis from "ioredis";
 import Logger from "./logs";
 import koaSession from "koa-session";
 import { Redis } from "ioredis";
-import Utils from "./lib/utils";
 const allRouter = new CRouter();
 const koaRouter = new Router<any, Context>();
 
@@ -119,9 +118,8 @@ export default class App {
   }
 
   private errorHandler() {
-    this.app.on("error", (err: Error, ctx: Context) => {
+    this.app.on("error", (err: Error) => {
       Logger.log("APP", err.stack, "error");
-      return ctx.response.body = Utils.generateResponse(0, '服务器错误')
     });
   }
 

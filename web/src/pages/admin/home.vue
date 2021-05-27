@@ -16,11 +16,20 @@
 <script lang="ts">
 import Menu from "@/components/admin/menu.vue";
 import Navbar from "@/components/admin/nav.vue";
-import { defineComponent } from "vue";
+import { defineComponent, onBeforeMount } from "vue";
+import http from "../../libs/http";
+import store from "../../vuex";
 export default defineComponent({
   components: {
     Menu,
     Navbar,
+  },
+  created() {
+    http.get("/profile", {}).then((res) => {
+      if (res.code == 1) {
+        store.commit("setUser", res.data);
+      }
+    });
   },
   setup() {},
 });

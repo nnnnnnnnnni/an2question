@@ -18,6 +18,9 @@ export const store = createStore<State>({
   },
   mutations: {
     setUser(state, user: IUser) {
+      if(import.meta.env.VITE_ENV == 'dev') {
+        user.avator = '/api' + user.avator;
+      }
       state.user = user;
     },
     setRoute(state, route) {
