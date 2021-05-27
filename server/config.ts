@@ -8,17 +8,18 @@ export const config: IConfig = {
   mongo: {
     host: '127.0.0.1',
     port: 27017,
-    name: 'koaTemplateDB'
+    name: 'ys'
   },
   redis: {
     host: '127.0.0.1',
     port: 6379,
     pass: '',
   },
-  jwt: {
-    name: 'KOA-TEMPLATE-TOKEN',
+  jwtOrSession: {
+    name: 'ys-sid',
     alg: 'sha256',
-    secret: 'KOA_TEMPLATE_SECRET',
-    time: 1000 * 60 * 60 * 12
+    secret: 'YS_COOKIE_SECRET',
+    time: 1000 * 60 * 60 * 12,
+    authFunc: 'cookie',
   }
 }

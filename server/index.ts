@@ -10,16 +10,17 @@ import Router from "koa-router";
 import mongoose from "mongoose";
 import redis from "ioredis";
 import Logger from "./logs";
+import koaSession from "koa-session";
 import { Redis } from "ioredis";
 const allRouter = new CRouter();
 const koaRouter = new Router<any, Context>();
 
 export default class App {
-  public app: Koa<{}, Context>;
+  public app: Koa;
   public redisClient: Redis;
   private config: IConfig;
   constructor(config: IConfig) {
-    this.app = new Koa<{}, Context>();
+    this.app = new Koa();
     this.config = config;
     if (this.config.redis) {
       this.redisClient = this.redisConnect();
@@ -47,6 +48,22 @@ export default class App {
     this.app.use(koaStaic(this.config.localStatic));
     // 注册跨域
     this.app.use(cors());
+    // 注册 session认证
+    this.app.use(
+      koaSession(
+        {
+          key: this.config.jwtOrSession.name,
+          maxAge: this.config.jwtOrSession.time,
+          overwrite: true,
+          httpOnly: true,
+          signed: false,
+          rolling: false,
+          renew: false,
+          // secure: true,
+        },
+        this.app
+      )
+    );
   }
 
   private initializeRoutes(routes: IRoute[]) {
@@ -92,7 +109,7 @@ export default class App {
     });
     redisConnect.monitor().then((monitor) => {
       monitor.on("monitor", (_time, args, source, database) => {
-        Logger.log('REDIS', `${source} ${args} ${database}`, 'info', false, true)
+        Logger.log("REDIS", `${source} ${args} ${database}`, "info", false, true);
       });
     });
     return redisConnect;
