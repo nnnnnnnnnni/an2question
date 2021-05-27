@@ -5,6 +5,7 @@ const Response = Utils.generateResponse;
 import crypto from "crypto";
 import userModel from "../../mongo/userSchema";
 import jwt from "../../lib/jwt";
+import { config } from "../../config";
 
 export default async (ctx: Context) => {
   const { email, phone, password } = ctx.request.body;
@@ -14,19 +15,23 @@ export default async (ctx: Context) => {
   const secret = Utils.randomString();
   const registerUser: IUser = {
     secret: secret,
-    avator: '/default_avator.png',
-    password: crypto
-      .createHmac("sha512", password)
-      .update(secret)
-      .digest("hex"),
+    avator: "/default_avator.png",
+    password: crypto.createHmac("sha512", password).update(secret).digest("hex"),
   };
   if (email && Utils.isEmail(email)) {
     registerUser.email = email;
   } else if (phone && Utils.isPhone(phone)) {
     registerUser.phone = phone;
+  } else {
+    return ctx.body = Response(0, '注册失败: 缺少必要参数');
   }
   await userModel.create(registerUser);
   delete registerUser.password;
-  const token = jwt.generate(registerUser as any);
-  return (ctx.body = Response(1, "注册成功", { token: token }));
+  delete registerUser.secret;
+  if (config.jwtOrSession.authFunc == "jwt") {
+    const token = jwt.generate(registerUser as any);
+    return (ctx.body = Response(1, "注册成功", { token: token }));
+  } else {
+    return (ctx.body = Response(1, "注册成功", registerUser));
+  }
 };

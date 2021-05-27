@@ -9,7 +9,7 @@
       <div class="container-item2" :style="{ left: activeTab == 2 ? '0px' : '-360px' }">
         <div class="container-phone">
           <div class="container-item">
-            <input type="text" placeholder="请输入手机号" />
+            <input type="text" v-model="formState.phone" placeholder="请输入手机号" />
           </div>
           <div class="container-item">
             <div class="code">
@@ -20,10 +20,10 @@
         </div>
         <div class="container-mail">
           <div class="container-item">
-            <input type="text" placeholder="请输入邮箱" />
+            <input type="text" v-model="formState.email" placeholder="请输入邮箱" />
           </div>
           <div class="container-item">
-            <input type="password" placeholder="请输入密码" />
+            <input type="password" v-model="formState.password" placeholder="请输入密码" />
           </div>
         </div>
       </div>
@@ -38,19 +38,78 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, UnwrapRef } from "vue";
 import { MailOutlined, PhoneOutlined, QuestionCircleOutlined } from "@ant-design/icons-vue";
+import http from "../libs/http";
+import { isEmail } from "../libs/utils";
+import { message } from "ant-design-vue";
+import { IUser } from "./interface";
+import router from "../router";
+import store from "../vuex";
 export default defineComponent({
   setup() {
     const activeTab = ref<number>(1);
     const changeTab = (tab: number) => {
       activeTab.value = tab;
     };
-    const formState = reactive({});
+
+    const formState: UnwrapRef<IUser> = reactive({});
     const login = () => {
-      console.log(activeTab.value);
+      if (activeTab.value == 1) {
+        if (formState.email && formState.password) {
+          if (isEmail(formState.email)) {
+            http
+              .post("/register", {
+                email: formState.email,
+                password: formState.password,
+              })
+              .then((res) => {
+                console.log(res);
+              });
+          } else {
+            message.error("邮箱格式错误");
+          }
+        } else {
+          message.error("信息填写错误");
+        }
+      } else if (activeTab.value == 2) {
+        message.warning("暂未开通手机号注册功能");
+      } else {
+        message.warning("暂未开通手机号注册功能");
+      }
     };
-    const register = () => {};
+    const register = () => {
+      if (activeTab.value == 1) {
+        if (formState.email && formState.password) {
+          if (isEmail(formState.email)) {
+            http
+              .post("/register", {
+                email: formState.email,
+                password: formState.password,
+              })
+              .then((res) => {
+                if (res.code == 1) {
+                  message.success("注册成功");
+                  store.commit('setUser', res.data)
+                  setTimeout(() => {
+                    router.push({ name: "LOGIN" });
+                  }, 2000);
+                } else {
+                  return message.error(res.message);
+                }
+              });
+          } else {
+            message.error("邮箱格式错误");
+          }
+        } else {
+          message.error("信息填写错误");
+        }
+      } else if (activeTab.value == 2) {
+        message.warning("暂未开通手机号注册功能");
+      } else {
+        message.warning("暂未开通手机号注册功能");
+      }
+    };
     return {
       changeTab,
       activeTab,

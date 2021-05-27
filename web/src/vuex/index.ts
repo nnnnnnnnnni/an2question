@@ -2,7 +2,7 @@ import { createStore } from "vuex";
 import { IUser } from "../pages/interface";
 
 export interface State {
-  user: IUser;
+  user: IUser | null;
   route?: {
     name?: string,
     path?: string
@@ -12,7 +12,7 @@ export interface State {
 export const store = createStore<State>({
   state() {
     return {
-      user: {},
+      user: null,
       route: {},
     };
   },

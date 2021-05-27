@@ -152,6 +152,9 @@ router.beforeEach((to, from, next) => {
     name: to.name,
     path: to.path
   })
+  if(store.state.user == null && to.meta.needLogin) {
+    return router.replace({name: 'LOGIN'})
+  }
   next();
 })
 

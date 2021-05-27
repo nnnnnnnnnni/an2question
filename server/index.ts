@@ -12,6 +12,7 @@ import redis from "ioredis";
 import Logger from "./logs";
 import koaSession from "koa-session";
 import { Redis } from "ioredis";
+import Utils from "./lib/utils";
 const allRouter = new CRouter();
 const koaRouter = new Router<any, Context>();
 
@@ -25,10 +26,10 @@ export default class App {
     if (this.config.redis) {
       this.redisClient = this.redisConnect();
     }
+    this.errorHandler();
     this.dbConnect();
     this.initializeMiddlewares();
     this.initializeRoutes(allRouter.getAllRoutes());
-    this.errorHandler();
   }
 
   private initializeMiddlewares() {
@@ -47,7 +48,9 @@ export default class App {
     // 注册静态文件地址
     this.app.use(koaStaic(this.config.localStatic));
     // 注册跨域
-    this.app.use(cors());
+    this.app.use(cors({
+      origin: '*'
+    }));
     // 注册 session认证
     this.app.use(
       koaSession(
@@ -116,8 +119,9 @@ export default class App {
   }
 
   private errorHandler() {
-    this.app.on("error", (err: Error) => {
+    this.app.on("error", (err: Error, ctx: Context) => {
       Logger.log("APP", err.stack, "error");
+      return ctx.response.body = Utils.generateResponse(0, '服务器错误')
     });
   }
 

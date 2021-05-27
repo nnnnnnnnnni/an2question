@@ -3,8 +3,14 @@ import { IUserSchema } from "./models";
 const userSchema = new mongoose.Schema(
   {
     name: String,
-    email: String,
-    phone: String,
+    email: {
+      type: String,
+      unique: true,
+    },
+    phone: {
+      type: String,
+      unique: true,
+    },
     password: String,
     secret: String,
     lastLogin: {
@@ -19,5 +25,7 @@ const userSchema = new mongoose.Schema(
     },
   }
 );
+
+userSchema.index({ email: 1, phone: 1 });
 
 export default mongoose.model<IUserSchema>("user", userSchema);

@@ -1,9 +1,17 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { message } from "ant-design-vue";
 import router from "../router";
 
+export interface IResponse extends AxiosResponse {
+  code?: 0 | 1;
+  data: any;
+  message?: string;
+  timestamp?: number;
+}
+
 axios.interceptors.response.use(
   async (response) => {
+    console.log(response)
     if (response.status == 200) {
       return Promise.resolve(response.data);
     } else if (response.status == 400) {
@@ -12,11 +20,11 @@ axios.interceptors.response.use(
       message.warn(response.data.message);
       return router.push({ name: "login" });
     } else if (response.status == 404) {
-      return message.error("not found");
+      return message.error("Not Fund");
     } else if (response.status == 405) {
-      return message.error("method not allow");
+      return message.error("Method Not Allow");
     } else if (response.status == 429) {
-      return message.error("接口请求频繁");
+      return message.error("Frequent interface requests");
     }
   },
   (error) => {
@@ -24,17 +32,14 @@ axios.interceptors.response.use(
   }
 );
 
-const baseURL =
-  import.meta.env.VITE_ENV == "dev"
-    ? "http://localhost:8081"
-    : "http://localhost:8081";
+const baseURL = import.meta.env.VITE_ENV == "dev" ? "/api" : "http://localhost:3001";
 
 interface IData {
   [key: string]: any;
 }
 
 export default {
-  post(url: string, data: IData) {
+  post(url: string, data: IData): Promise<IResponse> {
     return new Promise((reslove, reject) => {
       axios({
         method: "POST",
@@ -47,14 +52,14 @@ export default {
         },
       })
         .then((response) => {
-          reslove(response);
+          return reslove(response);
         })
         .catch((err) => {
-          reject(err);
+          return reject(err);
         });
     });
   },
-  get(url: string, params: IData) {
+  get(url: string, params: IData): Promise<IResponse> {
     return new Promise((reslove, reject) => {
       axios({
         method: "GET",
@@ -67,14 +72,14 @@ export default {
         },
       })
         .then((response) => {
-          reslove(response);
+          return reslove(response);
         })
         .catch((err) => {
-          reject(err);
+          return reject(err);
         });
     });
   },
-  put(url: string, data: IData) {
+  put(url: string, data: IData): Promise<IResponse> {
     return new Promise((reslove, reject) => {
       axios({
         method: "PUT",
@@ -87,14 +92,14 @@ export default {
         },
       })
         .then((response) => {
-          reslove(response);
+          return reslove(response);
         })
         .catch((err) => {
-          reject(err);
+          return reject(err);
         });
     });
   },
-  delete(url: string, data: IData) {
+  delete(url: string, data: IData): Promise<IResponse> {
     return new Promise((reslove, reject) => {
       axios({
         method: "DELETE",
@@ -107,10 +112,10 @@ export default {
         },
       })
         .then((response) => {
-          reslove(response);
+          return reslove(response);
         })
         .catch((err) => {
-          reject(err);
+          return reject(err);
         });
     });
   },
