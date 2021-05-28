@@ -48,9 +48,6 @@ export default {
         url,
         data: data,
         timeout: 10000,
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
       })
         .then((response) => {
           return reslove(response);
@@ -68,9 +65,6 @@ export default {
         url,
         params, // get 请求时带的参数
         timeout: 10000,
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
       })
         .then((response) => {
           return reslove(response);
@@ -88,9 +82,6 @@ export default {
         url,
         data: data,
         timeout: 10000,
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
       })
         .then((response) => {
           return reslove(response);
@@ -108,9 +99,6 @@ export default {
         url,
         data: data,
         timeout: 10000,
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
       })
         .then((response) => {
           return reslove(response);

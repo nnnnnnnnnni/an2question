@@ -1,4 +1,6 @@
+import { message } from "ant-design-vue";
 import { createRouter, createWebHistory } from "vue-router";
+import http from "../libs/http";
 import store from "../vuex";
 
 const router = createRouter({
@@ -148,15 +150,22 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  store.commit('setRoute', {
+  store.commit("setRoute", {
     name: to.name,
-    path: to.path
-  })
-  if(store.state.user == null && to.meta.needLogin && to.name != 'ADMIN_HOME') {
-    router.push({name: 'LOGIN', query: {from: encodeURIComponent(to.path)}})
-    return next();
+    path: to.path,
+  });
+  if (store.state.user == null && to.meta.needLogin) {
+    http.get("/profile", {}).then((res) => {
+      if (res.code == 1) {
+        store.commit("setUser", res.data);
+        return next({name: 'ADMIN_HOME'})
+      } else {
+        message.warn(res.message??'');
+        return next({name: 'LOGIN'})
+      }
+    });
   }
-  next();
-})
+  return next();
+});
 
 export default router;

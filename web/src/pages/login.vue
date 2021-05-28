@@ -46,7 +46,6 @@ import { message } from "ant-design-vue";
 import { IUser } from "./interface";
 import router from "../router";
 import store from "../vuex";
-import { useRoute, useRouter } from "vue-router";
 export default defineComponent({
   setup() {
     const activeTab = ref<number>(1);
