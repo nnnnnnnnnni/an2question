@@ -17,7 +17,7 @@ export default class Utils {
 
   public static randomString(len = 16) {
     return crypto
-      .randomBytes(len || 32)
+      .randomBytes(len)
       .toString("base64")
       .replace(new RegExp("[`~%!@#^+-=''?~！@#￥……&——‘”“'？*()（），,。.、]", "g"), this.randomChar());
   }

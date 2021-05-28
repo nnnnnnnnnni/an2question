@@ -1,13 +1,20 @@
 <template>
-  <div class="menu">
-    <div class="logo" />
+  <div class="admin-menu">
+    <div class="logo">
+      <img
+        class="img"
+        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K"
+        alt=""
+      />
+      <img src="@/assets/logo_fff.png" alt="" />
+    </div>
     <a-menu theme="dark" v-model:selectedKeys="selectedKeys" mode="inline">
       <a-menu-item key="ADMIN_QUESTION">
         <BarsOutlined />
         <span>题目管理</span>
         <router-link to="/admin/question">题目管理</router-link>
       </a-menu-item>
-      <a-menu-item key="ADMIN_PAPER">
+      <a-menu-item key="ADMIN_TESTPAPER">
         <ContainerOutlined />
         <span>套题管理</span>
         <router-link to="/admin/testpaper">套题管理</router-link>
@@ -56,7 +63,7 @@
       <a-menu-item key="ADMIN_SETTING">
         <SettingOutlined />
         <span>设置</span>
-        <router-link to="/admin/setting">设置</router-link>
+        <router-link to="/admin/setting/base">设置</router-link>
       </a-menu-item>
     </a-menu>
   </div>
@@ -64,8 +71,9 @@
 
 <script lang="ts">
 import { BarsOutlined, SettingOutlined, ContainerOutlined, TableOutlined, UsergroupDeleteOutlined, AreaChartOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref, onMounted, toRaw } from "vue";
+import { defineComponent, ref, onBeforeMount, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
+import store from "../../vuex";
 export default defineComponent({
   components: {
     BarsOutlined,
@@ -77,15 +85,44 @@ export default defineComponent({
   },
   setup() {
     const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
+    onBeforeMount(() => {
+      selectedKeys.value = [store.state.route.name];
+    });
+    const route = useRoute();
+    watch(
+      () => route.name,
+      (key) => {
+        selectedKeys.value = [String(key)];
+      }
+    );
     return { selectedKeys };
   },
 });
 </script>
 
 <style scoped>
-.menu .logo {
+.admin-menu .logo {
   height: 60px;
   width: 200px;
   background-color: #001529;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+.logo .img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  animation: rotate 10s;
+  animation-timing-function: linear;
+  animation-direction: alternate;
 }
 </style>

@@ -138,6 +138,26 @@ const router = createRouter({
             needLogin: true,
           },
           component: () => import("@/pages/admin/setting/setting.vue"),
+          children: [
+            {
+              path: "base",
+              name: "ADMIN_SETTING_BASE",
+              meta: {
+                needLogin: true,
+                tab: 1,
+              },
+              component: () => import("@/components/admin/setting/base.vue"),
+            },
+            {
+              path: "password",
+              name: "ADMIN_SETTING_PASSWORD",
+              meta: {
+                needLogin: true,
+                tab: 2
+              },
+              component: () => import("@/components/admin/setting/password.vue"),
+            },
+          ],
         },
       ],
     },
@@ -158,10 +178,10 @@ router.beforeEach((to, from, next) => {
     http.get("/profile", {}).then((res) => {
       if (res.code == 1) {
         store.commit("setUser", res.data);
-        return next({name: 'ADMIN_HOME'})
+        return next({ name: "ADMIN_HOME" });
       } else {
-        message.warn(res.message??'');
-        return next({name: 'LOGIN'})
+        message.warn(res.message ?? "");
+        return next({ name: "LOGIN" });
       }
     });
   }

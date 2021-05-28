@@ -17,6 +17,7 @@ export default async (ctx: Context) => {
     secret: secret,
     avator: "/default_avator.png",
     password: crypto.createHmac("sha512", password).update(secret).digest("hex"),
+    name: `ys_${Utils.randomString(10)}`
   };
   if (email && Utils.isEmail(email)) {
     const count = await userModel.countDocuments({email: email});
