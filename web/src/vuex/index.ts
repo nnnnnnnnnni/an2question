@@ -4,8 +4,8 @@ import { IUser } from "../pages/interface";
 export interface State {
   user: IUser | null;
   route?: {
-    name?: string,
-    path?: string
+    name: string,
+    path: string
   };
 }
 
@@ -13,7 +13,10 @@ export const store = createStore<State>({
   state() {
     return {
       user: null,
-      route: {},
+      route: {
+        name: 'ADMIN_LOGIN',
+        path: '/login'
+      },
     };
   },
   mutations: {

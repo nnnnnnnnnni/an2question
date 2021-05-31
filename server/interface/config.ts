@@ -1,7 +1,8 @@
 export interface IConfig {
   environment: "development" | "production";
   prot: number;
-  localStatic: string;
+  publicStatic: string;
+  uploadStatic: string;
   jwtOrSession: {
     name: string;
     alg: string;

@@ -38,14 +38,15 @@ export default class App {
     this.app.use(
       koaBody({
         multipart: true,
+        strict: false,
         formidable: {
           keepExtensions: true,
-          uploadDir: this.config.localStatic,
+          uploadDir: this.config.uploadStatic,
         },
       })
     );
     // 注册静态文件地址
-    this.app.use(koaStaic(this.config.localStatic));
+    this.app.use(koaStaic(this.config.publicStatic));
     // 注册跨域
     this.app.use(cors({
       origin: '*'

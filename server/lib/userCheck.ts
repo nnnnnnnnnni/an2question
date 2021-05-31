@@ -3,6 +3,7 @@ import jwt from "./jwt";
 import Utils from "./utils";
 const Response = Utils.generateResponse;
 import {config} from '../config'
+import { Session } from "koa-session";
 
 /**
  * 验证jwt有效性
@@ -36,7 +37,7 @@ export const checkJwtAuth = async (ctx: Context, next: Next) => {
 };
 
 export const checkCookieAuth = async (ctx: Context, next: Next) => {
-  const session = ctx.session.toJSON();
+  const session = (ctx.session as Session).toJSON();
   if(Object.keys(session).length) {
     return next()
   } else {
@@ -48,6 +49,6 @@ export const checkCookieAuth = async (ctx: Context, next: Next) => {
 
 export const applyNoUser = async(ctx: Context, next: Next) => {
   ctx.user = null;
-  ctx.session.user = null;
+  (ctx.session as Session).user = null;
   return next();
 }

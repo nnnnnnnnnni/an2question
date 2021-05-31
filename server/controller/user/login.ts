@@ -6,6 +6,7 @@ import userModel from "../../mongo/userSchema";
 import { config } from "../../config";
 import jwt from '../../lib/jwt';
 import _ from 'lodash';
+import { Session } from "koa-session";
 
 export default async (ctx: Context) => {
   const { email, password } = ctx.request.body;
@@ -25,7 +26,7 @@ export default async (ctx: Context) => {
     const token = jwt.generate(_user as any);
     return (ctx.body = Response(1, "登录成功", { token: token }));
   } else {
-    ctx.session.user = _user as any;
+    (ctx.session as Session).user = _user as any;
     return (ctx.body = Response(1, "登录成功", _user));
   }
 };

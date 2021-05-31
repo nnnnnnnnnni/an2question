@@ -7,3 +7,4 @@ _*.ts
 logs/APP*
 logs/MONGO*
 logs/REDIS*
+uploads/

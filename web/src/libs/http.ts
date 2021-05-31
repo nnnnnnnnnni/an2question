@@ -12,7 +12,11 @@ export interface IResponse extends AxiosResponse {
 axios.interceptors.response.use(
   async (response) => {
     if (response.status == 200) {
-      return Promise.resolve(response.data);
+      if(response.data.code == 1) {
+        return Promise.resolve(response.data);
+      } else {
+        return message.error(response.data.message);
+      }
     } else if (response.status == 400) {
       return message.warn(response.data.message);
     } else if (response.status == 404) {

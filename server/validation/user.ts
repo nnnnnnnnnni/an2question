@@ -14,4 +14,16 @@ export const userValidation = {
       phone: Joi.string(),
     },
   },
+  Logout: {},
+  setting: {
+    body: {
+      name: Joi.string().required()
+    }
+  },
+  password: {
+    body: {
+      newPass: Joi.string().required(),
+      oldPass: Joi.string().required(),
+    }
+  }
 };

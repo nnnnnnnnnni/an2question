@@ -2,6 +2,7 @@ import { IRoute } from "../interface/route";
 import Logger from "../logs";
 import UserRoutes from "./userRoutes";
 import testRoutes from "./testRoutes";
+import publicRoutes from "./publicRoutes";
 import { Context, Next } from "koa";
 import { IMiddleware } from "koa-router";
 import { checkJwtAuth, applyNoUser, checkCookieAuth } from "../lib/userCheck";
@@ -24,6 +25,7 @@ export default class Routes {
   constructor() {
     this.addRoutes(UserRoutes);
     this.addRoutes(testRoutes);
+    this.addRoutes(publicRoutes);
   }
   addRoutes(routes: IRoute[]) {
     for (const route of routes) {
@@ -88,7 +90,7 @@ export default class Routes {
 
   setValidation(validation: IValidation): IMiddleware<any, Context> {
     return async (ctx: Context, next: Next) => {
-      let validationData: IValidationField
+      let validationData: IValidationField = {}
       let requestData: any
       if(validation.body) {
         validationData = validation.body
@@ -96,9 +98,11 @@ export default class Routes {
       } else if(validation.params) {
         validationData = validation.params
         requestData = ctx.params
-      } else {
+      } else if(validation.query) {
         validationData = validation.query as IValidationField
         requestData = ctx.query
+      } else {
+        return next();
       }
       const lenvalidationFields = Object.keys(validationData);
       for(let i = 0;i <lenvalidationFields.length; i++) {

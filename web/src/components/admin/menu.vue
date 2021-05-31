@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { BarsOutlined, SettingOutlined, ContainerOutlined, TableOutlined, UsergroupDeleteOutlined, AreaChartOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref, onBeforeMount, watch, watchEffect } from "vue";
+import { defineComponent, ref, onBeforeMount, watch } from "vue";
 import { useRoute } from "vue-router";
 import store from "../../vuex";
 export default defineComponent({
@@ -86,13 +86,22 @@ export default defineComponent({
   setup() {
     const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
     onBeforeMount(() => {
-      selectedKeys.value = [store.state.route.name];
+      if (store.state.route) {
+        const route = store.state.route.name
+        selectedKeys.value = [route];
+        if (['ADMIN_SETTING_PASSWORD', 'ADMIN_SETTING_BASE'].includes(route)) {
+          selectedKeys.value = ["ADMIN_SETTING"];
+        }
+      }
     });
     const route = useRoute();
     watch(
       () => route.name,
       (key) => {
         selectedKeys.value = [String(key)];
+        if (['ADMIN_SETTING_PASSWORD', 'ADMIN_SETTING_BASE'].includes(String(key))) {
+          selectedKeys.value = ["ADMIN_SETTING"];
+        }
       }
     );
     return { selectedKeys };

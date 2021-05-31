@@ -2,25 +2,42 @@
   <div class="navbar">
     <div class="container">
       <div class="container-item">
-        <a-avatar shape="circle" size="large" :src="store.state?.user?.avator">{{store.state?.user?.name}}</a-avatar>
+        <a-avatar shape="circle" size="large" :src="store.state?.user?.avator">{{ store.state?.user?.name }}</a-avatar>
       </div>
-      <div class="container-item">
-        <MessageOutlined style="font-size: 20px"/>
+      <div class="container-item container-icon" @click="logout">
+        <LoginOutlined style="font-size: 20px" />
+      </div>
+      <div class="container-item container-icon">
+        <MessageOutlined style="font-size: 20px" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { MessageOutlined } from "@ant-design/icons-vue";
+import { MessageOutlined, LoginOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
 import { defineComponent } from "vue";
-import store from '../../vuex/index'
+import http from "../../libs/http";
+import router from "../../router";
+import store from "../../vuex/index";
 export default defineComponent({
-  components: { MessageOutlined },
+  components: { MessageOutlined, LoginOutlined },
   setup() {
+    const logout = () => {
+      http.post("/logout", {}).then((res) => {
+        if (res.code == 1) {
+          message.success(res.message || '');
+          setTimeout(() => {
+            router.push({ name: "LOGIN" });
+          }, 2000);
+        }
+      });
+    };
     return {
-      store
-    }
+      logout,
+      store,
+    };
   },
 });
 </script>
@@ -41,7 +58,14 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   width: 40px;
-  margin: 0px 10px;
   cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 5px;
+}
+.container-icon:hover {
+  background-color: #e5e5e5;
+}
+.container-icon {
+  margin: 0 5px;
 }
 </style>

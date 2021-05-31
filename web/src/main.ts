@@ -4,7 +4,7 @@ import Router from "./router/index";
 import Store from "./vuex/index";
 import "ant-design-vue/es/grid/style/index.css";
 const app = createApp(App);
-import { Radio, Button, Layout, Menu, Input, Form, Avatar, Select, Checkbox, Tag, Divider, Table, Pagination, Space } from "ant-design-vue";
+import { Radio, Button, Layout, Menu, Input, Form, Avatar, Select, Checkbox, Tag, Divider, Table, Pagination, Space, notification } from "ant-design-vue";
 app
   .use(Button)
   .use(Radio)
@@ -20,6 +20,7 @@ app
   .use(Table)
   .use(Pagination)
   .use(Space)
+  .use(notification)
   .use(Store)
   .use(Router)
   .mount("#app");
