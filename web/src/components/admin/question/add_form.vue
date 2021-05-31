@@ -67,7 +67,7 @@
         </a-space>
       </a-form-item>
       <a-form-item v-else-if="formState.type == 3">
-        <a-textarea :autosize="{ minRows: 3, maxRows: 6 }" style="display: block; width: 666.66px"></a-textarea>
+        <a-textarea style="display: block; width: 666.66px" :placeholder="formState.options.isKeywords? placeholder: ''"></a-textarea>
       </a-form-item>
       <a-form-item v-for="(example, index) in formState.examples" :key="index" v-else>
         <a-space>
@@ -121,8 +121,10 @@ export default defineComponent({
     const addCodeExample = () => {
       formState.examples.push({ input: "", output: "" });
     };
+
+    const placeholder = ref<string>('关键字答案填写方式: 答案A,答案A分值.答案B,答案B分值. 例如: windows,10.linux,5.(关键词windows会得分5分,linux会得分五分)')
     onMounted(() => {
-      const editor = new E("#body");
+      const editor: UnwrapRef<E> = reactive(new E("#body"));
       editor.config.menus = ["head", "bold", "italic", "strikeThrough", "indent", "lineHeight", "foreColor", "link", "list", "justify", "emoticon", "image", "table", "code"];
       editor.create();
     });
@@ -140,6 +142,7 @@ export default defineComponent({
       level,
       addCodeExample,
       removeCodeExample,
+      placeholder,
     };
   },
   components: {

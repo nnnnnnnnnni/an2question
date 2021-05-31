@@ -35,7 +35,7 @@
           <span>权限管理</span>
           <router-link to="/admin/user/auth">权限管理</router-link>
         </a-menu-item>
-        <a-menu-item key="ADMIN_USER_manager">
+        <a-menu-item key="ADMIN_USER_MANAGER">
           <span>人员管理</span>
           <router-link to="/admin/user/manager">人员管理</router-link>
         </a-menu-item>
@@ -51,11 +51,11 @@
           <span>题目统计</span>
           <router-link to="/admin/statistics/question">题目统计</router-link>
         </a-menu-item>
-        <a-menu-item key="ADMIN_CHART_PAPER">
+        <a-menu-item key="ADMIN_STATISTICS_PAPER">
           <span>套题统计</span>
           <router-link to="/admin/statistics/testpaper">套题统计</router-link>
         </a-menu-item>
-        <a-menu-item key="ADMIN_CHART_COMPETITION">
+        <a-menu-item key="ADMIN_STATISTICS_COMPETITION">
           <span>竞赛统计</span>
           <router-link to="/admin/statistics/competition">竞赛统计</router-link>
         </a-menu-item>
@@ -85,12 +85,15 @@ export default defineComponent({
   },
   setup() {
     const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
+    const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_COMPETITION", "ADMIN_USER", "ADMIN_STATISTICS", "ADMIN_SETTING"]);
     onBeforeMount(() => {
       if (store.state.route) {
-        const route = store.state.route.name
-        selectedKeys.value = [route];
-        if (['ADMIN_SETTING_PASSWORD', 'ADMIN_SETTING_BASE'].includes(route)) {
-          selectedKeys.value = ["ADMIN_SETTING"];
+        const route = store.state.route.name;
+        if (allKeys.value.includes(route)) {
+          selectedKeys.value = [route];
+        } else {
+          const nameArr = route.split("_");
+          selectedKeys.value = [`${nameArr[0]}_${nameArr[1]}`];
         }
       }
     });
@@ -98,9 +101,11 @@ export default defineComponent({
     watch(
       () => route.name,
       (key) => {
-        selectedKeys.value = [String(key)];
-        if (['ADMIN_SETTING_PASSWORD', 'ADMIN_SETTING_BASE'].includes(String(key))) {
-          selectedKeys.value = ["ADMIN_SETTING"];
+        if (allKeys.value.includes(String(key))) {
+          selectedKeys.value = [String(key)];
+        } else {
+          const nameArr = String(key).split("_");
+          selectedKeys.value = [`${nameArr[0]}_${nameArr[1]}`];
         }
       }
     );

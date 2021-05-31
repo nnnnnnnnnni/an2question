@@ -8,7 +8,7 @@
         <Navbar />
       </a-layout-header>
       <a-layout-content class="content">
-        <router-view class="content-view" />
+        <router-view class="content-view shake" />
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -29,6 +29,7 @@ export default defineComponent({
 .header {
   background: #fff;
   padding: 0;
+  z-index: 2;
   box-shadow: 0 2px 8px #f0f1f2;
 }
 .content {
@@ -43,5 +44,22 @@ export default defineComponent({
   box-shadow: 0px, 5px 12px 4px rgba(0, 0, 0, 0.09);
   box-sizing: border-box;
   padding: 20px;
+}
+.shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  0% {
+    opacity: .3;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 </style>
