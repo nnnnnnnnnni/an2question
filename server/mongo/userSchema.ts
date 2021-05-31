@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IUserSchema } from "./models";
+import { IUser } from "./models";
 const userSchema = new mongoose.Schema(
   {
     name: String,
@@ -29,4 +29,4 @@ const userSchema = new mongoose.Schema(
 
 userSchema.index({ email: 1, phone: 1 });
 
-export default mongoose.model<IUserSchema>("user", userSchema);
+export default mongoose.model<IUser>("user", userSchema);

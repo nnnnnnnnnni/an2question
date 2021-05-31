@@ -10,7 +10,7 @@ import { Session } from "koa-session";
 
 export default async (ctx: Context) => {
   const { email, password } = ctx.request.body;
-  const user = await userModel.findOne({ email: email });
+  const user = await userModel.findOneAndUpdate({ email: email }, {$set: {lastLogin: new Date()}});
   if (!user) {
     return ctx.body = Response(0, "账号不存在");
   }
