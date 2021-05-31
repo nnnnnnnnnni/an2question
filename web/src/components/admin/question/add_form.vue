@@ -94,8 +94,11 @@ import { defineComponent, onMounted, reactive, toRaw, UnwrapRef, ref } from "vue
 import { clearObj } from "../../../libs/utils";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import E from "wangeditor";
+import { useRoute } from "vue-router";
 export default defineComponent({
   setup() {
+    const route = useRoute();
+    const query = route.query['type'];
     const formState: UnwrapRef<IQuestion> = reactive({
       title: undefined,
       type: 1,

@@ -51,7 +51,7 @@
           <span>题目统计</span>
           <router-link to="/admin/statistics/question">题目统计</router-link>
         </a-menu-item>
-        <a-menu-item key="ADMIN_STATISTICS_PAPER">
+        <a-menu-item key="ADMIN_STATISTICS_TESTPAPER">
           <span>套题统计</span>
           <router-link to="/admin/statistics/testpaper">套题统计</router-link>
         </a-menu-item>
@@ -85,7 +85,7 @@ export default defineComponent({
   },
   setup() {
     const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
-    const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_COMPETITION", "ADMIN_USER", "ADMIN_STATISTICS", "ADMIN_SETTING"]);
+    const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_COMPETITION", "ADMIN_USER_AUTH", "ADMIN_USER_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_COMPETITION", "ADMIN_SETTING"]);
     onBeforeMount(() => {
       if (store.state.route) {
         const route = store.state.route.name;
