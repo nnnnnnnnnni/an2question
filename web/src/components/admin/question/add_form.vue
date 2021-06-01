@@ -1,5 +1,12 @@
 <template>
-  <a-form style="width: 800px" :labelCol="{ span: 3 }" :wrapperCol="{ span: 20, offset: 1 }" :model="formState" :rules="formRules" ref="formRef">
+  <a-form
+    style="width: 800px"
+    :labelCol="{ span: 3 }"
+    :wrapperCol="{ span: 20, offset: 1 }"
+    :model="formState"
+    :rules="formRules"
+    ref="formRef"
+  >
     <a-form-item label="题型" required>
       <a-radio-group v-model:value="formState.type" @change="typeChange">
         <a-radio v-for="item in type" :key="item.key" :value="item.key">{{ item.label }}</a-radio>
@@ -76,10 +83,14 @@
         </a-row>
       </a-form-item>
       <a-form-item v-else-if="formState.type == 3">
-        <a-textarea style="display: block; width: 666.66px" v-model:value="formState.answer" :placeholder="formState.factor.isKeywords ? placeholder : ''"></a-textarea>
+        <a-textarea
+          style="display: block; width: 666.66px"
+          v-model:value="formState.answer"
+          :placeholder="formState.factor.isKeywords ? placeholder : ''"
+        ></a-textarea>
       </a-form-item>
       <a-form-item v-for="(example, index) in formState.examples" :key="index" v-else :wrapperCol="{ span: 24 }">
-        <a-row justify='center' align='center'>
+        <a-row justify="center" align="center">
           <a-col :span="10">
             <a-textarea v-model:value="example.input" placeholder="输入" style="margin-right: 8px" />
           </a-col>
@@ -92,7 +103,9 @@
         </a-row>
       </a-form-item>
       <a-form-item v-if="formState.type == 4">
-        <a-button type="dashed" @click="addCodeExample" :disabled="formState.examples.length > 3"> <PlusOutlined />Add Example </a-button>
+        <a-button type="dashed" @click="addCodeExample" :disabled="formState.examples.length > 3">
+          <PlusOutlined />Add Example
+        </a-button>
       </a-form-item>
     </a-form-item>
     <a-form-item :wrapperCol="{ span: 13, offset: 11 }">
@@ -167,6 +180,17 @@ export default defineComponent({
       formState.factor.isWidth = e.includes("isWidth");
     };
 
+    // 选项增减
+    const removeOption = (item: any) => {
+      let index = formState.options.indexOf(item);
+      if (index !== -1) {
+        formState.options.splice(index, 1);
+      }
+    }
+    const addOption = () => {
+      formState.options.push({ key: "", val: "" });
+    };
+
     // 代码示例
     const removeCodeExample = (item: any) => {
       let index = formState.examples.indexOf(item);
@@ -185,7 +209,22 @@ export default defineComponent({
     let editor: E;
     onMounted(() => {
       editor = new E("#body");
-      editor.config.menus = ["head", "bold", "italic", "strikeThrough", "indent", "lineHeight", "foreColor", "link", "list", "justify", "emoticon", "image", "table", "code"];
+      editor.config.menus = [
+        "head",
+        "bold",
+        "italic",
+        "strikeThrough",
+        "indent",
+        "lineHeight",
+        "foreColor",
+        "link",
+        "list",
+        "justify",
+        "emoticon",
+        "image",
+        "table",
+        "code",
+      ];
       editor.config.onchange = (newHtml: string) => {
         formState.body = newHtml;
       };
@@ -197,11 +236,20 @@ export default defineComponent({
       formRef.value
         .validate()
         .then(() => {
-          console.log(formState);
+          console.log(toRaw(formState));
+          if (formState.type == 1) {
+          } else if (formState.type == 2) {
+          } else if (formState.type == 3) {
+          } else {
+          }
         })
         .catch((error: ValidateErrorEntity<IQuestion>) => {
           console.log("error", error);
         });
+    };
+
+    const answerChange = (e: any) => {
+      console.log(e);
     };
     return {
       formState,
@@ -215,6 +263,7 @@ export default defineComponent({
       placeholder,
       optionsChange,
       typeChange,
+      answerChange,
       formRef,
     };
   },
