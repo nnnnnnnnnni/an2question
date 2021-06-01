@@ -10,11 +10,16 @@ const questionSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
-    options: {
+    factor: {
       isSpace: Boolean,
       isCase: Boolean,
       isKeywords: Boolean,
+      isWidth: Boolean,
     },
+    options: [{
+      key: String,
+      val: String
+    }],
     answer: String,
     examples: [
       {

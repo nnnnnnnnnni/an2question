@@ -7,12 +7,12 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/api': {
-        target: 'http://127.0.0.1:3001',
+      "/api": {
+        target: "http://127.0.0.1:3001",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
   plugins: [
     vue(),
@@ -21,6 +21,11 @@ export default defineConfig({
         {
           libName: "ant-design-vue",
           style(name) {
+            if (/popconfirm/.test(name)) {
+              return `ant-design-vue/es/popover/style/index.css`;
+            } else if(/row/.test(name) || /col/.test(name)) {
+              return `ant-design-vue/es/grid/style/index.css`;
+            }
             return `ant-design-vue/es/${name}/style/index.css`;
           },
         },

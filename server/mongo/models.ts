@@ -19,15 +19,23 @@ export interface IQuestion extends Document {
     type: number;
     default: 1;
   };
-  options: {
-    // 选择题选项
+  factor: {
+    // 判题因素
     isSpace: boolean;
     isCase: boolean;
     isKeywords: boolean;
+    isWidth: boolean;
   };
+  options: [
+    // 选择题选项
+    {
+      key: string;
+      val: string;
+    }
+  ];
   answer: string; // 正确答案
   examples: [
-    // 代码示例
+    // 代码题代码示例
     {
       input: string;
       output: string;

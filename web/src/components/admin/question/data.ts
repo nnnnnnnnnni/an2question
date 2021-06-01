@@ -9,12 +9,15 @@ export interface IQuestion extends IFormState {
   _id?: string;
   score: number;
   answerTime: number;
-  options: {
+  body: string | void;
+  factor: {
     isSpace: boolean;
     isCase: boolean;
     isKeywords: boolean;
+    isWidth: boolean;
   };
-  answer: string;
+  options: { key: string; val: string }[];
+  answer: string | string[];
   examples: {
     input: string;
     output: string;
