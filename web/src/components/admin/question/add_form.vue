@@ -39,48 +39,61 @@
     </a-form-item>
     <a-form-item :label="formState.type != 4 ? '答案' : '示例'" required>
       <a-form-item v-if="formState.type == 1" :wrapperCol="{ span: 24 }">
-        <a-row>
-          <a-col :span="2">
-            <a-radio-group v-model:value="formState.answer">
-              <a-radio value="A" style="height: 42px">A</a-radio>
-              <a-radio value="B" style="height: 42px">B</a-radio>
-              <a-radio value="C" style="height: 42px">C</a-radio>
-              <a-radio value="D">D</a-radio>
-            </a-radio-group>
-          </a-col>
-          <a-col :span="22">
-            <a-input-group v-model:value="formState.options" name="options">
-              <a-space direction="vertical" style="width: 100%">
-                <a-input />
-                <a-input />
-                <a-input />
-                <a-input />
-              </a-space>
-            </a-input-group>
-          </a-col>
-        </a-row>
+        <a-space direction="vertical" style="width: 100%">
+          <a-radio-group v-model:value="formState.answer" style="width: 100%">
+            <a-space direction="vertical" style="width: 100%">
+              <a-radio
+                v-for="(option, index) in formState.options"
+                :key="index"
+                :value="option.key"
+                style="margin: 0; width: 80%"
+              >
+                {{ option.key }}
+                <a-input v-model:value="option.val" style="margin-left: 10px" />
+                <a-space style="margin-left: 10px">
+                  <MinusCircleOutlined
+                    v-if="formState.options.length == index + 1 && formState.options.length > 1"
+                    class="dynamic-delete-button"
+                    @click="removeOption"
+                  />
+                  <PlusCircleOutlined
+                    v-if="formState.options.length == index + 1 && formState.options.length < 4"
+                    class="dynamic-delete-button"
+                    @click="addOption"
+                  />
+                </a-space>
+              </a-radio>
+            </a-space>
+          </a-radio-group>
+        </a-space>
       </a-form-item>
       <a-form-item v-else-if="formState.type == 2" :wrapperCol="{ span: 24 }">
-        <a-row>
-          <a-col :span="2">
-            <a-checkbox-group v-model:value="formState.answer">
-              <a-checkbox value="A" style="height: 42px">A</a-checkbox>
-              <a-checkbox value="B" style="height: 42px; margin-left: 0px">B</a-checkbox>
-              <a-checkbox value="C" style="height: 42px; margin-left: 0px">C</a-checkbox>
-              <a-checkbox value="D" style="margin-left: 0px">D</a-checkbox>
-            </a-checkbox-group>
-          </a-col>
-          <a-col :span="22">
-            <a-input-group v-model:value="formState.options" name="options">
-              <a-space direction="vertical" style="width: 100%">
-                <a-input />
-                <a-input />
-                <a-input />
-                <a-input />
+        <a-checkbox-group v-model:value="formState.answer" style="width: 100%">
+          <a-row align="middle" justify="center" v-for="(option, index) in formState.options" :key="index" style="margin-bottom: 8px">
+            <a-col :span="2">
+              <a-checkbox :value="option.key" style="margin: 0; width: 80%">
+                {{ option.key }}
+              </a-checkbox>
+            </a-col>
+            <a-col :span="18" :offset="1">
+              <a-input v-model:value="option.val" />
+            </a-col>
+            <a-col :span="2" :offset="1">
+              <a-space>
+                <MinusCircleOutlined
+                  v-if="formState.options.length == index + 1 && formState.options.length > 1"
+                  class="dynamic-delete-button"
+                  @click="removeOption"
+                />
+                <PlusCircleOutlined
+                  v-if="formState.options.length == index + 1 && formState.options.length < 4"
+                  class="dynamic-delete-button"
+                  @click="addOption"
+                />
               </a-space>
-            </a-input-group>
-          </a-col>
-        </a-row>
+            </a-col>
+          </a-row>
+        </a-checkbox-group>
       </a-form-item>
       <a-form-item v-else-if="formState.type == 3">
         <a-textarea
@@ -119,7 +132,7 @@
 <script lang="ts">
 import { type, level, IQuestion } from "./data";
 import { defineComponent, onMounted, reactive, toRaw, UnwrapRef, ref, watch } from "vue";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons-vue";
+import { MinusCircleOutlined, PlusOutlined, PlusCircleOutlined } from "@ant-design/icons-vue";
 import E from "wangeditor";
 import { useRoute } from "vue-router";
 import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
@@ -130,7 +143,7 @@ export default defineComponent({
     const formRef = ref();
     const formState: UnwrapRef<IQuestion> = reactive({
       title: undefined,
-      type: 1,
+      type: 2,
       level: 1,
       status: 1,
       score: 10,
@@ -142,7 +155,10 @@ export default defineComponent({
         isKeywords: false,
         isWidth: false,
       },
-      options: [],
+      options: [
+        { key: "A", val: "" },
+        { key: "B", val: "" },
+      ],
       answer: "A",
       examples: [],
     });
@@ -165,7 +181,7 @@ export default defineComponent({
       if (val == 1) {
         formState.answer = "A";
       } else if (val == 2) {
-        formState.answer = ["A", "B"];
+        formState.answer = ["A"];
       } else {
         formState.answer = "";
       }
@@ -180,15 +196,11 @@ export default defineComponent({
       formState.factor.isWidth = e.includes("isWidth");
     };
 
-    // 选项增减
-    const removeOption = (item: any) => {
-      let index = formState.options.indexOf(item);
-      if (index !== -1) {
-        formState.options.splice(index, 1);
-      }
-    }
     const addOption = () => {
-      formState.options.push({ key: "", val: "" });
+      formState.options.push({ key: String.fromCharCode(65 + formState.options.length), val: "" });
+    };
+    const removeOption = () => {
+      formState.options.pop();
     };
 
     // 代码示例
@@ -203,7 +215,9 @@ export default defineComponent({
     };
 
     // 填空题placeholder
-    const placeholder = ref<string>(`关键字答案填写方式: "答案A,答案A分值.答案B,答案B分值." 例如: windows,10.linux,5.(关键词windows得分5分,linux得分五分)`);
+    const placeholder = ref<string>(
+      `关键字答案填写方式: "答案A,答案A分值.答案B,答案B分值." 例如: windows,10.linux,5.(关键词windows得分5分,linux得分五分)`
+    );
 
     // 正文处用到的文本框
     let editor: E;
@@ -260,6 +274,8 @@ export default defineComponent({
       level,
       addCodeExample,
       removeCodeExample,
+      addOption,
+      removeOption,
       placeholder,
       optionsChange,
       typeChange,
@@ -270,6 +286,7 @@ export default defineComponent({
   components: {
     MinusCircleOutlined,
     PlusOutlined,
+    PlusCircleOutlined,
   },
 });
 </script>
