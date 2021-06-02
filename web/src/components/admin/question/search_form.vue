@@ -43,7 +43,7 @@ import { defineComponent, reactive, UnwrapRef, toRaw } from "vue";
 import { IFormState, level, type, status } from "./data";
 import router from "../../../router";
 export default defineComponent({
-  setup() {
+  setup(_, context) {
     const formState: UnwrapRef<IFormState> = reactive({
       title: undefined,
       type: undefined,
@@ -61,7 +61,7 @@ export default defineComponent({
       resetFields();
     };
     const search = () => {
-      console.log(toRaw(formState));
+      context.emit('search', formState)
     };
     return {
       formState,

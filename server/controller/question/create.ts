@@ -1,10 +1,34 @@
 import { Context } from "koa";
 import Utils from "../../lib/utils";
 const Response = Utils.generateResponse;
+import questionModel from "../../mongo/questionSchema";
 
 export default async (ctx: Context) => {
-  const { type, level, title, body, score, answerTime } = ctx.request.body;
+  const doc = ctx.request.body;
 
-  console.log(type, level, title, body, score, answerTime)
-  return (ctx.body = Response(1, ""));
+  const insertData = {
+    title: doc.title,
+    body: doc.body,
+    score: doc.score,
+    answerTime: doc.answerTime,
+    factor:
+      doc.type == 1
+        ? doc.factor
+        : {
+            isCase: false,
+            isKeywords: false,
+            isSpace: false,
+            isWidth: false,
+          },
+    options: [1, 2].includes(doc.type) ? doc.options : [],
+    answer: doc.type == 4 ? "" : doc.answer,
+    examples: doc.type == 3 ? doc.examples : [],
+    type: doc.type,
+    level: doc.level,
+    status: doc.status,
+  };
+
+  const newQuestion = await questionModel.create(insertData);
+
+  return (ctx.body = Response(1, "", newQuestion.toJSON()));
 };

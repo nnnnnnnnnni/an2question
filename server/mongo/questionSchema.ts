@@ -39,6 +39,6 @@ const questionSchema = new mongoose.Schema(
   }
 );
 
-questionSchema.index({ title: 1 });
+questionSchema.index({ title: 1, type: 1 });
 
 export default mongoose.model<IQuestion>("question", questionSchema);

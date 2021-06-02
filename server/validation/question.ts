@@ -11,4 +11,10 @@ export const questionValidation = {
       answerTime: Joi.number().required(),
     },
   },
+  list: {
+    query: {
+      count: Joi.number().required(),
+      page: Joi.number().required(),
+    }
+  }
 };

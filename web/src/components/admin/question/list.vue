@@ -1,23 +1,23 @@
 <template>
-  <a-table :columns="columns" rowKey="_id" :data-source="data">
+  <a-table :columns="columns" rowKey="_id" :dataSource="data.data" :loading="data.loading" :pagination="pagination" @change="pageChange">
     <template #type="{ text }">
       <span>
-        <a-tag :color='getTypeTag(text).color'>{{getTypeTag(text).label}}</a-tag>
+        <a-tag :color="getTypeTag(text).color">{{ getTypeTag(text).label }}</a-tag>
       </span>
     </template>
     <template #level="{ text }">
       <span>
-        <a-tag :color='getLevelTag(text).color'>{{getLevelTag(text).label}}</a-tag>
+        <a-tag :color="getLevelTag(text).color">{{ getLevelTag(text).label }}</a-tag>
       </span>
     </template>
     <template #status="{ text }">
       <span>
-        <a-tag :color='getStatusTag(text).color'>{{getStatusTag(text).label}}</a-tag>
+        <a-tag :color="getStatusTag(text).color">{{ getStatusTag(text).label }}</a-tag>
       </span>
     </template>
     <template #action="{ record }">
       <span>
-        <a-button shape="circle" type="primary" @click="detail(record)">
+        <a-button shape="circle" type="primary" @click="goDetail(record)">
           <template #icon>
             <EllipsisOutlined />
           </template>
@@ -34,58 +34,43 @@
 </template>
 <script lang="ts">
 import { EllipsisOutlined, DeleteOutlined } from "@ant-design/icons-vue";
-import { defineComponent } from "vue";
+import { defineComponent, reactive, toRefs } from "vue";
 import router from "../../../router";
 import { columns, IQuestion, getLevelTag, getStatusTag, getTypeTag } from "./data";
-const data = [
-  {
-    _id: "1",
-    title: "测试题目1",
-    type: 1,
-    status: 1,
-    level: 1,
-    score: 10,
-  },
-  {
-    _id: "2",
-    title: "测试题目2",
-    type: 2,
-    status: 2,
-    level: 2,
-    score: 20,
-  },
-  {
-    _id: "3",
-    title: "测试题目3",
-    type: 3,
-    status: 3,
-    level: 3,
-    score: 30,
-  },
-  {
-    _id: "4",
-    title: "测试题目4",
-    type: 4,
-    status: 4,
-    level: 3,
-    score: 40,
-  },
-];
 
 export default defineComponent({
-  setup() {
-    const detail = (reacrd: IQuestion) => {
-      router.push({ name: "ADMIN_QUESTION_DETAIL", params: { id: reacrd._id } });
+  props: ["list", "page", "count", "total", "loading"],
+  setup(props, {emit}) {
+    const { list, page, count, total, loading } = toRefs(props);
+    const data = reactive({
+      data: list || [],
+      page: page.value || 1,
+      count: count.value || 10,
+      total: total.value || 0,
+      loading: loading.value || false,
+    });
+    const pagination = reactive({
+      current: page || 1,
+      pageSize: count || 10,
+      total: total || 0,
+    });
+    const goDetail = (reacrd: IQuestion) => {
+      router.push(`/admin/question/${reacrd._id}`);
+    };
+    const pageChange = (pagination: any, filters: any, sorter: any, data: any) => {
+      emit('pageChange', pagination)
     };
     const del = (reacrd: IQuestion) => {};
     return {
       data,
+      pagination,
       getLevelTag,
       getTypeTag,
       getStatusTag,
       columns,
-      detail,
+      goDetail,
       del,
+      pageChange,
     };
   },
   components: {

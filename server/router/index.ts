@@ -2,6 +2,7 @@ import { IRoute } from "../interface/route";
 import Logger from "../logs";
 import UserRoutes from "./userRoutes";
 import testRoutes from "./testRoutes";
+import questionRoutes from "./questionRoute";
 import publicRoutes from "./publicRoutes";
 import { Context, Next } from "koa";
 import { IMiddleware } from "koa-router";
@@ -25,6 +26,7 @@ export default class Routes {
   constructor() {
     this.addRoutes(UserRoutes);
     this.addRoutes(testRoutes);
+    this.addRoutes(questionRoutes);
     this.addRoutes(publicRoutes);
   }
   addRoutes(routes: IRoute[]) {
