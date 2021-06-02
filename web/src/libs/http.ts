@@ -17,22 +17,23 @@ axios.interceptors.response.use(
       } else {
         return message.error(response.data.message);
       }
-    } else if (response.status == 400) {
-      return message.warn(response.data.message);
-    } else if (response.status == 404) {
-      return message.error("Not Fund");
-    } else if (response.status == 405) {
-      return message.error("Method Not Allow");
-    } else if (response.status == 429) {
-      return message.error("Frequent interface requests");
     }
   },
   (error) => {
-    if (error.response.status == 403) {
+    if (error.response.status == 400) {
+      return message.warn(error.response.data.message);
+    } else if (error.response.status == 403) {
       message.warn(error.response.data.message);
       return router.push({ name: "LOGIN" });
+    } if (error.response.status == 404) {
+      return message.error("Not Fund");
+    } else if (error.response.status == 405) {
+      return message.error("Method Not Allow");
+    } else if (error.response.status == 429) {
+      return message.error("Frequent interface requests");
+    } else {
+      return message.error("服务器错误");
     }
-    return message.error("服务器错误");
   }
 );
 

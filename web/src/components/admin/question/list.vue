@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" rowKey="_id" :dataSource="data.data" :loading="data.loading" :pagination="pagination" @change="pageChange">
+  <a-table :columns="columns" rowKey="_id" :dataSource="data.data" :loading="_loading" :pagination="pagination" @change="pageChange">
     <template #type="{ text }">
       <span>
         <a-tag :color="getTypeTag(text).color">{{ getTypeTag(text).label }}</a-tag>
@@ -15,26 +15,58 @@
         <a-tag :color="getStatusTag(text).color">{{ getStatusTag(text).label }}</a-tag>
       </span>
     </template>
+    <template #actionTitle>
+      操作(
+      <a-space>
+        <a-tooltip>
+          <template #title>删除</template>
+          <span class="circle"> <DeleteOutlined style="color: #ff7875" /> </span>
+        </a-tooltip>
+        <a-tooltip>
+          <template #title>跳转详情页</template>
+          <span class="circle"> <EllipsisOutlined style="color: #1890ff" /> </span>
+        </a-tooltip>
+        <a-tooltip>
+          <template #title>发布</template>
+          <span class="circle"> <BranchesOutlined style="color: #52c41a" /> </span>
+        </a-tooltip>
+        <a-tooltip>
+          <template #title>取消发布</template>
+          <span class="circle"> <DisconnectOutlined style="color: #f5222d" /> </span>
+        </a-tooltip>)
+      </a-space>
+    </template>
     <template #action="{ record }">
-      <span>
-        <a-button shape="circle" type="primary" @click="goDetail(record)">
-          <template #icon>
-            <EllipsisOutlined />
-          </template>
-        </a-button>
-        <a-divider type="vertical" />
+      <a-space>
         <a-button shape="circle" type="danger" @click="del(record)">
           <template #icon>
             <DeleteOutlined />
           </template>
         </a-button>
-      </span>
+        <a-button shape="circle" type="primary" @click="goDetail(record)">
+          <template #icon>
+            <EllipsisOutlined />
+          </template>
+        </a-button>
+        <a-button v-if="record.status == 1" type="dashed" shape="circle" @click="publish(record, 2)">
+          <template #icon>
+            <BranchesOutlined style="color: #52c41a" />
+          </template>
+        </a-button>
+        <a-button v-if="record.status == 2" type="dashed" shape="circle" @click="publish(record, 1)">
+          <template #icon>
+            <DisconnectOutlined style="color: #f5222d" />
+          </template>
+        </a-button>
+      </a-space>
     </template>
   </a-table>
 </template>
 <script lang="ts">
-import { EllipsisOutlined, DeleteOutlined } from "@ant-design/icons-vue";
-import { defineComponent, reactive, toRefs } from "vue";
+import { EllipsisOutlined, DeleteOutlined, BranchesOutlined, DisconnectOutlined } from "@ant-design/icons-vue";
+import { message } from "ant-design-vue";
+import { defineComponent, reactive, toRefs, watch, ref } from "vue";
+import http from "../../../libs/http";
 import router from "../../../router";
 import { columns, IQuestion, getLevelTag, getStatusTag, getTypeTag } from "./data";
 
@@ -47,8 +79,9 @@ export default defineComponent({
       page: page.value || 1,
       count: count.value || 10,
       total: total.value || 0,
-      loading: loading.value || false,
     });
+    const _loading = ref(loading.value)
+    watch(loading, () => _loading.value = loading.value)
     const pagination = reactive({
       current: page || 1,
       pageSize: count || 10,
@@ -61,8 +94,17 @@ export default defineComponent({
       emit('pageChange', pagination)
     };
     const del = (reacrd: IQuestion) => {};
+    const publish = (reacrd: IQuestion, status: number) => {
+      http.put('/question/publish', {id: reacrd._id, status: status}).then(res => {
+        if(res.code == 1) {
+          message.success('发布成功!')
+          reacrd.status = status;
+        }
+      })
+    }
     return {
       data,
+      _loading,
       pagination,
       getLevelTag,
       getTypeTag,
@@ -71,11 +113,14 @@ export default defineComponent({
       goDetail,
       del,
       pageChange,
+      publish
     };
   },
   components: {
     EllipsisOutlined,
     DeleteOutlined,
+    BranchesOutlined,
+    DisconnectOutlined
   },
 });
 </script>

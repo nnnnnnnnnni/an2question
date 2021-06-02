@@ -47,9 +47,12 @@ export default defineComponent({
         });
     };
     const search = (data: IOptions) => {
-      // Object.keys(data).forEach(key => {
-      //   searchData[key] = data[key]
-      // })
+      searchData.title = data.title;
+      searchData.level = data.level;
+      searchData.type = data.type;
+      searchData.status = data.status;
+      pageData.count = 10;
+      pageData.page = 1;
       getList(pageData.page, pageData.count, clearObj(toRaw(data), true));
     };
     const pageChange = (_data: { current: number; pageSize: number }) => {

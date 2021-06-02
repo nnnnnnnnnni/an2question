@@ -15,6 +15,12 @@ export const questionValidation = {
     query: {
       count: Joi.number().required(),
       page: Joi.number().required(),
-    }
-  }
+    },
+  },
+  publish: {
+    body: {
+      id: Joi.string().required(),
+      status: Joi.number().required()
+    },
+  },
 };

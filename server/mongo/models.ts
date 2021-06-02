@@ -43,5 +43,5 @@ export interface IQuestion extends Document {
   ];
   type: number; // 1: 选择   2: 多选   3: 填空   4: 代码
   level: number; // 1: 初级   2: 普通   3: 困难
-  status: number; // 1: 未发布 2: 已发布  3: 未使用 4: 已使用
+  status: number; // 1: 未发布 2: 已发布  3: 已使用
 }

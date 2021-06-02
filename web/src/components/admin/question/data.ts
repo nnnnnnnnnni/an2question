@@ -46,8 +46,7 @@ export const type: ISelectOptions[] = [
 export const status: ISelectOptions[] = [
   { label: "未发布", key: 1, color: "#bfbfbf" },
   { label: "已发布", key: 2, color: "#52c41a" },
-  { label: "未使用", key: 3, color: "#1890ff" },
-  { label: "已使用", key: 4, color: "#faad14" },
+  { label: "已使用", key: 3, color: "#1890ff" },
 ];
 
 export const getTypeTag = (key: number): ISelectOptions => {
@@ -112,9 +111,7 @@ export const columns = [
     align: "center",
   },
   {
-    title: "其他",
     key: "action",
-    slots: { customRender: "action" },
-    align: "center",
+    slots: { title: 'actionTitle', customRender: "action" },
   },
 ];
