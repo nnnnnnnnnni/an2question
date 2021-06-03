@@ -6,7 +6,7 @@ import questionRoutes from "./questionRoute";
 import publicRoutes from "./publicRoutes";
 import { Context, Next } from "koa";
 import { IMiddleware } from "koa-router";
-import { checkJwtAuth, applyNoUser, checkCookieAuth } from "../lib/userCheck";
+import { checkJwtAuth, checkCookieAuth } from "../lib/userCheck";
 import Redis from "../redis/index";
 import Utils from "../lib/utils";
 import { IValidation, IValidationField } from "interface/validation";
@@ -55,8 +55,6 @@ export default class Routes {
         } else if(config.jwtOrSession.authFunc == 'jwt') {
           route.Middlewares.unshift(checkJwtAuth);
         }
-      } else {
-        route.Middlewares.unshift(applyNoUser);
       }
       // 注册 接口字段判断
       if (route.validation) {

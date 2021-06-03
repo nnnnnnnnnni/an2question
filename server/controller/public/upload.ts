@@ -2,8 +2,10 @@ import { Context } from "koa";
 import Utils from "../../lib/utils";
 const Response = Utils.generateResponse;
 
-export default (ctx: Context) => {
-  const files = ctx.request.files;
-  // console.log(files);
+export default async (ctx: Context) => {
+  const requestFiles = ctx.request.files;
+  const files = requestFiles['files[]'];
+  console.log(files)
+  await Utils.HandleUpload(files, 'question')
   return ctx.body = Response(1, '', files)
 };

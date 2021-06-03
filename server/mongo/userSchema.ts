@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: new Date(),
     },
+    files: [
+      {
+        name: String,
+        path: String,
+      },
+    ],
   },
   {
     timestamps: {

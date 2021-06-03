@@ -1,4 +1,4 @@
-import Koa, { Context } from "koa";
+import Koa, { Context, Next } from "koa";
 import { config } from "./config";
 import { IConfig } from "./interface/config";
 import { IRoute } from "./interface/route";
@@ -48,9 +48,11 @@ export default class App {
     // 注册静态文件地址
     this.app.use(koaStaic(this.config.publicStatic));
     // 注册跨域
-    this.app.use(cors({
-      origin: '*'
-    }));
+    this.app.use(
+      cors({
+        origin: "*",
+      })
+    );
     // 注册 session认证
     this.app.use(
       koaSession(
@@ -119,8 +121,9 @@ export default class App {
   }
 
   private errorHandler() {
-    this.app.on("error", (err: Error) => {
+    this.app.on("error", (err: Error, ctx: Context) => {
       Logger.log("APP", err.stack, "error");
+      ctx.body = { code: 0, message: "服务器错误", data: {}, timestamp: new Date().getTime() };
     });
   }
 

@@ -96,7 +96,7 @@ export default defineComponent({
     const del = (reacrd: IQuestion) => {};
     const publish = (reacrd: IQuestion, status: number) => {
       http.put("/question/publish", { id: reacrd._id, status: status }).then((res) => {
-        message.success(`${status == 2 ? "" : "取消"}发布成功!`);
+        message.success(`[${reacrd.title}] ${status == 2 ? "" : "取消"}发布成功!`);
         reacrd.status = status;
       });
     };

@@ -23,4 +23,9 @@ export const questionValidation = {
       status: Joi.number().required()
     },
   },
+  detail: {
+    params: {
+      id: Joi.string().required()
+    }
+  }
 };

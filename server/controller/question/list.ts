@@ -4,7 +4,7 @@ const Response = Utils.generateResponse;
 import questionModel from "../../mongo/questionSchema";
 
 export default async (ctx: Context) => {
-  const { page, count, options }: any = ctx.query;
+  const { page, count, options }: any = ctx.request.query;
 
   const conds = options ? JSON.parse(options) : {};
 

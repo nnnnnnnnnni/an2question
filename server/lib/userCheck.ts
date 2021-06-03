@@ -46,9 +46,3 @@ export const checkCookieAuth = async (ctx: Context, next: Next) => {
     return ctx.body = Response(0, msg);
   }
 }
-
-export const applyNoUser = async(ctx: Context, next: Next) => {
-  ctx.user = null;
-  (ctx.session as Session).user = null;
-  return next();
-}

@@ -30,6 +30,11 @@
         <a-checkbox :disabled="formState.type != 3" value="isKeywords">按点得分</a-checkbox>
       </a-checkbox-group>
     </a-form-item>
+    <a-form-item label="附件">
+      <a-upload :fileList="fileList" :remove="handleRemove" :before-upload="beforeUpload">
+        <a-button type="primary"> <UploadOutlined /> 选择文件 </a-button>
+      </a-upload>
+    </a-form-item>
     <a-form-item :label="formState.type != 4 ? '答案' : '示例'" required>
       <a-form-item v-if="formState.type == 1" :wrapperCol="{ span: 24 }" name="options">
         <a-space direction="vertical" style="width: 100%">
@@ -94,12 +99,12 @@
   </a-form>
 </template>
 <script lang="ts">
-import { type, level, IQuestion } from "./data";
+import { type, level, IQuestion, IFileItem } from "./data";
 import { defineComponent, onMounted, onBeforeUnmount, reactive, toRaw, UnwrapRef, ref } from "vue";
-import { MinusCircleOutlined, PlusOutlined, PlusCircleOutlined } from "@ant-design/icons-vue";
+import { MinusCircleOutlined, PlusOutlined, PlusCircleOutlined, UploadOutlined } from "@ant-design/icons-vue";
 import WangEditor from "wangeditor";
 import { useRoute } from "vue-router";
-import { RuleObject, ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
+import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import { message } from "ant-design-vue";
 import http from "../../../libs/http";
 import router from "../../../router";
@@ -128,6 +133,7 @@ export default defineComponent({
       ],
       answer: "A",
       examples: [],
+      files: [],
     });
 
     // form 规则
@@ -189,22 +195,43 @@ export default defineComponent({
       factors.value = [];
     };
     const initAnswer = (type: number) => {
-      if (type == 1 || type == 2) {
+      if ([1, 2, 3].includes(Number(formState.type))) {
         formState.examples = [];
       }
-      if (type == 3) {
-        formState.options = [
-          { key: "A", val: "" },
-          { key: "B", val: "" },
-        ];
-        formState.examples = [];
-      }
-      if (type == 4) {
+      if ([3, 4].includes(Number(formState.type))) {
         formState.options = [
           { key: "A", val: "" },
           { key: "B", val: "" },
         ];
       }
+    };
+
+    // 附件相关
+    const fileList = ref<IFileItem[]>([]);
+    const beforeUpload = (file: IFileItem) => {
+      fileList.value = [...fileList.value, file];
+      return false;
+    };
+    const handleRemove = (file: IFileItem) => {
+      const index = fileList.value.indexOf(file);
+      const newFileList = fileList.value.slice();
+      newFileList.splice(index, 1);
+      fileList.value = newFileList;
+    };
+    const handleUpload = () => {
+      const formData = new FormData();
+      fileList.value.forEach((file: IFileItem) => {
+        formData.append("files[]", file as any);
+      });
+
+      http
+        .post("/upload", formData)
+        .then(() => {
+          message.success("upload successfully.");
+        })
+        .catch(() => {
+          message.error("upload failed.");
+        });
     };
 
     // 选择选项
@@ -235,6 +262,7 @@ export default defineComponent({
     };
 
     const onSubmit = (status: number) => {
+      return handleUpload();
       formState.status = status;
       formState.body = editor.txt.html();
       formRef.value
@@ -249,8 +277,8 @@ export default defineComponent({
                 return false;
               }
             });
-            if(formState.type == 2) {
-              formState.answer = (formState.answer as string[]).join('')
+            if (formState.type == 2) {
+              formState.answer = (formState.answer as string[]).join("");
             }
           } else if (formState.type == 4) {
             if (formState.examples.length == 0) {
@@ -279,9 +307,6 @@ export default defineComponent({
         });
     };
 
-    const answerChange = (e: any) => {
-      console.log(e);
-    };
     return {
       formState,
       formRules,
@@ -296,14 +321,17 @@ export default defineComponent({
       placeholder,
       factorsChange,
       typeChange,
-      answerChange,
       formRef,
+      beforeUpload,
+      handleRemove,
+      fileList,
     };
   },
   components: {
     MinusCircleOutlined,
     PlusOutlined,
     PlusCircleOutlined,
+    UploadOutlined,
   },
 });
 </script>

@@ -2,6 +2,7 @@ import { IRoute } from "../interface/route";
 import Create from "../controller/question/create";
 import List from "../controller/question/list";
 import { publish } from "../controller/question/update";
+import Detail from "../controller/question/detail";
 import { questionValidation } from "../validation/question";
 
 export default [
@@ -25,5 +26,12 @@ export default [
     validation: questionValidation.publish,
     Middlewares: [publish],
     needLogin: true,
+  },
+  {
+    path: "/question/:id",
+    methods: "GET",
+    validation: questionValidation.detail,
+    Middlewares: [Detail],
+    needLogin: false,
   },
 ] as IRoute[];

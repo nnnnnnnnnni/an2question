@@ -1,5 +1,8 @@
+import { config } from "../config";
 import crypto from "crypto";
 import { TCode, IResponse } from "interface/response";
+import path from "path";
+import fs from "fs";
 
 export default class Utils {
   public static isEmail(mail: string) {
@@ -16,10 +19,7 @@ export default class Utils {
   }
 
   public static randomString(len = 16) {
-    return crypto
-      .randomBytes(len)
-      .toString("base64")
-      .replace(new RegExp("[`~%!@#^+-=''?~！@#￥……&——‘”“'？*()（），,。.、]", "g"), this.randomChar());
+    return crypto.randomBytes(len).toString("base64").replace(new RegExp("[`~%!@#^+-=''?~！@#￥……&——‘”“'？*()（），,。.、]", "g"), this.randomChar());
   }
 
   /**
@@ -32,5 +32,31 @@ export default class Utils {
       data,
       timestamp: new Date().getTime(),
     };
+  }
+
+  public static async moveFile(destPath: string, originPath: string) {
+
+  }
+
+  public static async HandleUpload(files: any, folderName: string) {
+    return new Promise((reslove, reject) => {
+      const newFiles: { name: string; path: string }[] = [];
+      files.map((file: any) => {
+        const folder = path.resolve(config.publicStatic, folderName);
+        fs.access(folder, (err) => {
+          if (err) {
+            fs.mkdir(folder, (err) => {
+              if (err) {
+                return reject(err);
+              } else {
+                Utils.moveFile(folder, file.path);
+              }
+            });
+          } else {
+            Utils.moveFile(folder, file.path);
+          }
+        });
+      });
+    });
   }
 }

@@ -22,12 +22,24 @@ export interface IQuestion extends IFormState {
     input: string;
     output: string;
   }[];
+  files: [] | { name: string; path: string }[];
 }
 
 export interface ISelectOptions {
   label: string;
   key: string | number;
   color?: string;
+}
+
+export interface IFileItem {
+  uid: string;
+  name?: string;
+  status?: string;
+  response?: string;
+  url?: string;
+  preview?: string;
+  originFileObj?: any;
+  file: string | Blob;
 }
 
 export const level: ISelectOptions[] = [
@@ -112,6 +124,6 @@ export const columns = [
   },
   {
     key: "action",
-    slots: { title: 'actionTitle', customRender: "action" },
+    slots: { title: "actionTitle", customRender: "action" },
   },
 ];
