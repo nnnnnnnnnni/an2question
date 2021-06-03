@@ -195,10 +195,10 @@ export default defineComponent({
       factors.value = [];
     };
     const initAnswer = (type: number) => {
-      if ([1, 2, 3].includes(Number(formState.type))) {
+      if ([1, 2, 3].includes(Number(type))) {
         formState.examples = [];
       }
-      if ([3, 4].includes(Number(formState.type))) {
+      if ([3, 4].includes(Number(type))) {
         formState.options = [
           { key: "A", val: "" },
           { key: "B", val: "" },

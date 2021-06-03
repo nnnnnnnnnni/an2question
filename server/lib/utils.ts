@@ -34,26 +34,50 @@ export default class Utils {
     };
   }
 
-  public static async moveFile(destPath: string, originPath: string) {
-
+  public static moveFile(destPath: string, originPath: string): Promise<void> {
+    return new Promise((reslove, reject) => {
+      fs.rename(originPath, destPath, err => {
+        if(err) {
+          reject(err)
+        } else {
+          reslove()
+        }
+      })
+    })
   }
 
+  /**
+   * @param files 上传上来的文件数组
+   * @param folderName 保存的文件夹名称
+   * @returns 
+   */
   public static async HandleUpload(files: any, folderName: string) {
     return new Promise((reslove, reject) => {
+      const folder = path.resolve(config.publicStatic, folderName);
       const newFiles: { name: string; path: string }[] = [];
       files.map((file: any) => {
-        const folder = path.resolve(config.publicStatic, folderName);
-        fs.access(folder, (err) => {
+        const fileNameArr = file.name.split('.');
+        const newFileName = `${fileNameArr[0]}.${Math.random()*10000000000}.${Utils.randomString(10)}.${new Date().getTime()}.${fileNameArr[1]}`
+        const destFilePath = path.resolve(folder, newFileName);
+        fs.access(folder, async (err) => {
           if (err) {
-            fs.mkdir(folder, (err) => {
+            fs.mkdir(folder, async (err) => {
               if (err) {
                 return reject(err);
               } else {
-                Utils.moveFile(folder, file.path);
+                await Utils.moveFile(destFilePath, file.path);
+                newFiles.push({name: file.name, path: path.resolve(folderName, newFileName)});
+                if(newFiles.length == files.length) {
+                  reslove(newFiles)
+                }
               }
             });
           } else {
-            Utils.moveFile(folder, file.path);
+            await Utils.moveFile(destFilePath, file.path);
+            newFiles.push({name: file.name, path: path.resolve(folderName, newFileName)});
+            if(newFiles.length == files.length) {
+              reslove(newFiles)
+            }
           }
         });
       });
