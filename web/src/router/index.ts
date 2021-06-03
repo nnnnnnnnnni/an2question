@@ -178,14 +178,14 @@ router.beforeEach((to, from, next) => {
     http.get("/profile", {}).then((res) => {
       if (res.code == 1) {
         store.commit("setUser", res.data);
-        return next({ name: "ADMIN_HOME" });
+        return next();
       } else {
-        message.warn(res.message ?? "");
         return next({ name: "LOGIN" });
       }
     });
+  } else {
+    return next();
   }
-  return next();
 });
 
 export default router;
