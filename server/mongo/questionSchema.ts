@@ -30,6 +30,12 @@ const questionSchema = new mongoose.Schema(
     type: Number,
     level: Number,
     status: Number,
+    files: [
+      {
+        name: String,
+        path: String,
+      },
+    ],
   },
   {
     timestamps: {
