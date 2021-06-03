@@ -66,7 +66,7 @@ export default class Utils {
                 return reject(err);
               } else {
                 await Utils.moveFile(destFilePath, file.path);
-                newFiles.push({name: file.name, path: path.resolve(folderName, newFileName)});
+                newFiles.push({name: fileNameArr[0], path: path.join(`/${folderName}`, newFileName)});
                 if(newFiles.length == files.length) {
                   reslove(newFiles)
                 }
@@ -74,7 +74,7 @@ export default class Utils {
             });
           } else {
             await Utils.moveFile(destFilePath, file.path);
-            newFiles.push({name: file.name, path: path.resolve(folderName, newFileName)});
+            newFiles.push({name: fileNameArr[0], path: path.join(`/${folderName}`, newFileName)});
             if(newFiles.length == files.length) {
               reslove(newFiles)
             }

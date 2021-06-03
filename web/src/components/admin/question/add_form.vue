@@ -106,8 +106,9 @@ import WangEditor from "wangeditor";
 import { useRoute } from "vue-router";
 import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import { message } from "ant-design-vue";
-import http from "../../../libs/http";
+import http, {baseURL} from "../../../libs/http";
 import router from "../../../router";
+import { rejects } from "assert/strict";
 export default defineComponent({
   setup() {
     const route = useRoute();
@@ -170,9 +171,24 @@ export default defineComponent({
     onMounted(() => {
       editor = new WangEditor("#body");
       editor.config.menus = ["head", "bold", "italic", "strikeThrough", "indent", "lineHeight", "foreColor", "link", "list", "justify", "emoticon", "image", "table", "code"];
-      editor.config.onchange = (newHtml: string) => {
-        formState.body = newHtml;
-      };
+      editor.config.uploadImgServer = baseURL + '/upload'
+      editor.config.uploadFileName = 'files';
+      editor.config.customUploadImg = (resultFiles: any, insertImgFn: any) => {
+        const formData = new FormData();
+        resultFiles.forEach((file: IFileItem) => {
+          formData.append("files[]", file as any);
+        });
+        http
+          .post("/upload", formData)
+          .then((res) => {
+            insertImgFn(res.data[0].path);
+          })
+      }
+      // editor.config.uploadImgHooks = {
+      //   customInsert: (insert, result) => {
+      //     console.log(result)
+      //   }
+      // }
       editor.create();
     });
     onBeforeUnmount(() => {
@@ -218,20 +234,19 @@ export default defineComponent({
       newFileList.splice(index, 1);
       fileList.value = newFileList;
     };
-    const handleUpload = () => {
-      const formData = new FormData();
-      fileList.value.forEach((file: IFileItem) => {
-        formData.append("files[]", file as any);
-      });
-
-      http
-        .post("/upload", formData)
-        .then(() => {
-          message.success("upload successfully.");
-        })
-        .catch(() => {
-          message.error("upload failed.");
+    const handleUpload = (): Promise<void> => {
+      return new Promise((reslove, reject) => {
+        const formData = new FormData();
+        fileList.value.forEach((file: IFileItem) => {
+          formData.append("files[]", file as any);
         });
+        http
+          .post("/upload", formData)
+          .then((res) => {
+            formState.files = res.data;
+            reslove();
+          })
+      })
     };
 
     // 选择选项
@@ -262,12 +277,11 @@ export default defineComponent({
     };
 
     const onSubmit = (status: number) => {
-      return handleUpload();
       formState.status = status;
       formState.body = editor.txt.html();
       formRef.value
         .validate()
-        .then(() => {
+        .then( async () => {
           let err = "";
           initAnswer(formState.type as number);
           if (formState.type == 1 || formState.type == 2) {
@@ -294,6 +308,7 @@ export default defineComponent({
           if (err) {
             return message.error(err);
           } else {
+            await handleUpload();
             http.post("/question", toRaw(formState)).then((res) => {
               message.success("新增成功! 即将跳转......");
               setTimeout(() => {
