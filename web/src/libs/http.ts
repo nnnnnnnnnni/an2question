@@ -9,36 +9,40 @@ export interface IResponse extends AxiosResponse {
   timestamp?: number;
 }
 
-axios.interceptors.response.use(
-  async (response) => {
-    if (response.status == 200) {
-      if(response.data.code == 1) {
-        return Promise.resolve(response.data);
-      } else {
-        return message.error(response.data.message);
-      }
+const baseURL = import.meta.env.VITE_ENV == "dev" ? "/api" : "http://localhost:3001";
+
+const Axios = axios.create({
+  baseURL: baseURL,
+  timeout: 10000,
+});
+
+Axios.interceptors.response.use(
+  (response) => {
+    if (response.data.code == 1) {
+      return Promise.resolve(response.data);
+    } else {
+      message.error(response.data.message);
+      return Promise.reject(response);
     }
   },
   (error) => {
-    if (error.response.status == 400) {
-      return message.warn(error.response.data.message);
-    } else if (error.response.status == 403) {
-      message.warn(error.response.data.message);
-      return router.push({ name: "LOGIN" });
-    } if (error.response.status == 404) {
-      return message.error("Not Fund");
-    } else if (error.response.status == 405) {
-      return message.error("Method Not Allow");
-    } else if (error.response.status == 429) {
-      return message.error("Frequent interface requests");
+    const response = error.response;
+    if (response.status == 400) {
+      return Promise.reject(response.data.message);
+    } else if (response.status == 403) {
+      router.push({ name: "LOGIN" });
+      return Promise.reject(response.data.message);
+    } else if (response.status == 404) {
+      return Promise.reject("Not Fund");
+    } else if (response.status == 405) {
+      return Promise.reject("Method Not Allow");
+    } else if (response.status == 429) {
+      return Promise.reject("Frequent Interface Requests");
     } else {
-      return message.error("服务器错误");
+      return Promise.reject("Server Failed");
     }
   }
 );
-
-const baseURL =
-  import.meta.env.VITE_ENV == "dev" ? "/api" : "http://localhost:3001";
 
 interface IData {
   [key: string]: any;
@@ -47,69 +51,61 @@ interface IData {
 export default {
   post(url: string, data: IData): Promise<IResponse> {
     return new Promise((reslove, reject) => {
-      axios({
+      Axios({
         method: "POST",
-        baseURL: baseURL,
         url,
         data: data,
-        timeout: 10000,
       })
         .then((response) => {
           return reslove(response);
         })
         .catch((err) => {
-          return reject(err);
+          return message.error(err);
         });
     });
   },
   get(url: string, params: IData): Promise<IResponse> {
     return new Promise((reslove, reject) => {
-      axios({
+      Axios({
         method: "GET",
-        baseURL: baseURL,
         url,
         params, // get 请求时带的参数
-        timeout: 10000,
       })
         .then((response) => {
           return reslove(response);
         })
         .catch((err) => {
-          return reject(err);
+          return message.error(err);
         });
     });
   },
   put(url: string, data: IData): Promise<IResponse> {
     return new Promise((reslove, reject) => {
-      axios({
+      Axios({
         method: "PUT",
-        baseURL: baseURL,
         url,
         data: data,
-        timeout: 10000,
       })
         .then((response) => {
           return reslove(response);
         })
         .catch((err) => {
-          return reject(err);
+          return message.error(err);
         });
     });
   },
   delete(url: string, data: IData): Promise<IResponse> {
     return new Promise((reslove, reject) => {
-      axios({
+      Axios({
         method: "DELETE",
-        baseURL: baseURL,
         url,
         data: data,
-        timeout: 10000,
       })
         .then((response) => {
           return reslove(response);
         })
         .catch((err) => {
-          return reject(err);
+          return message.error(err);
         });
     });
   },

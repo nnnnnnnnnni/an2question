@@ -1,5 +1,5 @@
 <template>
-  <a-table :columns="columns" rowKey="_id" :dataSource="data.data" :loading="_loading" :pagination="pagination" @change="pageChange">
+  <a-table :columns="columns" rowKey="_id" :dataSource="data.data" :loading="tableLoading" :pagination="pagination" @change="pageChange">
     <template #type="{ text }">
       <span>
         <a-tag :color="getTypeTag(text).color">{{ getTypeTag(text).label }}</a-tag>
@@ -32,8 +32,8 @@
         </a-tooltip>
         <a-tooltip>
           <template #title>取消发布</template>
-          <span class="circle"> <DisconnectOutlined style="color: #f5222d" /> </span>
-        </a-tooltip>)
+          <span class="circle"> <DisconnectOutlined style="color: #f5222d" /> </span> </a-tooltip
+        >)
       </a-space>
     </template>
     <template #action="{ record }">
@@ -72,7 +72,7 @@ import { columns, IQuestion, getLevelTag, getStatusTag, getTypeTag } from "./dat
 
 export default defineComponent({
   props: ["list", "page", "count", "total", "loading"],
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const { list, page, count, total, loading } = toRefs(props);
     const data = reactive({
       data: list || [],
@@ -80,8 +80,8 @@ export default defineComponent({
       count: count.value || 10,
       total: total.value || 0,
     });
-    const _loading = ref(loading.value)
-    watch(loading, () => _loading.value = loading.value)
+    const tableLoading = ref(loading.value);
+    watch(loading, () => (tableLoading.value = loading.value));
     const pagination = reactive({
       current: page || 1,
       pageSize: count || 10,
@@ -91,20 +91,18 @@ export default defineComponent({
       router.push(`/admin/question/${reacrd._id}`);
     };
     const pageChange = (pagination: any, filters: any, sorter: any, data: any) => {
-      emit('pageChange', pagination)
+      emit("pageChange", pagination);
     };
     const del = (reacrd: IQuestion) => {};
     const publish = (reacrd: IQuestion, status: number) => {
-      http.put('/question/publish', {id: reacrd._id, status: status}).then(res => {
-        if(res.code == 1) {
-          message.success('发布成功!')
-          reacrd.status = status;
-        }
-      })
-    }
+      http.put("/question/publish", { id: reacrd._id, status: status }).then((res) => {
+        message.success(`${status == 2 ? "" : "取消"}发布成功!`);
+        reacrd.status = status;
+      });
+    };
     return {
       data,
-      _loading,
+      tableLoading,
       pagination,
       getLevelTag,
       getTypeTag,
@@ -113,14 +111,14 @@ export default defineComponent({
       goDetail,
       del,
       pageChange,
-      publish
+      publish,
     };
   },
   components: {
     EllipsisOutlined,
     DeleteOutlined,
     BranchesOutlined,
-    DisconnectOutlined
+    DisconnectOutlined,
   },
 });
 </script>
