@@ -108,7 +108,6 @@ import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import { message } from "ant-design-vue";
 import http, {baseURL} from "../../../libs/http";
 import router from "../../../router";
-import { rejects } from "assert/strict";
 export default defineComponent({
   setup() {
     const route = useRoute();
@@ -171,24 +170,18 @@ export default defineComponent({
     onMounted(() => {
       editor = new WangEditor("#body");
       editor.config.menus = ["head", "bold", "italic", "strikeThrough", "indent", "lineHeight", "foreColor", "link", "list", "justify", "emoticon", "image", "table", "code"];
-      editor.config.uploadImgServer = baseURL + '/upload'
-      editor.config.uploadFileName = 'files';
       editor.config.customUploadImg = (resultFiles: any, insertImgFn: any) => {
         const formData = new FormData();
         resultFiles.forEach((file: IFileItem) => {
           formData.append("files[]", file as any);
         });
         http
-          .post("/upload", formData)
+          .post("/question/upload", formData)
           .then((res) => {
-            insertImgFn(res.data[0].path);
+            const path = baseURL + res.data[0].path
+            insertImgFn(path);
           })
       }
-      // editor.config.uploadImgHooks = {
-      //   customInsert: (insert, result) => {
-      //     console.log(result)
-      //   }
-      // }
       editor.create();
     });
     onBeforeUnmount(() => {
@@ -241,7 +234,7 @@ export default defineComponent({
           formData.append("files[]", file as any);
         });
         http
-          .post("/upload", formData)
+          .post("/question/upload", formData)
           .then((res) => {
             formState.files = res.data;
             reslove();
@@ -300,7 +293,7 @@ export default defineComponent({
             }
             formState.examples.forEach((example) => {
               if (example.input == "" || example.output == "") {
-                err = "请填写完澡示例";
+                err = "请填写完整示例";
                 return false;
               }
             });

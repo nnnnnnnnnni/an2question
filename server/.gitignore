@@ -8,4 +8,4 @@ logs/APP*
 logs/MONGO*
 logs/REDIS*
 uploads/
-public/question/*
+public/questionFiles/*

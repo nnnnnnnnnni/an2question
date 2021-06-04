@@ -38,7 +38,7 @@
     </template>
     <template #action="{ record }">
       <a-space>
-        <a-button shape="circle" type="danger" @click="del(record)">
+        <a-button :disabled='record.status == 3' shape="circle" type="danger" @click="del(record)">
           <template #icon>
             <DeleteOutlined />
           </template>

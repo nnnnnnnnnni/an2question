@@ -27,11 +27,13 @@ import {
   Col,
   message,
   Upload,
+  Card,
 } from "ant-design-vue";
 message.config({
   maxCount: 5,
 });
 app
+  .use(Card)
   .use(Button)
   .use(Radio)
   .use(Layout)

@@ -64,13 +64,9 @@ export default defineComponent({
                 password: formState.password,
               })
               .then((res) => {
-                if(res.code == 1) {
-                  message.success("登录成功");
-                  store.commit('setUser', res.data)
-                  router.push({ name: 'ADMIN_HOME' });
-                } else {
-                  return message.error(res.message);
-                }
+                message.success("登录成功");
+                store.commit("setUser", res.data);
+                return router.push({ name: "ADMIN_HOME" });
               });
           } else {
             message.error("邮箱格式错误");
@@ -94,13 +90,9 @@ export default defineComponent({
                 password: formState.password,
               })
               .then((res) => {
-                if (res.code == 1) {
-                  message.success("注册成功");
-                  store.commit('setUser', res.data)
-                  router.push({ name: 'ADMIN_HOME' });
-                } else {
-                  return message.error(res?.message);
-                }
+                message.success("注册成功");
+                store.commit("setUser", res.data);
+                return router.push({ name: "ADMIN_HOME" });
               });
           } else {
             message.error("邮箱格式错误");

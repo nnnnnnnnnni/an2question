@@ -117,6 +117,12 @@ export const columns = [
     align: "center",
   },
   {
+    title: "答题次数",
+    key: "answerTime",
+    dataIndex: "answerTime",
+    align: "center",
+  },
+  {
     title: "分数",
     key: "score",
     dataIndex: "score",

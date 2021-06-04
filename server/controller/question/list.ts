@@ -16,7 +16,7 @@ export default async (ctx: Context) => {
 
   const questions = await questionModel
     .find(conds)
-    .select("title score type status level")
+    .select("title score type status level answerTime")
     .sort({ createAt: -1 })
     .skip((Number(_page) - 1) * Number(_count))
     .limit(Number(_count));

@@ -9,7 +9,7 @@ export interface IResponse extends AxiosResponse {
   timestamp?: number;
 }
 
-export const baseURL = import.meta.env.VITE_ENV == "dev" ? "/api" : "http://localhost:3001";
+export const baseURL = import.meta.env.VITE_ENV == "dev" ? "/api" : "/";
 
 const Axios = axios.create({
   baseURL: baseURL,
@@ -21,8 +21,7 @@ Axios.interceptors.response.use(
     if (response.data.code == 1) {
       return Promise.resolve(response.data);
     } else {
-      message.error(response.data.message);
-      return Promise.reject(response);
+      return Promise.reject(response.data.message);
     }
   },
   (error) => {

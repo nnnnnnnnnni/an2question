@@ -62,7 +62,6 @@ export default class App {
           overwrite: true,
           httpOnly: true,
           signed: false,
-          rolling: false,
           renew: false,
           // secure: true,
         },
