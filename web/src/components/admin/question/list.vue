@@ -38,7 +38,7 @@
     </template>
     <template #action="{ record }">
       <a-space>
-        <a-button :disabled='record.status == 3' shape="circle" type="danger" @click="del(record)">
+        <a-button :disabled="record.status == 3" shape="circle" type="danger" @click="openDeleteModal(record)">
           <template #icon>
             <DeleteOutlined />
           </template>
@@ -61,6 +61,9 @@
       </a-space>
     </template>
   </a-table>
+  <a-modal v-model:visible="modalConf.visible" title="确认删除" @ok="handleDlete">
+    <p>题目一经删除,无法恢复,请确认后删除!</p>
+  </a-modal>
 </template>
 <script lang="ts">
 import { EllipsisOutlined, DeleteOutlined, BranchesOutlined, DisconnectOutlined } from "@ant-design/icons-vue";
@@ -93,12 +96,22 @@ export default defineComponent({
     const pageChange = (pagination: any, filters: any, sorter: any, data: any) => {
       emit("pageChange", pagination);
     };
-    const del = (reacrd: IQuestion) => {
-      http.delete("/question", { id: reacrd._id }).then((res) => {
+
+    const modalConf = reactive({
+      visible: false,
+      id: "",
+    });
+    const handleDlete = (id: string) => {
+      http.delete("/question", { id: id }).then((res) => {
         message.success(String(res.message));
-        emit('reacrdDelete')
+        emit("reacrdDelete");
       });
     };
+    const openDeleteModal = (reacrd: IQuestion) => {
+      modalConf.id = String(reacrd._id);
+      modalConf.visible = true;
+    };
+
     const publish = (reacrd: IQuestion, status: number) => {
       http.put("/question/publish", { id: reacrd._id, status: status }).then((res) => {
         message.success(`[${reacrd.title}] ${status == 2 ? "" : "取消"}发布成功!`);
@@ -114,9 +127,11 @@ export default defineComponent({
       getStatusTag,
       columns,
       goDetail,
-      del,
+      openDeleteModal,
       pageChange,
       publish,
+      modalConf,
+      handleDlete
     };
   },
   components: {

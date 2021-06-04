@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import Router from "./router/index";
 import Store from "./vuex/index";
-import "ant-design-vue/es/grid/style/index.css";
+import "ant-design-vue/dist/antd.css";
 const app = createApp(App);
 import {
   Spin,
@@ -28,6 +28,7 @@ import {
   message,
   Upload,
   Card,
+  Modal,
 } from "ant-design-vue";
 message.config({
   maxCount: 5,
@@ -54,6 +55,7 @@ app
   .use(Tooltip)
   .use(Spin)
   .use(Upload)
+  .use(Modal)
   .use(notification)
   .use(Store)
   .use(Router)
