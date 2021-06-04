@@ -1,6 +1,6 @@
 <template>
   <div class="question_detail">
-    <a-card :title="question._title" :headStyle="headerStyle" :bodyStyle="bodyStyle" class="question_detail_card">
+    <a-card :title="question.title+ ' [ '+ question.score+ ' 分 ]'" :headStyle="headerStyle" :bodyStyle="bodyStyle" class="question_detail_card">
       <template #extra>
         <a-space>
           <a-button type="primary" v-if="question.status != 3"> <EditOutlined /> 编辑 </a-button>
@@ -16,7 +16,7 @@
           </div>
         </div>
         <div class="right">
-          <a-card title="答案选项" v-if="[1, 2].includes(question.type)">
+          <a-card title="答案选项" v-if="question.type == 1 || question.type == 2">
             <div class="option" :class="{ correct: question.answer.includes(option.key) }" v-for="option in question.options" :key="option.key">
               <span class="option_label">{{ option.key }}</span>
               <span class="option_value">{{ option.val }}</span>
@@ -27,6 +27,12 @@
             <div class="option" :class="{ correct: question.factor.isSpace }">是否区分空格</div>
             <div class="option" :class="{ correct: question.factor.isWidth }">是否区分全半角</div>
             <div class="option" :class="{ correct: question.factor.isKeywords }">是否按点得分</div>
+          </a-card>
+          <a-card title="示例" v-if="question.type == 4" style="margin-top: 20px">
+            <div class="option" v-for="(example, i) in question.examples" :key="i">
+              <span class="example_label">{{ example.input }}</span>
+              <span class="example_value">{{ example.output }}</span>
+            </div>
           </a-card>
           <a-card title="附件" style="margin-top: 20px">
             <div class="option" v-for="file in question.files" :key="file.name">
@@ -40,11 +46,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from "vue";
+import { createVNode, defineComponent, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
-import { EditOutlined, BranchesOutlined, DisconnectOutlined, DeleteOutlined } from "@ant-design/icons-vue";
+import { EditOutlined, BranchesOutlined, DisconnectOutlined, DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import http from "../../../libs/http";
-import { message } from "ant-design-vue";
+import { message, Modal } from "ant-design-vue";
 import router from "../../../router";
 export default defineComponent({
   setup() {
@@ -52,25 +58,28 @@ export default defineComponent({
     const question = reactive({});
     const getDetail = () => {
       http.get(`/question/${params.id}`, {}).then((res) => {
-        res.data._title = `${res.data.title} [${res.data.score}分]`;
         return Object.assign(question, res.data);
       });
     };
-    const headerStyle = reactive({
-      fontWeight: 600,
-    });
-    const bodyStyle = reactive({
-      height: "calc(100% - 65px)",
-      padding: "0px",
-    });
     onMounted(async () => await getDetail());
     
     const del = () => {
-      http.delete("/question", { id: params.id }).then((res) => {
-        message.success(String(res.message));
-        setTimeout(() => {
-          router.push('/admin/question')
-        }, 500);
+      Modal.confirm({
+        title: '确定要删除吗?',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: '题目一经删除,无法恢复,请确认后删除!',
+        okText: '删除',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+          http.delete("/question", { id: params.id }).then((res) => {
+            message.success(String(res.message));
+            return router.push('/admin/question')
+          });
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
       });
     };
     const publish = (status: number) => {
@@ -81,10 +90,14 @@ export default defineComponent({
     };
     return {
       id: params.id,
-      getDetail,
       question,
-      headerStyle,
-      bodyStyle,
+      headerStyle: {
+        fontWeight: 600,
+      },
+      bodyStyle: {
+        height: "calc(100% - 65px)",
+        padding: "0px",
+      },
       del,
       publish,
     };
@@ -139,11 +152,26 @@ export default defineComponent({
 .right .option {
   font-size: 16px;
   line-height: 30px;
-  height: 30px;
 }
 .right .option_label {
   display: inline-block;
   padding-right: 10px;
+}
+.right .option .example_label {
+  width: 48%;
+  margin: 5px 1%;
+  padding: 4px;
+  border-radius: 5px;
+  border: 1px solid #e3e3e3;
+  display: inline-block;
+}
+.right .option .example_value {
+  width: 48%;
+  margin: 5px 1%;
+  padding: 4px;
+  border-radius: 5px;
+  border: 1px solid #e3e3e3;
+  display: inline-block;
 }
 .correct {
   font-weight: 600;

@@ -14,7 +14,7 @@ export const store = createStore<State>({
     return {
       user: null,
       route: {
-        name: 'ADMIN_LOGIN',
+        name: 'LOGIN',
         path: '/login'
       },
     };

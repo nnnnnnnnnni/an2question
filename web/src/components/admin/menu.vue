@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { BarsOutlined, SettingOutlined, ContainerOutlined, TableOutlined, UsergroupDeleteOutlined, AreaChartOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref, onBeforeMount, watch } from "vue";
+import { defineComponent, ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import store from "../../vuex";
 export default defineComponent({
@@ -86,7 +86,7 @@ export default defineComponent({
   setup() {
     const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
     const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_COMPETITION", "ADMIN_USER_AUTH", "ADMIN_USER_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_COMPETITION", "ADMIN_SETTING"]);
-    onBeforeMount(() => {
+    onMounted(() => {
       if (store.state.route) {
         const route = store.state.route.name;
         if (allKeys.value.includes(route)) {

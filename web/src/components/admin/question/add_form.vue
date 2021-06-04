@@ -318,8 +318,9 @@ export default defineComponent({
             if (fileList.value.length) await handleUpload();
             http.post("/question", toRaw(formState)).then((res) => {
               message.success("新增成功! 即将跳转......");
-              setTimeout(() => {
-                return router.push(`/admin/question/${res.data._id}`);
+              const timer = setTimeout(() => {
+                router.push(`/admin/question/${res.data._id}`);
+                clearTimeout(timer)
               }, 500);
             });
           }

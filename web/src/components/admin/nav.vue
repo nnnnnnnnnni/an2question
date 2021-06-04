@@ -28,9 +28,10 @@ export default defineComponent({
       http.post("/logout", {}).then((res) => {
         if (res.code == 1) {
           message.success(res.message || '');
-          setTimeout(() => {
+          const timer = setTimeout(() => {
             router.push({ name: "LOGIN" });
-          }, 2000);
+            clearTimeout(timer)
+          }, 500);
         }
       });
     };

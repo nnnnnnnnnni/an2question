@@ -153,7 +153,7 @@ const router = createRouter({
               name: "ADMIN_SETTING_PASSWORD",
               meta: {
                 needLogin: true,
-                tab: 2
+                tab: 2,
               },
               component: () => import("@/components/admin/setting/password.vue"),
             },
@@ -176,12 +176,8 @@ router.beforeEach((to, from, next) => {
   });
   if (store.state.user == null && to.meta.needLogin) {
     http.get("/profile", {}).then((res) => {
-      if (res.code == 1) {
-        store.commit("setUser", res.data);
-        return next();
-      } else {
-        return next({ name: "LOGIN" });
-      }
+      store.commit("setUser", res.data);
+      return next();
     });
   } else {
     return next();

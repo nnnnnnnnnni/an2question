@@ -33,9 +33,10 @@ export default defineComponent({
       http.put('/user/password', formState).then(res => {
         if(res.code == 1) {
           message.success(res.message || '密码修改成功');
-          setTimeout(() => {
-            return router.push({name: 'LOGIN'})
-          }, 1000);
+          const timer = setTimeout(() => {
+            router.push({name: 'LOGIN'})
+            clearTimeout(timer)
+          }, 500);
         }
       })
     }

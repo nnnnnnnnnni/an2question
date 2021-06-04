@@ -41,11 +41,12 @@ export default defineComponent({
           options: conds,
         })
         .then((res) => {
-          pageData.data = res.data.questions;
-          pageData.total = res.data.total;
-          pageData.loading = false;
           if(res.data.total != 0 && res.data.questions.length == 0) {
             getList(pageData.page -1, pageData.count, clearObj(toRaw(searchData), true))
+          } else {
+            pageData.data = res.data.questions;
+            pageData.total = res.data.total;
+            pageData.loading = false;
           }
         });
     };

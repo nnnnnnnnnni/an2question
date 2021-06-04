@@ -61,20 +61,18 @@
       </a-space>
     </template>
   </a-table>
-  <a-modal v-model:visible="modalConf.visible" title="确认删除" @ok="handleDlete">
-    <p>题目一经删除,无法恢复,请确认后删除!</p>
-  </a-modal>
 </template>
 <script lang="ts">
-import { EllipsisOutlined, DeleteOutlined, BranchesOutlined, DisconnectOutlined } from "@ant-design/icons-vue";
-import { message } from "ant-design-vue";
-import { defineComponent, reactive, toRefs, watch, ref } from "vue";
+import { EllipsisOutlined, DeleteOutlined, BranchesOutlined, DisconnectOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import { message, Modal } from "ant-design-vue";
+import { defineComponent, reactive, toRefs, watch, ref, createVNode } from "vue";
 import http from "../../../libs/http";
 import router from "../../../router";
 import { columns, IQuestion, getLevelTag, getStatusTag, getTypeTag } from "./data";
 
 export default defineComponent({
   props: ["list", "page", "count", "total", "loading"],
+  emits: ["pageChange", "reacrdDelete"],
   setup(props, { emit }) {
     const { list, page, count, total, loading } = toRefs(props);
     const data = reactive({
@@ -96,20 +94,24 @@ export default defineComponent({
     const pageChange = (pagination: any, filters: any, sorter: any, data: any) => {
       emit("pageChange", pagination);
     };
-
-    const modalConf = reactive({
-      visible: false,
-      id: "",
-    });
-    const handleDlete = (id: string) => {
-      http.delete("/question", { id: id }).then((res) => {
-        message.success(String(res.message));
-        emit("reacrdDelete");
-      });
-    };
     const openDeleteModal = (reacrd: IQuestion) => {
-      modalConf.id = String(reacrd._id);
-      modalConf.visible = true;
+      Modal.confirm({
+        title: '确定要删除吗?',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: '题目一经删除,无法恢复,请确认后删除!',
+        okText: '删除',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+          http.delete("/question", { id: reacrd._id }).then((res) => {
+            message.success(String(res.message));
+            emit("reacrdDelete");
+          });
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
     };
 
     const publish = (reacrd: IQuestion, status: number) => {
@@ -130,8 +132,6 @@ export default defineComponent({
       openDeleteModal,
       pageChange,
       publish,
-      modalConf,
-      handleDlete
     };
   },
   components: {
