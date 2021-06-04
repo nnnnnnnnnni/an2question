@@ -27,5 +27,10 @@ export const questionValidation = {
     params: {
       id: Joi.string().required()
     }
-  }
+  },
+  delete: {
+    body: {
+      id: Joi.string().required(),
+    },
+  },
 };

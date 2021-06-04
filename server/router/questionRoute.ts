@@ -4,6 +4,7 @@ import List from "../controller/question/list";
 import { publish } from "../controller/question/update";
 import Detail from "../controller/question/detail";
 import Upload from "../controller/question/upload";
+import Delete from "../controller/question/delete";
 import { questionValidation } from "../validation/question";
 
 export default [
@@ -19,6 +20,13 @@ export default [
     methods: "POST",
     validation: questionValidation.create,
     Middlewares: [Create],
+    needLogin: true,
+  },
+  {
+    path: "/question",
+    methods: "DELETE",
+    validation: questionValidation.delete,
+    Middlewares: [Delete],
     needLogin: true,
   },
   {

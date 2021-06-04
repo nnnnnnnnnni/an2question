@@ -4,7 +4,7 @@
       <SearchForm @search="search" />
     </div>
     <div class="table">
-      <List @pageChange="pageChange" :list="pageData.data" :page="pageData.page" :count="pageData.count" :total="pageData.total" :loading="pageData.loading" />
+      <List @pageChange="pageChange" @reacrdDelete="reacrdDelete" :list="pageData.data" :page="pageData.page" :count="pageData.count" :total="pageData.total" :loading="pageData.loading" />
     </div>
   </div>
 </template>
@@ -44,6 +44,9 @@ export default defineComponent({
           pageData.data = res.data.questions;
           pageData.total = res.data.total;
           pageData.loading = false;
+          if(res.data.total != 0 && res.data.questions.length == 0) {
+            getList(pageData.page -1, pageData.count, clearObj(toRaw(searchData), true))
+          }
         });
     };
     const search = (data: IOptions) => {
@@ -60,6 +63,9 @@ export default defineComponent({
       pageData.count = _data.pageSize;
       getList(_data.current, _data.pageSize, clearObj(toRaw(searchData), true));
     };
+    const reacrdDelete = () => {
+      getList(pageData.page, pageData.count, clearObj(toRaw(searchData), true));
+    }
     onMounted(() => {
       getList(pageData.page, pageData.count);
     });
@@ -68,6 +74,7 @@ export default defineComponent({
       search,
       pageData,
       pageChange,
+      reacrdDelete,
     };
   },
   components: {

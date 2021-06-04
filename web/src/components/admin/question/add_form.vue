@@ -106,7 +106,7 @@ import WangEditor from "wangeditor";
 import { useRoute } from "vue-router";
 import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import { message } from "ant-design-vue";
-import http, {baseURL} from "../../../libs/http";
+import http from "../../../libs/http";
 import router from "../../../router";
 export default defineComponent({
   setup() {
@@ -170,18 +170,34 @@ export default defineComponent({
     onMounted(() => {
       editor = new WangEditor("#body");
       editor.config.menus = ["head", "bold", "italic", "strikeThrough", "indent", "lineHeight", "foreColor", "link", "list", "justify", "emoticon", "image", "table", "code"];
+      editor.config.customAlert = (s: any, t: any) => {
+        switch (t) {
+          case "success":
+            message.success(s);
+            break;
+          case "info":
+            message.info(s);
+            break;
+          case "warning":
+            message.warning(s);
+            break;
+          case "error":
+            message.error(s);
+            break;
+          default:
+            message.info(s);
+            break;
+        }
+      };
       editor.config.customUploadImg = (resultFiles: any, insertImgFn: any) => {
         const formData = new FormData();
         resultFiles.forEach((file: IFileItem) => {
           formData.append("files[]", file as any);
         });
-        http
-          .post("/question/upload", formData)
-          .then((res) => {
-            const path = baseURL + res.data[0].path
-            insertImgFn(path);
-          })
-      }
+        http.post("/question/upload", formData).then((res) => {
+          insertImgFn(res.data[0].path);
+        });
+      };
       editor.create();
     });
     onBeforeUnmount(() => {
@@ -233,13 +249,11 @@ export default defineComponent({
         fileList.value.forEach((file: IFileItem) => {
           formData.append("files[]", file as any);
         });
-        http
-          .post("/question/upload", formData)
-          .then((res) => {
-            formState.files = res.data;
-            reslove();
-          })
-      })
+        http.post("/question/upload", formData).then((res) => {
+          formState.files = res.data;
+          reslove();
+        });
+      });
     };
 
     // 选择选项
@@ -274,7 +288,7 @@ export default defineComponent({
       formState.body = editor.txt.html();
       formRef.value
         .validate()
-        .then( async () => {
+        .then(async () => {
           let err = "";
           initAnswer(formState.type as number);
           if (formState.type == 1 || formState.type == 2) {
@@ -301,7 +315,7 @@ export default defineComponent({
           if (err) {
             return message.error(err);
           } else {
-            await handleUpload();
+            if (fileList.value.length) await handleUpload();
             http.post("/question", toRaw(formState)).then((res) => {
               message.success("新增成功! 即将跳转......");
               setTimeout(() => {

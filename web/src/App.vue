@@ -22,4 +22,38 @@ body {
   margin: 0;
   padding: 0;
 }
+
+p {
+  margin: 7px 0px;
+}
+
+/* blockquote 样式 */
+blockquote {
+  display: block;
+  border-left: 8px solid #d0e5f2;
+  padding: 5px 10px;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-size: 100%;
+  background-color: #f1f1f1;
+}
+
+/* code 样式 */
+code {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  background-color: #f1f1f1;
+  border-radius: 3px;
+  padding: 3px 5px;
+  margin: 0 3px;
+}
+pre code {
+  display: block;
+}
+
+/* ul ol 样式 */
+ul, ol {
+  margin: 10px 0 10px 20px;
+}
 </style>

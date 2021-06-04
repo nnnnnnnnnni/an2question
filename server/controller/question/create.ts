@@ -12,7 +12,7 @@ export default async (ctx: Context) => {
     score: doc.score,
     answerTime: doc.answerTime,
     factor:
-      doc.type == 1
+      doc.type == 3
         ? doc.factor
         : {
             isCase: false,

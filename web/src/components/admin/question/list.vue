@@ -93,7 +93,12 @@ export default defineComponent({
     const pageChange = (pagination: any, filters: any, sorter: any, data: any) => {
       emit("pageChange", pagination);
     };
-    const del = (reacrd: IQuestion) => {};
+    const del = (reacrd: IQuestion) => {
+      http.delete("/question", { id: reacrd._id }).then((res) => {
+        message.success(String(res.message));
+        emit('reacrdDelete')
+      });
+    };
     const publish = (reacrd: IQuestion, status: number) => {
       http.put("/question/publish", { id: reacrd._id, status: status }).then((res) => {
         message.success(`[${reacrd.title}] ${status == 2 ? "" : "取消"}发布成功!`);
