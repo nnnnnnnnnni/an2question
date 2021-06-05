@@ -44,8 +44,8 @@
           </a-card>
           <a-card title="示例" v-if="question.type == 4" style="margin-top: 20px">
             <div class="option" v-for="(example, i) in question.examples" :key="i">
-              <span class="example">{{ example.input }}</span>
-              <span class="example">{{ example.output }}</span>
+              <pre class="example">{{ example.input }}</pre>
+              <pre class="example">{{ example.output }}</pre>
             </div>
           </a-card>
           <a-card title="附件" style="margin-top: 20px">
