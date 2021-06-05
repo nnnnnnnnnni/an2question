@@ -1,12 +1,21 @@
 <template>
   <div class="question_detail">
-    <a-card :title="question.title+ ' [ '+ question.score+ ' 分 ]'" :headStyle="headerStyle" :bodyStyle="bodyStyle" class="question_detail_card">
+    <a-card
+      :title="question.title + ' [ ' + question.score + ' 分 ]'"
+      :headStyle="headerStyle"
+      :bodyStyle="bodyStyle"
+      class="question_detail_card"
+    >
       <template #extra>
         <a-space>
-          <a-button type="primary" v-if="question.status != 3"> <EditOutlined /> 编辑 </a-button>
-          <a-button type="primary" v-if="question.status == 1" @click="publish(2)"> <BranchesOutlined /> 发布 </a-button>
-          <a-button type="primary" v-if="question.status == 2" @click="publish(1)"> <DisconnectOutlined /> 取消发布 </a-button>
-          <a-button type="danger" v-if="question.status != 3" @click="del"> <DeleteOutlined /> 删除 </a-button>
+          <a-button type="primary" v-if="question.status != 3" @click="goEdit"> <EditOutlined /> 编辑 </a-button>
+          <a-button type="primary" v-if="question.status == 1" @click="publish(2)">
+            <BranchesOutlined /> 发布
+          </a-button>
+          <a-button type="primary" v-if="question.status == 2" @click="publish(1)">
+            <DisconnectOutlined /> 取消发布
+          </a-button>
+          <a-button type="danger" v-if="question.status != 3" @click="handleDelete"> <DeleteOutlined /> 删除 </a-button>
         </a-space>
       </template>
       <div class="body">
@@ -17,26 +26,31 @@
         </div>
         <div class="right">
           <a-card title="答案选项" v-if="question.type == 1 || question.type == 2">
-            <div class="option" :class="{ correct: question.answer.includes(option.key) }" v-for="option in question.options" :key="option.key">
+            <div
+              class="option"
+              :class="{ correct: question.answer.includes(option.key) }"
+              v-for="option in question.options"
+              :key="option.key"
+            >
               <span class="option_label">{{ option.key }}</span>
               <span class="option_value">{{ option.val }}</span>
             </div>
           </a-card>
           <a-card title="判题因素" v-if="question.type == 3" style="margin-top: 20px">
-            <div class="option" :class="{ correct: question.factor.isCase }">是否区分大小写</div>
-            <div class="option" :class="{ correct: question.factor.isSpace }">是否区分空格</div>
-            <div class="option" :class="{ correct: question.factor.isWidth }">是否区分全半角</div>
-            <div class="option" :class="{ correct: question.factor.isKeywords }">是否按点得分</div>
+            <div class="option correct" v-if="question.factor.isCase">是否区分大小写</div>
+            <div class="option correct" v-if="question.factor.isSpace">是否区分空格</div>
+            <div class="option correct" v-if="question.factor.isWidth">是否区分全半角</div>
+            <div class="option correct" v-if="question.factor.isKeywords">是否按点得分</div>
           </a-card>
           <a-card title="示例" v-if="question.type == 4" style="margin-top: 20px">
             <div class="option" v-for="(example, i) in question.examples" :key="i">
-              <span class="example_label">{{ example.input }}</span>
-              <span class="example_value">{{ example.output }}</span>
+              <span class="example">{{ example.input }}</span>
+              <span class="example">{{ example.output }}</span>
             </div>
           </a-card>
           <a-card title="附件" style="margin-top: 20px">
             <div class="option" v-for="file in question.files" :key="file.name">
-              <a :href="file.path" target="__blank">{{file.name}}</a>
+              <a :href="file.path" target="__blank">{{ file.name }}</a>
             </div>
           </a-card>
         </div>
@@ -48,7 +62,13 @@
 <script lang="ts">
 import { createVNode, defineComponent, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
-import { EditOutlined, BranchesOutlined, DisconnectOutlined, DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import {
+  EditOutlined,
+  BranchesOutlined,
+  DisconnectOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons-vue";
 import http from "../../../libs/http";
 import { message, Modal } from "ant-design-vue";
 import router from "../../../router";
@@ -62,25 +82,28 @@ export default defineComponent({
       });
     };
     onMounted(async () => await getDetail());
-    
-    const del = () => {
+
+    const handleDelete = () => {
       Modal.confirm({
-        title: '确定要删除吗?',
+        title: "确定要删除吗?",
         icon: createVNode(ExclamationCircleOutlined),
-        content: '题目一经删除,无法恢复,请确认后删除!',
-        okText: '删除',
-        okType: 'danger',
-        cancelText: '取消',
+        content: "题目一经删除,无法恢复,请确认后删除!",
+        okText: "删除",
+        okType: "danger",
+        cancelText: "取消",
         onOk() {
           http.delete("/question", { id: params.id }).then((res) => {
             message.success(String(res.message));
-            return router.push('/admin/question')
+            return router.push("/admin/question");
           });
         },
         onCancel() {
-          console.log('Cancel');
+          console.log("Cancel");
         },
       });
+    };
+    const goEdit = () => {
+      router.push({ name: "ADMIN_QUESTION_EDIT", query: { id: params.id } });
     };
     const publish = (status: number) => {
       http.put("/question/publish", { id: params.id, status: status }).then((res) => {
@@ -98,7 +121,8 @@ export default defineComponent({
         height: "calc(100% - 65px)",
         padding: "0px",
       },
-      del,
+      handleDelete,
+      goEdit,
       publish,
     };
   },
@@ -157,17 +181,9 @@ export default defineComponent({
   display: inline-block;
   padding-right: 10px;
 }
-.right .option .example_label {
+.right .option .example {
   width: 48%;
-  margin: 5px 1%;
-  padding: 4px;
-  border-radius: 5px;
-  border: 1px solid #e3e3e3;
-  display: inline-block;
-}
-.right .option .example_value {
-  width: 48%;
-  margin: 5px 1%;
+  margin: 10px 1%;
   padding: 4px;
   border-radius: 5px;
   border: 1px solid #e3e3e3;

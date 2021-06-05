@@ -36,6 +36,14 @@ const router = createRouter({
           component: () => import("@/pages/admin/question/question_add.vue"),
         },
         {
+          path: "question/edit",
+          name: "ADMIN_QUESTION_EDIT",
+          meta: {
+            needLogin: true,
+          },
+          component: () => import("@/pages/admin/question/question_add.vue"),
+        },
+        {
           path: "question/:id",
           name: "ADMIN_QUESTION_DETAIL",
           meta: {

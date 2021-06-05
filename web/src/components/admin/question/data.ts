@@ -32,7 +32,7 @@ export interface ISelectOptions {
 }
 
 export interface IFileItem {
-  uid: string;
+  uid?: string;
   name?: string;
   status?: string;
   response?: string;

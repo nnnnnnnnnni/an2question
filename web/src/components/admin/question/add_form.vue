@@ -34,6 +34,13 @@
       <a-upload :fileList="fileList" :remove="handleRemove" :before-upload="beforeUpload">
         <a-button type="primary"> <UploadOutlined /> 选择文件 </a-button>
       </a-upload>
+      <div class="file" v-for="(file, i) in formState.files" :key="i">
+        <span><PaperClipOutlined style="color: rgba(0, 0, 0, 0.45)" /></span>
+        <span class="filename">{{file.name}}(已存在)</span>
+        <span class="delfile" @click="removeOwnedFile(i)">
+          <DeleteOutlined style="color: rgba(0, 0, 0, 0.45)" />
+        </span>
+      </div>
     </a-form-item>
     <a-form-item :label="formState.type != 4 ? '答案' : '示例'" required>
       <a-form-item v-if="formState.type == 1" :wrapperCol="{ span: 24 }" name="options">
@@ -101,7 +108,7 @@
 <script lang="ts">
 import { type, level, IQuestion, IFileItem } from "./data";
 import { defineComponent, onMounted, onBeforeUnmount, reactive, toRaw, UnwrapRef, ref } from "vue";
-import { MinusCircleOutlined, PlusOutlined, PlusCircleOutlined, UploadOutlined } from "@ant-design/icons-vue";
+import { MinusCircleOutlined, PlusOutlined, PlusCircleOutlined, UploadOutlined, PaperClipOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import WangEditor from "wangeditor";
 import { useRoute } from "vue-router";
 import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
@@ -110,9 +117,8 @@ import http from "../../../libs/http";
 import router from "../../../router";
 export default defineComponent({
   setup() {
-    const route = useRoute();
-    const query = route.query["type"];
     const formRef = ref();
+    const mode = ref(1)   // 1: add | 2: edit
     const formState: UnwrapRef<IQuestion> = reactive({
       title: undefined,
       type: 1,
@@ -234,7 +240,7 @@ export default defineComponent({
     // 附件相关
     const fileList = ref<IFileItem[]>([]);
     const beforeUpload = (file: IFileItem) => {
-      fileList.value = [...fileList.value, file];
+      fileList.value = [file, ...fileList.value];
       return false;
     };
     const handleRemove = (file: IFileItem) => {
@@ -250,7 +256,8 @@ export default defineComponent({
           formData.append("files[]", file as any);
         });
         http.post("/question/upload", formData).then((res) => {
-          formState.files = res.data;
+          const files = res.data as never[]
+          formState.files.push(...files)
           reslove();
         });
       });
@@ -316,19 +323,50 @@ export default defineComponent({
             return message.error(err);
           } else {
             if (fileList.value.length) await handleUpload();
-            http.post("/question", toRaw(formState)).then((res) => {
-              message.success("新增成功! 即将跳转......");
-              const timer = setTimeout(() => {
-                router.push(`/admin/question/${res.data._id}`);
-                clearTimeout(timer)
-              }, 500);
-            });
+            if(mode.value == 1) {
+              http.post("/question", toRaw(formState)).then((res) => {
+                message.success("新增成功! 即将跳转......");
+                const timer = setTimeout(() => {
+                  router.push(`/admin/question/${res.data._id}`);
+                  clearTimeout(timer)
+                }, 500);
+              });
+            } else {
+              http.put("/question", toRaw(formState)).then((res) => {
+                message.success("更新成功! 即将跳转......");
+                const timer = setTimeout(() => {
+                  router.push(`/admin/question/${res.data._id}`);
+                  clearTimeout(timer)
+                }, 500);
+              });
+            }
           }
         })
         .catch((error: ValidateErrorEntity<IQuestion>) => {
           console.log("error", error);
         });
     };
+    
+    // 处理新增、编辑切换
+    const route = useRoute();
+    const query = route.query["id"];
+    if(query) {
+      mode.value = 2;
+      http.get(`/question/${query}`, {}).then((res) => {
+        if(res.data.factor.isSpace) factors.value.push('isSpace')
+        if(res.data.factor.isCase) factors.value.push('isCase')
+        if(res.data.factor.isWidth) factors.value.push('isWidth')
+        if(res.data.factor.isKeywords) factors.value.push('isKeywords');
+        Object.assign(formState, res.data);
+        if(res.data.type == 2) formState.answer = res.data.answer.split('')
+        editor.txt.html(res.data.body);
+      });
+    }
+    const removeOwnedFile = (i: number) => {
+      const newFileList = formState.files.slice();
+      newFileList.splice(i, 1);
+      formState.files = newFileList;
+    }
 
     return {
       formState,
@@ -348,6 +386,7 @@ export default defineComponent({
       beforeUpload,
       handleRemove,
       fileList,
+      removeOwnedFile,
     };
   },
   components: {
@@ -355,6 +394,8 @@ export default defineComponent({
     PlusOutlined,
     PlusCircleOutlined,
     UploadOutlined,
+    PaperClipOutlined,
+    DeleteOutlined
   },
 });
 </script>
@@ -362,5 +403,31 @@ export default defineComponent({
 <style scoped>
 .dynamic-delete-button {
   font-size: 20px;
+}
+.file {
+  height: 22px;
+  transition: background-color 0.3s;
+  color: rgba(0, 0, 0, 0.85);
+  margin-top: 8px;
+  line-height: 22px;
+  box-sizing: border-box;
+  padding-left: 4px;
+  position: relative;
+}
+.file .filename {
+  padding-left: 8px;
+  color: #40a9ff;
+}
+.file .delfile {
+  display: none;
+  float: right;
+  margin-right: 6px;
+}
+.file:hover {
+  background-color: #f3f3f3;
+}
+.file:hover .delfile {
+  display: block;
+  cursor: pointer;
 }
 </style>

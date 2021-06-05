@@ -22,7 +22,7 @@ export default async (ctx: Context) => {
           },
     options: [1, 2].includes(doc.type) ? doc.options : [],
     answer: doc.type == 4 ? "" : doc.answer,
-    examples: doc.type == 3 ? doc.examples : [],
+    examples: doc.type == 4 ? doc.examples : [],
     type: doc.type,
     level: doc.level,
     status: doc.status,

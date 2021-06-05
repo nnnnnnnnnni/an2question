@@ -33,4 +33,15 @@ export const questionValidation = {
       id: Joi.string().required(),
     },
   },
+  update: {
+    body: {
+      _id: Joi.string().required(),
+      type: Joi.number().required(),
+      level: Joi.number().required(),
+      title: Joi.string().required(),
+      body: Joi.string().required(),
+      score: Joi.number().required(),
+      answerTime: Joi.number().required(),
+    },
+  },
 };

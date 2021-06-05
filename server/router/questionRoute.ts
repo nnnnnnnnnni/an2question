@@ -1,7 +1,7 @@
 import { IRoute } from "../interface/route";
 import Create from "../controller/question/create";
 import List from "../controller/question/list";
-import { publish } from "../controller/question/update";
+import { publish, update } from "../controller/question/update";
 import Detail from "../controller/question/detail";
 import Upload from "../controller/question/upload";
 import Delete from "../controller/question/delete";
@@ -20,6 +20,13 @@ export default [
     methods: "POST",
     validation: questionValidation.create,
     Middlewares: [Create],
+    needLogin: true,
+  },
+  {
+    path: "/question",
+    methods: "PUT",
+    validation: questionValidation.update,
+    Middlewares: [update],
     needLogin: true,
   },
   {
