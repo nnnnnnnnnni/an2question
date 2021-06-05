@@ -155,7 +155,7 @@ export default defineComponent({
   box-sizing: border-box;
 }
 .question_detail_card .body .left {
-  flex: 1;
+  flex: 3;
   overflow: auto;
   padding: 24px;
 }
@@ -167,7 +167,7 @@ export default defineComponent({
   box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.3);
 }
 .question_detail_card .body .right {
-  flex: 1;
+  flex: 2;
   overflow: auto;
   box-sizing: border-box;
   padding: 24px;
