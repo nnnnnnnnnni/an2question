@@ -10,7 +10,7 @@
     "@ant-design/icons-vue": "^6.0.1",
     "ant-design-vue": "^2.1.6",
     "axios": "^0.21.1",
-    "vue": "^3.0.5",
+    "vue": "^3.0.11",
     "vue-router": "^4.0.8",
     "vuex": "^4.0.1",
     "wangeditor": "^4.7.1"
