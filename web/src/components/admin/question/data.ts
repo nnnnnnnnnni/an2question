@@ -37,6 +37,7 @@ export interface IFileItem {
   status?: string;
   response?: string;
   url?: string;
+  size?: number;
   preview?: string;
   originFileObj?: any;
   file: string | Blob;

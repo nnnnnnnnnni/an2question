@@ -240,6 +240,9 @@ export default defineComponent({
     // 附件相关
     const fileList = ref<IFileItem[]>([]);
     const beforeUpload = (file: IFileItem) => {
+      if(file.size && file.size > 1024 * 1024 * 50) {
+        return message.error("文件过大，无法上传！");
+      }
       fileList.value = [file, ...fileList.value];
       return false;
     };

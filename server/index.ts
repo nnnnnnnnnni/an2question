@@ -42,6 +42,7 @@ export default class App {
         formidable: {
           keepExtensions: true,
           uploadDir: this.config.uploadStatic,
+          maxFieldsSize: 1024 * 1024 * 50
         },
       })
     );
