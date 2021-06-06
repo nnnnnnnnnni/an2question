@@ -79,7 +79,7 @@ export default defineComponent({
       total: total || 0,
     });
     const goDetail = (reacrd: ITestpaper) => {
-      router.push(`/admin/question/${reacrd._id}`);
+      router.push(`/admin/testpaper/${reacrd._id}`);
     };
     const pageChange = (pagination: any, filters: any, sorter: any, data: any) => {
       emit("pageChange", pagination);
@@ -93,7 +93,7 @@ export default defineComponent({
         okType: 'danger',
         cancelText: '取消',
         onOk() {
-          http.delete("/question", { id: reacrd._id }).then((res) => {
+          http.delete("/testpaper", { id: reacrd._id }).then((res) => {
             message.success(String(res.message));
             emit("reacrdDelete");
           });
@@ -105,7 +105,7 @@ export default defineComponent({
     };
 
     const publish = (reacrd: ITestpaper, status: number) => {
-      http.put("/question/publish", { id: reacrd._id, status: status }).then((res) => {
+      http.put("/testpaper/publish", { id: reacrd._id, status: status }).then((res) => {
         message.success(`[${reacrd.title}] ${status == 2 ? "" : "取消"}发布成功!`);
         reacrd.status = status;
       });
