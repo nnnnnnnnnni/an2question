@@ -26,7 +26,8 @@ export default async (ctx: Context) => {
     type: doc.type,
     level: doc.level,
     status: doc.status,
-    files: doc.files??[]
+    files: doc.files??[],
+    creator: ctx.session.user._id
   };
 
   const newQuestion = await questionModel.create(insertData);

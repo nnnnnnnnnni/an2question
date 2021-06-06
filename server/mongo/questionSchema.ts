@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+const { ObjectId } = mongoose.Types;
 import { IQuestion } from "./models";
 
 const questionSchema = new mongoose.Schema(
@@ -16,10 +17,12 @@ const questionSchema = new mongoose.Schema(
       isKeywords: Boolean,
       isWidth: Boolean,
     },
-    options: [{
-      key: String,
-      val: String
-    }],
+    options: [
+      {
+        key: String,
+        val: String,
+      },
+    ],
     answer: String,
     examples: [
       {
@@ -36,6 +39,10 @@ const questionSchema = new mongoose.Schema(
         path: String,
       },
     ],
+    creator: {
+      type: ObjectId,
+      ref: 'user'
+    },
   },
   {
     timestamps: {

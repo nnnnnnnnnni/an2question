@@ -99,8 +99,8 @@
     </a-form-item>
     <a-form-item :wrapperCol="{ span: 13, offset: 11 }">
       <a-space>
-        <a-button type="primary" @click="onSubmit(1)">保存</a-button>
-        <a-button type="primary" @click="onSubmit(2)">发布</a-button>
+        <a-button type="primary" @click="onSubmit(1)" :loading="loading">保存</a-button>
+        <a-button type="primary" @click="onSubmit(2)" :loading="loading">发布</a-button>
       </a-space>
     </a-form-item>
   </a-form>
@@ -119,6 +119,7 @@ export default defineComponent({
   setup() {
     const formRef = ref();
     const mode = ref(1)   // 1: add | 2: edit
+    const loading = ref(false)
     const formState: UnwrapRef<IQuestion> = reactive({
       title: undefined,
       type: 1,
@@ -325,10 +326,12 @@ export default defineComponent({
           if (err) {
             return message.error(err);
           } else {
+            loading.value = true;
             if (fileList.value.length) await handleUpload();
             if(mode.value == 1) {
               http.post("/question", toRaw(formState)).then((res) => {
                 message.success("新增成功! 即将跳转......");
+                loading.value = false;
                 const timer = setTimeout(() => {
                   router.push(`/admin/question/${res.data._id}`);
                   clearTimeout(timer)
@@ -337,6 +340,7 @@ export default defineComponent({
             } else {
               http.put("/question", toRaw(formState)).then((res) => {
                 message.success("更新成功! 即将跳转......");
+                loading.value = false;
                 const timer = setTimeout(() => {
                   router.push(`/admin/question/${res.data._id}`);
                   clearTimeout(timer)
@@ -390,6 +394,7 @@ export default defineComponent({
       handleRemove,
       fileList,
       removeOwnedFile,
+      loading
     };
   },
   components: {

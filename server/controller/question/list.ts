@@ -7,6 +7,7 @@ export default async (ctx: Context) => {
   const { page, count, options }: any = ctx.request.query;
 
   const conds = options ? JSON.parse(options) : {};
+  conds.creator = ctx.session.user._id;
 
   if (conds.title) {
     conds.title = { $regex: conds.title, $options: "i" };
