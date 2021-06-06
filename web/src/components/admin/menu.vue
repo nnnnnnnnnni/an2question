@@ -15,7 +15,7 @@
         <router-link to="/admin/question">题目管理</router-link>
       </a-menu-item>
       <a-menu-item key="ADMIN_TESTPAPER">
-        <ContainerOutlined />
+        <FileTextOutlined />
         <span>套题管理</span>
         <router-link to="/admin/testpaper">套题管理</router-link>
       </a-menu-item>
@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { BarsOutlined, SettingOutlined, ContainerOutlined, TableOutlined, UsergroupDeleteOutlined, AreaChartOutlined } from "@ant-design/icons-vue";
+import { BarsOutlined, SettingOutlined, ContainerOutlined, TableOutlined, UsergroupDeleteOutlined, AreaChartOutlined, FileTextOutlined } from "@ant-design/icons-vue";
 import { defineComponent, ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import store from "../../vuex";
@@ -82,6 +82,7 @@ export default defineComponent({
     TableOutlined,
     UsergroupDeleteOutlined,
     AreaChartOutlined,
+    FileTextOutlined
   },
   setup() {
     const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
@@ -109,7 +110,9 @@ export default defineComponent({
         }
       }
     );
-    return { selectedKeys };
+    return {
+      selectedKeys,
+    };
   },
 });
 </script>
