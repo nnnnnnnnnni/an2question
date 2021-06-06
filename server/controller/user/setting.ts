@@ -4,7 +4,7 @@ import Utils from "../../lib/utils";
 const Response = Utils.generateResponse;
 import userModel from "../../mongo/userSchema";
 import _ from "lodash";
-import { IUser } from "mongo/models";
+import { IUser } from "mongo/userSchema";
 import crypto from "crypto";
 
 export const setting = async (ctx: Context) => {

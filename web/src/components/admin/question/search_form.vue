@@ -28,7 +28,7 @@
             <template #icon> <UndoOutlined /></template>清空
           </a-button>
           <a-button type="primary" @click="add">
-            <template #icon> <PlusOutlined /></template>添加
+            <template #icon> <PlusOutlined /></template>新增
           </a-button>
         </a-space>
       </a-form-item>
@@ -40,11 +40,11 @@
 import { SearchOutlined, UndoOutlined, PlusOutlined } from "@ant-design/icons-vue";
 import { useForm } from "@ant-design-vue/use";
 import { defineComponent, reactive, UnwrapRef, toRaw } from "vue";
-import { IFormState, level, type, status } from "./data";
+import { IOptions, level, type, status } from "./data";
 import router from "../../../router";
 export default defineComponent({
   setup(_, context) {
-    const formState: UnwrapRef<IFormState> = reactive({
+    const formState: UnwrapRef<IOptions> = reactive({
       title: undefined,
       type: undefined,
       level: undefined,

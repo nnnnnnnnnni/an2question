@@ -12,16 +12,11 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRaw, UnwrapRef } from "vue";
 import SearchForm from "@/components/admin/question/search_form.vue";
+import {IOptions} from '../../../components/admin/question/data';
 import List from "@/components/admin/question/list.vue";
 import http from "../../../libs/http";
 import { clearObj } from "../../../libs/utils";
 
-interface IOptions {
-  title?: string;
-  level?: number;
-  type?: number;
-  status?: number;
-}
 export default defineComponent({
   setup() {
     const pageData = reactive({

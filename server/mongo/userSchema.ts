@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { IUser } from "./models";
+import mongoose, { Document } from "mongoose";
+
 const userSchema = new mongoose.Schema(
   {
     name: String,
@@ -24,7 +24,18 @@ const userSchema = new mongoose.Schema(
     },
   }
 );
-
 userSchema.index({ email: 1, phone: 1 });
+
+export interface IUser extends Document {
+  avator: string;
+  name: string;
+  email: string;
+  phone?: string;
+  password?: string;
+  secret: string;
+  createAt: Date | string | number;
+  updateAt: Date | string | number;
+  lastLogin?: Date;
+}
 
 export default mongoose.model<IUser>("user", userSchema);

@@ -1,11 +1,11 @@
-export interface IFormState {
+export interface IOptions {
   title?: string;
   type?: number;
   level?: number;
   status?: number;
 }
 
-export interface IQuestion extends IFormState {
+export interface IQuestion extends IOptions {
   _id?: string;
   score: number;
   answerTime: number;
