@@ -36,6 +36,9 @@
               <span class="option_value">{{ option.val }}</span>
             </div>
           </a-card>
+          <a-card title="答案" v-if="question.type == 3" style="margin-top: 20px">
+            <div class="option correct">{{question.answer}}</div>
+          </a-card>
           <a-card title="判题因素" v-if="question.type == 3" style="margin-top: 20px">
             <div class="option correct" v-if="question.factor.isCase">是否区分大小写</div>
             <div class="option correct" v-if="question.factor.isSpace">是否区分空格</div>

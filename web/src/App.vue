@@ -3,11 +3,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'App',
-})
+  name: "App",
+});
 </script>
 
 <style>
@@ -21,6 +21,8 @@ export default defineComponent({
 body {
   margin: 0;
   padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 p {
@@ -53,7 +55,8 @@ pre code {
 }
 
 /* ul ol 样式 */
-ul, ol {
+ul,
+ol {
   margin: 10px 0 10px 20px;
 }
 </style>

@@ -111,13 +111,6 @@ export const columns = [
     align: "center",
   },
   {
-    title: "状态",
-    key: "status",
-    dataIndex: "status",
-    slots: { customRender: "status" },
-    align: "center",
-  },
-  {
     title: "答题次数",
     key: "answerTime",
     dataIndex: "answerTime",
@@ -127,6 +120,13 @@ export const columns = [
     title: "分数",
     key: "score",
     dataIndex: "score",
+    align: "center",
+  },
+  {
+    title: "状态",
+    key: "status",
+    dataIndex: "status",
+    slots: { customRender: "status" },
     align: "center",
   },
   {

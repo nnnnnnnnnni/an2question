@@ -29,21 +29,23 @@ export default defineComponent({
     const searchData: UnwrapRef<IOptions> = reactive({});
     const getList = (page: number, count: number, conds?: IOptions) => {
       pageData.loading = true;
-      // http
-      //   .get("/testpaper", {
-      //     page: page,
-      //     count: count,
-      //     options: conds,
-      //   })
-      //   .then((res) => {
-      //     if(res.data.total != 0 && res.data.testpaper.length == 0) {
-      //       getList(pageData.page -1, pageData.count, clearObj(toRaw(searchData), true))
-      //     } else {
-      //       pageData.data = res.data.testpaper;
-      //       pageData.total = res.data.total;
-      //       pageData.loading = false;
-      //     }
-      //   });
+      http
+        .get("/testpaper", {
+          page: page,
+          count: count,
+          options: conds,
+        })
+        .then((res) => {
+          if(res.data.total != 0 && res.data.testpaper.length == 0) {
+            getList(pageData.page -1, pageData.count, clearObj(toRaw(searchData), true))
+          } else {
+            pageData.data = res.data.testpaper;
+            pageData.total = res.data.total;
+            pageData.loading = false;
+          }
+        }).catch(err => {
+            pageData.loading = false;
+        });
     };
     const search = (data: IOptions) => {
       searchData.title = data.title;

@@ -59,7 +59,8 @@ export default {
           return reslove(response);
         })
         .catch((err) => {
-          return message.error(err);
+          message.error(err);
+          return reject(err)
         });
     });
   },
@@ -74,7 +75,8 @@ export default {
           return reslove(response);
         })
         .catch((err) => {
-          return message.error(err);
+          message.error(err);
+          return reject(err)
         });
     });
   },
@@ -89,7 +91,8 @@ export default {
           return reslove(response);
         })
         .catch((err) => {
-          return message.error(err);
+          message.error(err);
+          return reject(err)
         });
     });
   },
@@ -104,7 +107,8 @@ export default {
           return reslove(response);
         })
         .catch((err) => {
-          return message.error(err);
+          message.error(err);
+          return reject(err)
         });
     });
   },
