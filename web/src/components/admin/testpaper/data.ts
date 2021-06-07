@@ -6,9 +6,13 @@ export interface IOptions {
 export interface ITestpaper extends IOptions {
   _id?: string;
   choiceCount: number;
+  choiceScore: number;
   multiCount: number;
+  multiScore: number;
   blankCount: number;
+  blankScore: number;
   codeCount: number;
+  codeScore: number;
 }
 
 export interface ISelectOptions {
