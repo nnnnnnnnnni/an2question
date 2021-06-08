@@ -5,17 +5,17 @@
         <a-input v-model:value="formState.title" placeholder="标题" style="width: 150px" />
       </a-form-item>
       <a-form-item>
-        <a-select v-model:value="formState.level" placeholder="题目难度" allowClear style="width: 150px">
+        <a-select v-model:value="formState.level" placeholder="题目难度" allowClear style="width: 100px">
           <a-select-option v-for="item in RLevel" :key="item.label" :value="item.key">{{ item.label }}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item>
-        <a-select v-model:value="formState.type" placeholder="题目类型" allowClear style="width: 150px">
+        <a-select v-model:value="formState.type" placeholder="题目类型" allowClear style="width: 100px">
           <a-select-option v-for="item in RType" :key="item.label" :value="item.key">{{ item.label }}</a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item>
-        <a-select v-model:value="formState.status" placeholder="状态" allowClear style="width: 150px">
+        <a-select v-model:value="formState.status" placeholder="状态" allowClear style="width: 100px">
           <a-select-option v-for="item in RStatus" :key="item.label" :value="item.key">{{ item.label }}</a-select-option>
         </a-select>
       </a-form-item>

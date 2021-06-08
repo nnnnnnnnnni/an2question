@@ -76,28 +76,28 @@ const router = createRouter({
           component: () => import("@/pages/admin/testpaper/testpaper_detail.vue"),
         },
         {
-          path: "competition",
-          name: "ADMIN_COMPETITION",
+          path: "exam",
+          name: "ADMIN_EXAM",
           meta: {
             needLogin: true,
           },
-          component: () => import("@/pages/admin/competition/competition_list.vue"),
+          component: () => import("@/pages/admin/exam/exam_list.vue"),
         },
         {
-          path: "competition/add",
-          name: "ADMIN_COMPETITION_ADD",
+          path: "exam/add",
+          name: "ADMIN_EXAM_ADD",
           meta: {
             needLogin: true,
           },
-          component: () => import("@/pages/admin/competition/competition_add.vue"),
+          component: () => import("@/pages/admin/exam/exam_add.vue"),
         },
         {
-          path: "competition/:id",
-          name: "ADMIN_COMPETITION_DETAIL",
+          path: "exam/:id",
+          name: "ADMIN_EXAM_DETAIL",
           meta: {
             needLogin: true,
           },
-          component: () => import("@/pages/admin/competition/competition_detail.vue"),
+          component: () => import("@/pages/admin/exam/exam_detail.vue"),
         },
         {
           path: "user/auth",
@@ -125,7 +125,7 @@ const router = createRouter({
         },
         {
           path: "statistics/add",
-          name: "ADMIN_STATISTICS_COMPETITION",
+          name: "ADMIN_STATISTICS_EXAM",
           meta: {
             needLogin: true,
           },

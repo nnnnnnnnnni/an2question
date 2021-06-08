@@ -1,15 +1,24 @@
 <template>
-  <div class='testpaper_add'>testpaper_add</div>
+  <div class='testpaper_add'>
+    <AddForm />
+  </div>
 </template>
 
 <script lang='ts'>
 import { defineComponent } from 'vue';
+import AddForm from '@/components/admin/testpaper/add_form.vue'
 export default defineComponent({
-  setup() {} 
+  setup() {},
+  components: {
+    AddForm
+  }
 });
 </script>
 
 
 <style scoped>
-
+.testpaper_add {
+  display: flex;
+  justify-content: center;
+}
 </style>

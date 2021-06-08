@@ -9,6 +9,10 @@ export default async (ctx: Context) => {
   const conds = options ? JSON.parse(options) : {};
   conds.creator = ctx.session.user._id;
 
+  if(conds.status == 5) {
+    conds.status = {$in: [2, 3]}
+  }
+
   if (conds.title) {
     conds.title = { $regex: conds.title, $options: "i" };
   }

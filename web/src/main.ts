@@ -29,6 +29,7 @@ import {
   Upload,
   Card,
   Modal,
+  Empty
 } from "ant-design-vue";
 message.config({
   maxCount: 5,
@@ -56,6 +57,7 @@ app
   .use(Spin)
   .use(Upload)
   .use(Modal)
+  .use(Empty)
   .use(notification)
   .use(Store)
   .use(Router)

@@ -34,7 +34,7 @@ export default defineComponent({
 }
 .content {
   padding: 30px;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
   height: calc(100vh - 64px);
   min-width: 900px;

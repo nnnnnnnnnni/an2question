@@ -19,10 +19,10 @@
         <span>套题管理</span>
         <router-link to="/admin/testpaper">套题管理</router-link>
       </a-menu-item>
-      <a-menu-item key="ADMIN_COMPETITION">
+      <a-menu-item key="ADMIN_EXAM">
         <TableOutlined />
-        <span>竞赛管理</span>
-        <router-link to="/admin/competition">竞赛管理</router-link>
+        <span>考试管理</span>
+        <router-link to="/admin/exam">竞赛管理</router-link>
       </a-menu-item>
       <a-sub-menu key="ADMIN_USER">
         <template #title>
@@ -55,9 +55,9 @@
           <span>套题统计</span>
           <router-link to="/admin/statistics/testpaper">套题统计</router-link>
         </a-menu-item>
-        <a-menu-item key="ADMIN_STATISTICS_COMPETITION">
+        <a-menu-item key="ADMIN_STATISTICS_EXAM">
           <span>竞赛统计</span>
-          <router-link to="/admin/statistics/competition">竞赛统计</router-link>
+          <router-link to="/admin/statistics/exam">竞赛统计</router-link>
         </a-menu-item>
       </a-sub-menu>
       <a-menu-item key="ADMIN_SETTING">
@@ -86,7 +86,7 @@ export default defineComponent({
   },
   setup() {
     const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
-    const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_COMPETITION", "ADMIN_USER_AUTH", "ADMIN_USER_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_COMPETITION", "ADMIN_SETTING"]);
+    const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_EXAM", "ADMIN_USER_AUTH", "ADMIN_USER_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_EXAM", "ADMIN_SETTING"]);
     onMounted(() => {
       if (store.state.route) {
         const route = store.state.route.name;

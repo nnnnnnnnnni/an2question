@@ -11,7 +11,7 @@
       </a-radio-group>
     </a-form-item>
     <a-form-item label="标题" required name="title">
-      <a-input v-model:value="formState.title" />
+      <a-input v-model:value="formState.title" :maxlength="15" placeholder='标题最长15位' />
     </a-form-item>
     <a-form-item label="正文" required name="body">
       <div id="body"></div>
@@ -36,7 +36,7 @@
       </a-upload>
       <div class="file" v-for="(file, i) in formState.files" :key="i">
         <span><PaperClipOutlined style="color: rgba(0, 0, 0, 0.45)" /></span>
-        <span class="filename">{{file.name}}(已存在)</span>
+        <span class="filename">{{ file.name }}(已存在)</span>
         <span class="delfile" @click="removeOwnedFile(i)">
           <DeleteOutlined style="color: rgba(0, 0, 0, 0.45)" />
         </span>
@@ -118,8 +118,8 @@ import router from "../../../router";
 export default defineComponent({
   setup() {
     const formRef = ref();
-    const mode = ref(1)   // 1: add | 2: edit
-    const loading = ref(false)
+    const mode = ref(1); // 1: add | 2: edit
+    const loading = ref(false);
     const formState: UnwrapRef<IQuestion> = reactive({
       title: undefined,
       type: 1,
@@ -241,7 +241,7 @@ export default defineComponent({
     // 附件相关
     const fileList = ref<IFileItem[]>([]);
     const beforeUpload = (file: IFileItem) => {
-      if(file.size && file.size > 1024 * 1024 * 50) {
+      if (file.size && file.size > 1024 * 1024 * 50) {
         return message.error("文件过大，无法上传！");
       }
       fileList.value = [file, ...fileList.value];
@@ -260,8 +260,8 @@ export default defineComponent({
           formData.append("files[]", file as any);
         });
         http.post("/question/upload", formData).then((res) => {
-          const files = res.data as never[]
-          formState.files.push(...files)
+          const files = res.data as never[];
+          formState.files.push(...files);
           reslove();
         });
       });
@@ -328,13 +328,13 @@ export default defineComponent({
           } else {
             loading.value = true;
             if (fileList.value.length) await handleUpload();
-            if(mode.value == 1) {
+            if (mode.value == 1) {
               http.post("/question", toRaw(formState)).then((res) => {
                 message.success("新增成功! 即将跳转......");
                 loading.value = false;
                 const timer = setTimeout(() => {
                   router.push(`/admin/question/${res.data._id}`);
-                  clearTimeout(timer)
+                  clearTimeout(timer);
                 }, 500);
               });
             } else {
@@ -343,7 +343,7 @@ export default defineComponent({
                 loading.value = false;
                 const timer = setTimeout(() => {
                   router.push(`/admin/question/${res.data._id}`);
-                  clearTimeout(timer)
+                  clearTimeout(timer);
                 }, 500);
               });
             }
@@ -353,19 +353,19 @@ export default defineComponent({
           console.log("error", error);
         });
     };
-    
+
     // 处理新增、编辑切换
     const route = useRoute();
     const query = route.query["id"];
-    if(query) {
+    if (query) {
       mode.value = 2;
       http.get(`/question/${query}`, {}).then((res) => {
-        if(res.data.factor.isSpace) factors.value.push('isSpace')
-        if(res.data.factor.isCase) factors.value.push('isCase')
-        if(res.data.factor.isWidth) factors.value.push('isWidth')
-        if(res.data.factor.isKeywords) factors.value.push('isKeywords');
+        if (res.data.factor.isSpace) factors.value.push("isSpace");
+        if (res.data.factor.isCase) factors.value.push("isCase");
+        if (res.data.factor.isWidth) factors.value.push("isWidth");
+        if (res.data.factor.isKeywords) factors.value.push("isKeywords");
         Object.assign(formState, res.data);
-        if(res.data.type == 2) formState.answer = res.data.answer.split('')
+        if (res.data.type == 2) formState.answer = res.data.answer.split("");
         editor.txt.html(res.data.body);
       });
     }
@@ -373,7 +373,7 @@ export default defineComponent({
       const newFileList = formState.files.slice();
       newFileList.splice(i, 1);
       formState.files = newFileList;
-    }
+    };
 
     return {
       formState,
@@ -394,7 +394,7 @@ export default defineComponent({
       handleRemove,
       fileList,
       removeOwnedFile,
-      loading
+      loading,
     };
   },
   components: {
@@ -403,7 +403,7 @@ export default defineComponent({
     PlusCircleOutlined,
     UploadOutlined,
     PaperClipOutlined,
-    DeleteOutlined
+    DeleteOutlined,
   },
 });
 </script>

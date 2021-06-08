@@ -1,5 +1,5 @@
 <template>
-  <div class='competition_list'>competition_list</div>
+  <div class='exam_list'>exam_list</div>
 </template>
 
 <script lang='ts'>
