@@ -92,6 +92,7 @@ export default defineComponent({
       files: [],
       questions: [],
     });
+    const loading = ref(false);
     const formRules: any = [];
     const question = ref<string>("");
     const questions = reactive([]);
@@ -177,6 +178,7 @@ export default defineComponent({
     };
     const onSubmit = (status: number) => {};
     return {
+      loading,
       formState,
       formRules,
       questions,
