@@ -1,20 +1,11 @@
 <template>
   <div class="question_detail">
-    <a-card
-      :title="question.title + ' [ ' + question.score + ' 分 ]'"
-      :headStyle="headerStyle"
-      :bodyStyle="bodyStyle"
-      class="question_detail_card"
-    >
+    <a-card :title="question.title + ' [ ' + question.score + ' 分 ]'" :headStyle="headerStyle" :bodyStyle="bodyStyle" class="question_detail_card">
       <template #extra>
         <a-space>
           <a-button type="primary" v-if="question.status != 3" @click="goEdit"> <EditOutlined /> 编辑 </a-button>
-          <a-button type="primary" v-if="question.status == 1" @click="publish(2)">
-            <BranchesOutlined /> 发布
-          </a-button>
-          <a-button type="primary" v-if="question.status == 2" @click="publish(1)">
-            <DisconnectOutlined /> 取消发布
-          </a-button>
+          <a-button type="primary" v-if="question.status == 1" @click="publish(2)"> <BranchesOutlined /> 发布 </a-button>
+          <a-button type="primary" v-if="question.status == 2" @click="publish(1)"> <DisconnectOutlined /> 取消发布 </a-button>
           <a-button type="danger" v-if="question.status != 3" @click="handleDelete"> <DeleteOutlined /> 删除 </a-button>
         </a-space>
       </template>
@@ -26,24 +17,20 @@
         </div>
         <div class="right">
           <a-card title="答案选项" v-if="question.type == 1 || question.type == 2">
-            <div
-              class="option"
-              :class="{ correct: question.answer.includes(option.key) }"
-              v-for="option in question.options"
-              :key="option.key"
-            >
+            <div class="option" :class="{ correct: question.answer.includes(option.key) }" v-for="option in question.options" :key="option.key">
               <span class="option_label">{{ option.key }}</span>
               <span class="option_value">{{ option.val }}</span>
             </div>
           </a-card>
           <a-card title="答案" v-if="question.type == 3" style="margin-top: 20px">
-            <div class="option correct">{{question.answer}}</div>
+            <div class="option correct">{{ question.answer }}</div>
           </a-card>
           <a-card title="判题因素" v-if="question.type == 3" style="margin-top: 20px">
             <div class="option correct" v-if="question.factor.isCase">是否区分大小写</div>
             <div class="option correct" v-if="question.factor.isSpace">是否区分空格</div>
             <div class="option correct" v-if="question.factor.isWidth">是否区分全半角</div>
             <div class="option correct" v-if="question.factor.isKeywords">是否按点得分</div>
+            <a-empty v-if="!question.factor.isCase && !question.factor.isSpace && !question.factor.isWidth && !question.factor.isKeywords" description="无特殊判定"></a-empty>
           </a-card>
           <a-card title="示例" v-if="question.type == 4" style="margin-top: 20px">
             <div class="option" v-for="(example, i) in question.examples" :key="i">
@@ -52,9 +39,10 @@
             </div>
           </a-card>
           <a-card title="附件" style="margin-top: 20px">
-            <div class="option" v-for="file in question.files" :key="file.name">
+            <div class="option" v-if="question.files && question.files.length" v-for="file in question.files" :key="file.name">
               <a :href="file.path" target="__blank">{{ file.name }}</a>
             </div>
+            <a-empty v-else description="无附件"></a-empty>
           </a-card>
         </div>
       </div>
@@ -65,13 +53,7 @@
 <script lang="ts">
 import { createVNode, defineComponent, onBeforeMount, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
-import {
-  EditOutlined,
-  BranchesOutlined,
-  DisconnectOutlined,
-  DeleteOutlined,
-  ExclamationCircleOutlined,
-} from "@ant-design/icons-vue";
+import { EditOutlined, BranchesOutlined, DisconnectOutlined, DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import http from "../../../libs/http";
 import { message, Modal } from "ant-design-vue";
 import router from "../../../router";
@@ -79,7 +61,7 @@ export default defineComponent({
   setup() {
     const { params } = useRoute();
     const question = reactive({
-      status: 3
+      status: 3,
     });
     const getDetail = () => {
       http.get(`/question/${params.id}`, {}).then((res) => {

@@ -28,7 +28,9 @@
             </a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item name="questions">
+        <a-form-item
+          name="questions"
+          :label="`单选/多选/填空/代码/总分 : ${questionScores.choice} / ${questionScores.multi} / ${questionScores.blank} / ${questionScores.blank} / ${questionScores.allScore}`">
           <div class="question" v-if="selectedQuestions.length" v-for="question in selectedQuestions" :key="question._id">
             <div class="type">
               <a-tag :color="getTypeTag(question.type).color">{{ getTypeTag(question.type).label }}</a-tag>
@@ -98,6 +100,13 @@ export default defineComponent({
       title: undefined,
       status: 1,
     });
+    const questionScores = reactive({
+      choice: 0,
+      multi: 0,
+      blank: 0,
+      code: 0,
+      allScore: 0,
+    });
     const loading = ref(false);
     const question = ref<string>();
     const questions = reactive([]);
@@ -142,12 +151,22 @@ export default defineComponent({
           level: Number(level),
           title: title,
         });
+        if (type == "1") {
+          questionScores.choice += Number(score);
+        } else if (type == "2") {
+          questionScores.multi += Number(score);
+        } else if (type == "3") {
+          questionScores.blank += Number(score);
+        } else {
+          questionScores.code += Number(score);
+        }
+        questionScores.allScore += Number(score);
+        formRef.value.validate();
+        nextTick(() => {
+          question.value = undefined;
+          if (questions.length == 1) questions.length = 0;
+        });
       }
-      formRef.value.validate();
-      nextTick(() => {
-        question.value = undefined;
-        if (questions.length == 1) questions.length = 0;
-      });
     };
     const remove = (question: IOptionsExtra) => {
       const key = `${question.id}::${question.type}::${question.score}::${question.level}::${question.title}`;
@@ -158,6 +177,16 @@ export default defineComponent({
           selectedQuestions.splice(i, 1);
         }
       });
+      if (question.type == 1) {
+        questionScores.choice -= Number(question.score);
+      } else if (question.type == 2) {
+        questionScores.multi -= Number(question.score);
+      } else if (question.type == 3) {
+        questionScores.blank -= Number(question.score);
+      } else {
+        questionScores.code -= Number(question.score);
+      }
+      questionScores.allScore -= Number(question.score);
     };
 
     // form 规则
@@ -240,6 +269,7 @@ export default defineComponent({
       formRules,
       questions,
       question,
+      questionScores,
       remove,
       handleSearch,
       handleChange,

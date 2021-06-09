@@ -5,11 +5,21 @@
         <a-tag :color="getStatusTag(text).color">{{ getStatusTag(text).label }}</a-tag>
       </span>
     </template>
-    <template #choice="{ record }">{{ record.choiceCount }} / {{ record.choiceScore }}</template>
-    <template #multi="{ record }">{{ record.multiCount }} / {{ record.multiScore }}</template>
-    <template #blank="{ record }">{{ record.blankCount }} / {{ record.blankScore }}</template>
-    <template #code="{ record }">{{ record.codeCount }} / {{ record.codeScore }}</template>
-    <template #allScore="{ record }">{{ record.choiceScore + record.multiScore + record.blankScore + record.codeScore }}</template>
+    <template #choice="{ record }">
+      <b style="color: #f5222d">{{ record.choiceCount }}</b> / {{ record.choiceScore }}
+    </template>
+    <template #multi="{ record }">
+      <b style="color: #f5222d">{{ record.multiCount }}</b> / {{ record.multiScore }}
+    </template>
+    <template #blank="{ record }">
+      <b style="color: #f5222d">{{ record.blankCount }}</b> / {{ record.blankScore }}
+    </template>
+    <template #code="{ record }">
+      <b style="color: #f5222d">{{ record.codeCount }}</b> / {{ record.codeScore }}
+    </template>
+    <template #allScore="{ record }">
+      <b style="color: #f5222d">{{ record.choiceScore + record.multiScore + record.blankScore + record.codeScore }}</b>
+    </template>
     <template #actionTitle>
       操作(
       <a-space>

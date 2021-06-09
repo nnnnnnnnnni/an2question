@@ -1,0 +1,56 @@
+import { Context } from "koa";
+import Utils from "../../lib/utils";
+const Response = Utils.generateResponse;
+import questionModel from "../../mongo/questionSchema";
+import testpaperModel from "../../mongo/testpaperSchema";
+
+export const publish = async (ctx: Context) => {
+  const { id, status } = ctx.request.body;
+
+  const testpaper = await testpaperModel.findOne({ _id: id });
+  if (testpaper.status == 3) {
+    return (ctx.body = Response(0, "发布失败:试卷已经被使用"));
+  }
+
+  await testpaperModel.updateOne(
+    { _id: id },
+    {
+      $set: {
+        status: status,
+      },
+    }
+  );
+
+  return (ctx.body = Response(1, "发布成功"));
+};
+
+export const update = async (ctx: Context) => {
+  // const doc = ctx.request.body;
+
+  // const updateData = {
+  //   title: doc.title,
+  //   body: doc.body,
+  //   score: doc.score,
+  //   answerTime: doc.answerTime,
+  //   factor:
+  //     doc.type == 3
+  //       ? doc.factor
+  //       : {
+  //           isCase: false,
+  //           isKeywords: false,
+  //           isSpace: false,
+  //           isWidth: false,
+  //         },
+  //   options: [1, 2].includes(doc.type) ? doc.options : [],
+  //   answer: doc.type == 4 ? "" : doc.answer,
+  //   examples: doc.type == 4 ? doc.examples : [],
+  //   type: doc.type,
+  //   level: doc.level,
+  //   status: doc.status,
+  //   files: doc.files ?? [],
+  // };
+
+  // const newQuestion = await questionModel.findOneAndUpdate({ _id: doc._id }, { $set: updateData }, { new: true });
+
+  // return (ctx.body = Response(1, "", newQuestion.toJSON()));
+};
