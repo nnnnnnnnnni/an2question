@@ -78,7 +78,7 @@ import { CloseCircleOutlined, UploadOutlined, PaperClipOutlined, DeleteOutlined 
 import { message } from "ant-design-vue";
 import { defineComponent, reactive, UnwrapRef, ref, nextTick, toRaw } from "vue";
 import http from "../../../libs/http";
-import { IOptions, getTypeTag, getLevelTag, IFileItem } from "../question/data";
+import { IOptions, getTypeTag, getLevelTag, IFileItem, IQuestion } from "../question/data";
 import { RuleObject, ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import router from "../../../router";
 import { useRoute } from "vue-router";
@@ -247,6 +247,7 @@ export default defineComponent({
         .validate()
         .then(async () => {
           loading.value = true;
+          formState.questions.length = 0;
           selectedQuestionKeys.value.forEach((key) => {
             formState.questions.push(key.split("::")[0]);
           });
@@ -287,19 +288,17 @@ export default defineComponent({
         questionScores.blank = res.data.blankScore;
         questionScores.code = res.data.codeScore;
         questionScores.allScore = res.data.allScore;
-        selectedQuestionKeys.value = [];
-        selectedQuestions.length = 0;
-        res.data.questions.forEach((question) => {
+        res.data.questions.forEach((question: IQuestion) => {
           selectedQuestionKeys.value.push(`${question._id}::${question.type}::${question.score}::${question.level}::${question.title}`);
           selectedQuestions.push({
             id: question._id,
             type: question.type,
             score: question.score,
             level: question.level,
-            title: question.title,
+            title: String(question.title),
           });
         });
-        res.data.questions = res.data.questions.map(question => question._id)
+        res.data.questions = res.data.questions.map((question: IQuestion) => question._id)
         Object.assign(formState, res.data);
       });
     }
