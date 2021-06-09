@@ -31,8 +31,9 @@
         <a-form-item
           name="questions"
           :label="`单选/多选/填空/代码/总分 : ${questionScores.choice} / ${questionScores.multi} / ${questionScores.blank} / ${questionScores.blank} / ${questionScores.allScore}`"
+          v-if="selectedQuestions.length"
         >
-          <div class="question" v-if="selectedQuestions.length" v-for="question in selectedQuestions" :key="question._id">
+          <div class="question"  v-for="question in selectedQuestions" :key="question._id">
             <div class="type">
               <a-tag :color="getTypeTag(question.type).color">{{ getTypeTag(question.type).label }}</a-tag>
             </div>
@@ -43,8 +44,8 @@
             <div class="score">{{ question.score }} 分</div>
             <div class="close" @click="remove(question)"><CloseCircleOutlined style="font-size: 16px" /></div>
           </div>
-          <a-empty v-else description="尚未选择题目"></a-empty>
         </a-form-item>
+          <a-empty v-else description="尚未选择题目"></a-empty>
       </a-col>
       <a-col :span="10" :offset="2">
         <a-form-item label="标题" required name="title">
