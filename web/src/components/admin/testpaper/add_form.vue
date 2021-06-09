@@ -6,7 +6,7 @@
           <a-select
             show-search
             v-model:value="question"
-            placeholder="输入题目名称"
+            placeholder="输入题目名称搜索"
             :allowClear="true"
             :defaultActive-firstOption="false"
             :filterOption="false"
@@ -30,7 +30,8 @@
         </a-form-item>
         <a-form-item
           name="questions"
-          :label="`单选/多选/填空/代码/总分 : ${questionScores.choice} / ${questionScores.multi} / ${questionScores.blank} / ${questionScores.blank} / ${questionScores.allScore}`">
+          :label="`单选/多选/填空/代码/总分 : ${questionScores.choice} / ${questionScores.multi} / ${questionScores.blank} / ${questionScores.blank} / ${questionScores.allScore}`"
+        >
           <div class="question" v-if="selectedQuestions.length" v-for="question in selectedQuestions" :key="question._id">
             <div class="type">
               <a-tag :color="getTypeTag(question.type).color">{{ getTypeTag(question.type).label }}</a-tag>
@@ -80,6 +81,7 @@ import http from "../../../libs/http";
 import { IOptions, getTypeTag, getLevelTag, IFileItem } from "../question/data";
 import { RuleObject, ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import router from "../../../router";
+import { useRoute } from "vue-router";
 interface IOptionsExtra extends IOptions {
   score?: number;
   id?: string;
@@ -94,6 +96,7 @@ interface IFormState {
 export default defineComponent({
   setup() {
     const formRef = ref();
+    const mode = ref(1); // 1: add | 2: edit
     const formState: UnwrapRef<IFormState> = reactive({
       files: [],
       questions: [],
@@ -110,7 +113,7 @@ export default defineComponent({
     const loading = ref(false);
     const question = ref<string>();
     const questions = reactive([]);
-    const selectedQuestionKeys: UnwrapRef<string[]> = reactive([]);
+    const selectedQuestionKeys = ref<string[]>([]);
     const selectedQuestions: UnwrapRef<IOptionsExtra[]> = reactive([]);
 
     // 搜索选择题目
@@ -142,8 +145,8 @@ export default defineComponent({
     const handleChange = (e: string) => {
       const data = e;
       const [id, type, score, level, title] = data.split("::");
-      if (!selectedQuestionKeys.includes(e)) {
-        selectedQuestionKeys.push(e);
+      if (!selectedQuestionKeys.value.includes(e)) {
+        selectedQuestionKeys.value.push(e);
         selectedQuestions.push({
           id: id,
           type: Number(type),
@@ -170,8 +173,8 @@ export default defineComponent({
     };
     const remove = (question: IOptionsExtra) => {
       const key = `${question.id}::${question.type}::${question.score}::${question.level}::${question.title}`;
-      const i = selectedQuestionKeys.indexOf(key);
-      selectedQuestionKeys.splice(i, 1);
+      const i = selectedQuestionKeys.value.indexOf(key);
+      selectedQuestionKeys.value.splice(i, 1);
       selectedQuestions.forEach((item, i) => {
         if (item.id == question.id) {
           selectedQuestions.splice(i, 1);
@@ -244,23 +247,62 @@ export default defineComponent({
         .validate()
         .then(async () => {
           loading.value = true;
-          selectedQuestionKeys.forEach((key) => {
+          selectedQuestionKeys.value.forEach((key) => {
             formState.questions.push(key.split("::")[0]);
           });
           if (fileList.value.length) await handleUpload();
-          http.post("/testpaper", toRaw(formState)).then((res) => {
-            message.success("新增成功! 即将跳转......");
-            loading.value = false;
-            const timer = setTimeout(() => {
-              router.push(`/admin/testpaper/${res.data._id}`);
-              clearTimeout(timer);
-            }, 500);
-          });
+          if (mode.value == 1) {
+            http.post("/testpaper", toRaw(formState)).then((res) => {
+              message.success("新增成功! 即将跳转......");
+              loading.value = false;
+              const timer = setTimeout(() => {
+                router.push(`/admin/testpaper/${res.data._id}`);
+                clearTimeout(timer);
+              }, 500);
+            });
+          } else {
+            http.put("/testpaper", toRaw(formState)).then((res) => {
+              message.success("更新成功! 即将跳转......");
+              loading.value = false;
+              const timer = setTimeout(() => {
+                router.push(`/admin/testpaper/${query}`);
+                clearTimeout(timer);
+              }, 500);
+            });
+          }
         })
         .catch((error: ValidateErrorEntity<IOptionsExtra>) => {
           console.log("error", error);
         });
     };
+
+    // 处理新增、编辑切换
+    const route = useRoute();
+    const query = route.query["id"];
+    if (query) {
+      mode.value = 2;
+      http.get(`/testpaper/${query}`, {}).then((res) => {
+        questionScores.choice = res.data.choiceScore;
+        questionScores.multi = res.data.multiScore;
+        questionScores.blank = res.data.blankScore;
+        questionScores.code = res.data.codeScore;
+        questionScores.allScore = res.data.allScore;
+        selectedQuestionKeys.value = [];
+        selectedQuestions.length = 0;
+        res.data.questions.forEach((question) => {
+          selectedQuestionKeys.value.push(`${question._id}::${question.type}::${question.score}::${question.level}::${question.title}`);
+          selectedQuestions.push({
+            id: question._id,
+            type: question.type,
+            score: question.score,
+            level: question.level,
+            title: question.title,
+          });
+        });
+        res.data.questions = res.data.questions.map(question => question._id)
+        Object.assign(formState, res.data);
+      });
+    }
 
     return {
       formRef,

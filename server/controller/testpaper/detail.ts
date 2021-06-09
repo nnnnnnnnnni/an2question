@@ -7,7 +7,7 @@ import testpaperModel from "../../mongo/testpaperSchema";
 export default async (ctx: Context) => {
   const { id } = ctx.request.params;
 
-  const detail = await testpaperModel.findOne({ _id: id }).populate("questions");
+  const detail = await testpaperModel.findOne({ _id: id }).populate("questions", 'title score level type status');
   const data = {
     choiceCount: 0,
     choiceScore: 0,

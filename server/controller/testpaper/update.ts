@@ -2,7 +2,10 @@ import { Context } from "koa";
 import Utils from "../../lib/utils";
 const Response = Utils.generateResponse;
 import questionModel from "../../mongo/questionSchema";
+import bindModel from "../../mongo/bindSchema";
 import testpaperModel from "../../mongo/testpaperSchema";
+import { Types } from "mongoose";
+import ObjectId = Types.ObjectId;
 
 export const publish = async (ctx: Context) => {
   const { id, status } = ctx.request.body;
@@ -25,32 +28,50 @@ export const publish = async (ctx: Context) => {
 };
 
 export const update = async (ctx: Context) => {
-  // const doc = ctx.request.body;
+  const doc = ctx.request.body;
 
-  // const updateData = {
-  //   title: doc.title,
-  //   body: doc.body,
-  //   score: doc.score,
-  //   answerTime: doc.answerTime,
-  //   factor:
-  //     doc.type == 3
-  //       ? doc.factor
-  //       : {
-  //           isCase: false,
-  //           isKeywords: false,
-  //           isSpace: false,
-  //           isWidth: false,
-  //         },
-  //   options: [1, 2].includes(doc.type) ? doc.options : [],
-  //   answer: doc.type == 4 ? "" : doc.answer,
-  //   examples: doc.type == 4 ? doc.examples : [],
-  //   type: doc.type,
-  //   level: doc.level,
-  //   status: doc.status,
-  //   files: doc.files ?? [],
-  // };
+  const updateData = {
+    title: doc.title,
+    status: doc.status,
+    questions: doc.questions || [],
+    files: doc.files || [],
+  };
 
-  // const newQuestion = await questionModel.findOneAndUpdate({ _id: doc._id }, { $set: updateData }, { new: true });
+  const removeQuestions: ObjectId[] = [];
+  const stillQuestions: ObjectId[] = [];
+  const installQuestion: {testpaper: ObjectId, question: ObjectId}[] = [];
 
-  // return (ctx.body = Response(1, "", newQuestion.toJSON()));
+  const oldTestpaper = await testpaperModel.findOne({ _id: doc._id });
+  const oldQuestions = oldTestpaper.questions.map((question) => String(question));
+  doc.questions.forEach((question: string) => {
+    if (oldQuestions.includes(question)) {
+      stillQuestions.push(ObjectId(question));
+    } else {
+      installQuestion.push({
+        testpaper: ObjectId(doc._id),
+        question: ObjectId(question)
+      });
+    }
+  });
+  oldQuestions.forEach((question) => {
+    if (!doc.questions.includes(question)) {
+      removeQuestions.push(ObjectId(question));
+    }
+  });
+
+  const binds = await bindModel.aggregate([{ $match: { question: { $in: removeQuestions } } }, { $group: { _id: "$question", total: { $sum: 1 } } }]);
+  const delAndUpdateIds: ObjectId[] = [];
+  binds.forEach((bind) => {
+    if (bind.total == 1) {
+      delAndUpdateIds.push(bind._id);
+    }
+  });
+  await Promise.all([
+    questionModel.updateMany({ _id: { $in: delAndUpdateIds } }, { $set: { status: 2 } }),
+    testpaperModel.updateOne({ _id: doc._id }, { $set: updateData }),
+    bindModel.insertMany(installQuestion),
+    questionModel.updateMany({ _id: { $in: doc.questions } }, { $set: { status: 3 } })
+  ]);
+
+  return (ctx.body = Response(1, ""));
 };
