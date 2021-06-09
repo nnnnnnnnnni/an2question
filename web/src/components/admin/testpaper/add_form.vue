@@ -28,7 +28,7 @@
             </a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item>
+        <a-form-item name="questions">
           <div class="question" v-if="selectedQuestions.length" v-for="question in selectedQuestions" :key="question._id">
             <div class="type">
               <a-tag :color="getTypeTag(question.type).color">{{ getTypeTag(question.type).label }}</a-tag>
@@ -73,9 +73,11 @@
 <script lang="ts">
 import { CloseCircleOutlined, UploadOutlined, PaperClipOutlined, DeleteOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
-import { defineComponent, reactive, UnwrapRef, ref, nextTick } from "vue";
+import { defineComponent, reactive, UnwrapRef, ref, nextTick, toRaw } from "vue";
 import http from "../../../libs/http";
 import { IOptions, getTypeTag, getLevelTag, IFileItem } from "../question/data";
+import { RuleObject, ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
+import router from "../../../router";
 interface IOptionsExtra extends IOptions {
   score?: number;
   id?: string;
@@ -85,33 +87,47 @@ interface IFormState {
   title?: string;
   files: string[];
   questions: string[];
+  status: number;
 }
 export default defineComponent({
   setup() {
+    const formRef = ref();
     const formState: UnwrapRef<IFormState> = reactive({
       files: [],
       questions: [],
+      title: undefined,
+      status: 1,
     });
     const loading = ref(false);
-    const formRules: any = [];
-    const question = ref<string>("");
+    const question = ref<string>();
     const questions = reactive([]);
     const selectedQuestionKeys: UnwrapRef<string[]> = reactive([]);
     const selectedQuestions: UnwrapRef<IOptionsExtra[]> = reactive([]);
+
+    // 搜索选择题目
+    const requestQuestion = (e: string) => {
+      http
+        .get("/question", {
+          page: 1,
+          count: 10,
+          options: {
+            title: e,
+            status: 5,
+          },
+        })
+        .then((res) => {
+          return Object.assign(questions, res.data.questions);
+        });
+    };
+    let timer: any = null;
     const handleSearch = (e: string) => {
       if (e != "") {
-        http
-          .get("/question", {
-            page: 1,
-            count: 10,
-            options: {
-              title: e,
-              status: 5,
-            },
-          })
-          .then((res) => {
-            return Object.assign(questions, res.data.questions);
-          });
+        if (timer != null) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          requestQuestion(e);
+        }, 500);
       }
     };
     const handleChange = (e: string) => {
@@ -127,8 +143,9 @@ export default defineComponent({
           title: title,
         });
       }
+      formRef.value.validate();
       nextTick(() => {
-        question.value = "";
+        question.value = undefined;
         if (questions.length == 1) questions.length = 0;
       });
     };
@@ -141,6 +158,21 @@ export default defineComponent({
           selectedQuestions.splice(i, 1);
         }
       });
+    };
+
+    // form 规则
+    const formRules = {
+      title: [{ required: true, message: "请输入标题", trigger: "change" }],
+      questions: [
+        {
+          validator: async () => {
+            if (selectedQuestions.length == 0) {
+              return Promise.reject("请选择题目");
+            }
+          },
+          trigger: "change",
+        },
+      ],
     };
 
     // 附件相关
@@ -164,7 +196,7 @@ export default defineComponent({
         fileList.value.forEach((file: IFileItem) => {
           formData.append("files[]", file as any);
         });
-        http.post("/question/upload", formData).then((res) => {
+        http.post("/testpaper/upload", formData).then((res) => {
           const files = res.data as never[];
           formState.files.push(...files);
           reslove();
@@ -176,8 +208,33 @@ export default defineComponent({
       newFileList.splice(i, 1);
       formState.files = newFileList;
     };
-    const onSubmit = (status: number) => {};
+
+    const onSubmit = (status: number) => {
+      formState.status = status;
+      formRef.value
+        .validate()
+        .then(async () => {
+          loading.value = true;
+          selectedQuestionKeys.forEach((key) => {
+            formState.questions.push(key.split("::")[0]);
+          });
+          if (fileList.value.length) await handleUpload();
+          http.post("/testpaper", toRaw(formState)).then((res) => {
+            message.success("新增成功! 即将跳转......");
+            loading.value = false;
+            const timer = setTimeout(() => {
+              router.push(`/admin/testpaper/${res.data._id}`);
+              clearTimeout(timer);
+            }, 500);
+          });
+        })
+        .catch((error: ValidateErrorEntity<IOptionsExtra>) => {
+          console.log("error", error);
+        });
+    };
+
     return {
+      formRef,
       loading,
       formState,
       formRules,
@@ -193,7 +250,6 @@ export default defineComponent({
       fileList,
       beforeUpload,
       handleRemove,
-      handleUpload,
       removeOwnedFile,
       onSubmit,
     };
@@ -259,6 +315,7 @@ export default defineComponent({
 .close:hover {
   color: red;
 }
+
 .file {
   height: 22px;
   transition: background-color 0.3s;

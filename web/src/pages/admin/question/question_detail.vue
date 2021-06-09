@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { createVNode, defineComponent, onMounted, reactive } from "vue";
+import { createVNode, defineComponent, onBeforeMount, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
 import {
   EditOutlined,
@@ -78,13 +78,15 @@ import router from "../../../router";
 export default defineComponent({
   setup() {
     const { params } = useRoute();
-    const question = reactive({});
+    const question = reactive({
+      status: 3
+    });
     const getDetail = () => {
       http.get(`/question/${params.id}`, {}).then((res) => {
         return Object.assign(question, res.data);
       });
     };
-    onMounted(async () => await getDetail());
+    onBeforeMount(async () => await getDetail());
 
     const handleDelete = () => {
       Modal.confirm({

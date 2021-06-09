@@ -5,6 +5,11 @@
         <a-tag :color="getStatusTag(text).color">{{ getStatusTag(text).label }}</a-tag>
       </span>
     </template>
+    <template #choice="{ record }">{{ record.choiceCount }} / {{ record.choiceScore }}</template>
+    <template #multi="{ record }">{{ record.multiCount }} / {{ record.multiScore }}</template>
+    <template #blank="{ record }">{{ record.blankCount }} / {{ record.blankScore }}</template>
+    <template #code="{ record }">{{ record.codeCount }} / {{ record.codeScore }}</template>
+    <template #allScore="{ record }">{{ record.choiceScore + record.multiScore + record.blankScore + record.codeScore }}</template>
     <template #actionTitle>
       操作(
       <a-space>
@@ -71,6 +76,7 @@ export default defineComponent({
       count: count.value || 10,
       total: total.value || 0,
     });
+    console.log(list);
     const tableLoading = ref(loading.value);
     watch(loading, () => (tableLoading.value = loading.value));
     const pagination = reactive({
@@ -86,12 +92,12 @@ export default defineComponent({
     };
     const openDeleteModal = (reacrd: ITestpaper) => {
       Modal.confirm({
-        title: '确定要删除吗?',
+        title: "确定要删除吗?",
         icon: createVNode(ExclamationCircleOutlined),
-        content: '题目一经删除,无法恢复,请确认后删除!',
-        okText: '删除',
-        okType: 'danger',
-        cancelText: '取消',
+        content: "题目一经删除,无法恢复,请确认后删除!",
+        okText: "删除",
+        okType: "danger",
+        cancelText: "取消",
         onOk() {
           http.delete("/testpaper", { id: reacrd._id }).then((res) => {
             message.success(String(res.message));
@@ -99,7 +105,7 @@ export default defineComponent({
           });
         },
         onCancel() {
-          console.log('Cancel');
+          console.log("Cancel");
         },
       });
     };

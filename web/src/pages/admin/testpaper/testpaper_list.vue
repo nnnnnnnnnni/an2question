@@ -36,10 +36,10 @@ export default defineComponent({
           options: conds,
         })
         .then((res) => {
-          if(res.data.total != 0 && res.data.testpaper.length == 0) {
+          if(res.data.total != 0 && res.data.testpapers.length == 0) {
             getList(pageData.page -1, pageData.count, clearObj(toRaw(searchData), true))
           } else {
-            pageData.data = res.data.testpaper;
+            pageData.data = res.data.testpapers;
             pageData.total = res.data.total;
             pageData.loading = false;
           }

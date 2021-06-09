@@ -9,3 +9,4 @@ logs/MONGO*
 logs/REDIS*
 uploads/
 public/questionFiles/*
+public/testpaperFiles/*

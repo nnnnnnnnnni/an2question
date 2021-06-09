@@ -57,7 +57,7 @@ export default class Utils {
       const newFiles: { name: string; path: string }[] = [];
       files.map((file: any) => {
         const fileNameArr = file.name.split('.');
-        const newFileName = `${fileNameArr[0]}.${Math.random()*10000000000}.${Utils.randomString(10)}.${new Date().getTime()}` +fileNameArr[1]?`.${fileNameArr[1]}`: ''
+        const newFileName = `${fileNameArr[0]}.${Math.random()*10000000000}.${Utils.randomString(10)}.${new Date().getTime()}` +(fileNameArr[1]?`.${fileNameArr[1]}`: '')
         const destFilePath = path.resolve(folder, newFileName);
         fs.access(folder, async (err) => {
           if (err) {

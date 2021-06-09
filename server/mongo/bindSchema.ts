@@ -5,9 +5,9 @@ const { ObjectId } = mongoose.Types;
 
 const bindSchema = new mongoose.Schema(
   {
-    competition: {
+    exam: {
       type: ObjectId,
-      ref: "competition",
+      ref: "exam",
     },
     testpaper: {
       type: ObjectId,
@@ -27,7 +27,7 @@ const bindSchema = new mongoose.Schema(
 );
 
 export interface IBind extends Document {
-  competition?: ObjectId;
+  exam?: ObjectId;
   testpaper?: ObjectId | ITestPaper;
   question?: ObjectId | IQuestion;
   createAt: Date | string | number;
