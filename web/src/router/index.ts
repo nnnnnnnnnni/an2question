@@ -68,6 +68,14 @@ const router = createRouter({
           component: () => import("@/pages/admin/testpaper/testpaper_add.vue"),
         },
         {
+          path: "testpaper/edit",
+          name: "ADMIN_TESTPAPER_EDIT",
+          meta: {
+            needLogin: true,
+          },
+          component: () => import("@/pages/admin/testpaper/testpaper_add.vue"),
+        },
+        {
           path: "testpaper/:id",
           name: "ADMIN_TESTPAPER_DETAIL",
           meta: {

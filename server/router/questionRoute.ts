@@ -48,7 +48,7 @@ export default [
     methods: "GET",
     validation: questionValidation.detail,
     Middlewares: [Detail],
-    needLogin: false,
+    needLogin: true,
   },
   {
     path: "/question/upload",

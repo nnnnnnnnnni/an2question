@@ -1,6 +1,7 @@
 import { IRoute } from "../interface/route";
 import Upload from "../controller/testpaper/upload";
 import Create from "../controller/testpaper/create";
+import Detail from "../controller/testpaper/detail";
 import List from "../controller/testpaper/list";
 import { publish } from "../controller/testpaper/update";
 import Delete from "../controller/testpaper/delete";
@@ -12,6 +13,13 @@ export default [
     methods: "GET",
     validation: testpaperValidation.list,
     Middlewares: [List],
+    needLogin: true,
+  },
+  {
+    path: "/testpaper/:id",
+    methods: "GET",
+    validation: testpaperValidation.detail,
+    Middlewares: [Detail],
     needLogin: true,
   },
   {

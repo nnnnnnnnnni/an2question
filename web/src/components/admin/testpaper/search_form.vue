@@ -2,7 +2,7 @@
   <div class="search_form">
     <a-form layout="inline">
       <a-form-item>
-        <a-input v-model:value="formState.title" placeholder="标题" style="width: 150px" />
+        <a-input v-model:value="formState.title" placeholder="标题" style="width: 150px" allowClear />
       </a-form-item>
       <a-form-item>
         <a-select v-model:value="formState.status" placeholder="状态" allowClear style="width: 150px">
@@ -47,7 +47,7 @@ export default defineComponent({
       resetFields();
     };
     const search = () => {
-      context.emit('search', formState)
+      context.emit("search", formState);
     };
     return {
       formState,
