@@ -13,13 +13,32 @@ export default class Utils {
   }
 
   public static randomChar(): string {
-    const chars = "123456780ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz123456780";
+    const chars = "123456780ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz";
     const length = chars.length;
-    return chars[Number((Math.random() * (length - 1)).toFixed())];
+    return chars[this.random(length)];
   }
 
   public static randomString(len = 16) {
     return crypto.randomBytes(len).toString("base64").replace(new RegExp("[`~%!@#^+-=''?~！@#￥……&——‘”“'？*()（），,。.、]", "g"), this.randomChar());
+  }
+
+  /**
+   * 随机获取数组内容(一项)
+   * @param array 数组
+   * @returns 数组中随机一项
+   */
+  public static randomArrayItem<T>(array: T[]): T {
+    const length = array.length;
+    return array[this.random(length)];
+  }
+
+  /**
+   * 生成 0 - max 的随机整数
+   * @param max 随机数上限,不包含 max
+   * @returns 随机数
+   */
+  public static random(max: number) {
+    return Math.floor(Math.random() * max);
   }
 
   /**
@@ -36,28 +55,28 @@ export default class Utils {
 
   public static moveFile(destPath: string, originPath: string): Promise<void> {
     return new Promise((reslove, reject) => {
-      fs.rename(originPath, destPath, err => {
-        if(err) {
-          reject(err)
+      fs.rename(originPath, destPath, (err) => {
+        if (err) {
+          reject(err);
         } else {
-          reslove()
+          reslove();
         }
-      })
-    })
+      });
+    });
   }
 
   /**
    * @param files 上传上来的文件数组
    * @param folderName 保存的文件夹名称
-   * @returns 
+   * @returns
    */
   public static async HandleUpload(files: any, folderName: string) {
     return new Promise((reslove, reject) => {
       const folder = path.resolve(config.publicStatic, folderName);
       const newFiles: { name: string; path: string }[] = [];
       files.map((file: any) => {
-        const fileNameArr = file.name.split('.');
-        const newFileName = `${fileNameArr[0]}.${Math.random()*10000000000}.${Utils.randomString(10)}.${new Date().getTime()}` +(fileNameArr[1]?`.${fileNameArr[1]}`: '')
+        const fileNameArr = file.name.split(".");
+        const newFileName = `${fileNameArr[0]}.${Math.random() * 10000000000}.${Utils.randomString(10)}.${new Date().getTime()}` + (fileNameArr[1] ? `.${fileNameArr[1]}` : "");
         const destFilePath = path.resolve(folder, newFileName);
         fs.access(folder, async (err) => {
           if (err) {
@@ -66,17 +85,17 @@ export default class Utils {
                 return reject(err);
               } else {
                 await Utils.moveFile(destFilePath, file.path);
-                newFiles.push({name: fileNameArr[0], path: path.join('/', folderName, newFileName).replace(/(\\|\/\/)/g, '/')});
-                if(newFiles.length == files.length) {
-                  reslove(newFiles)
+                newFiles.push({ name: fileNameArr[0], path: path.join("/", folderName, newFileName).replace(/(\\|\/\/)/g, "/") });
+                if (newFiles.length == files.length) {
+                  reslove(newFiles);
                 }
               }
             });
           } else {
             await Utils.moveFile(destFilePath, file.path);
-            newFiles.push({name: fileNameArr[0], path: path.join('/', folderName, newFileName).replace(/(\\|\/\/)/g, '/')});
-            if(newFiles.length == files.length) {
-              reslove(newFiles)
+            newFiles.push({ name: fileNameArr[0], path: path.join("/", folderName, newFileName).replace(/(\\|\/\/)/g, "/") });
+            if (newFiles.length == files.length) {
+              reslove(newFiles);
             }
           }
         });

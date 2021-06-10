@@ -22,15 +22,14 @@ import http from "../../libs/http";
 import router from "../../router";
 import store from "../../vuex/index";
 export default defineComponent({
-  components: { MessageOutlined, LoginOutlined },
   setup() {
     const logout = () => {
       http.post("/logout", {}).then((res) => {
         if (res.code == 1) {
-          message.success(res.message || '');
+          message.success(res.message || "");
           const timer = setTimeout(() => {
             router.push({ name: "LOGIN" });
-            clearTimeout(timer)
+            clearTimeout(timer);
           }, 500);
         }
       });
@@ -40,6 +39,7 @@ export default defineComponent({
       store,
     };
   },
+  components: { MessageOutlined, LoginOutlined },
 });
 </script>
 

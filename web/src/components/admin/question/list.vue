@@ -96,12 +96,12 @@ export default defineComponent({
     };
     const openDeleteModal = (reacrd: IQuestion) => {
       Modal.confirm({
-        title: '确定要删除吗?',
+        title: "确定要删除吗?",
         icon: createVNode(ExclamationCircleOutlined),
-        content: '题目一经删除,无法恢复,请确认后删除!',
-        okText: '删除',
-        okType: 'danger',
-        cancelText: '取消',
+        content: "题目一经删除,无法恢复,请确认后删除!",
+        okText: `删除`,
+        okType: "danger",
+        cancelText: "取消",
         onOk() {
           http.delete("/question", { id: reacrd._id }).then((res) => {
             message.success(String(res.message));
@@ -109,7 +109,7 @@ export default defineComponent({
           });
         },
         onCancel() {
-          console.log('Cancel');
+          console.log("Cancel");
         },
       });
     };

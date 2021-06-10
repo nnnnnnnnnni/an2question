@@ -1,4 +1,5 @@
-import mongoose, { Document } from "mongoose";
+import mongoose, { Document, ObjectId } from "mongoose";
+const { ObjectId } = mongoose.Types;
 
 const userSchema = new mongoose.Schema(
   {

@@ -8,6 +8,9 @@
       <div class="setting-item">
         <router-link :class="activeTab == 2 ? 'setting-item-active' : ''" to="/admin/setting/password">修改密码</router-link>
       </div>
+      <div class="setting-item">
+        <router-link :class="activeTab == 3 ? 'setting-item-active' : ''" to="/admin/setting/message">消息中心</router-link>
+      </div>
     </div>
   </div>
 </template>

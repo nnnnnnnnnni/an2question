@@ -29,7 +29,7 @@ import {
   Upload,
   Card,
   Modal,
-  Empty
+  Empty,
 } from "ant-design-vue";
 message.config({
   maxCount: 5,

@@ -34,4 +34,4 @@ export interface IBind extends Document {
   updateAt: Date | string | number;
 }
 
-export default mongoose.model("bind", bindSchema);
+export default mongoose.model<IBind>("bind", bindSchema);

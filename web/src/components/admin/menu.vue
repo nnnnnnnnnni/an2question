@@ -16,13 +16,13 @@
       </a-menu-item>
       <a-menu-item key="ADMIN_TESTPAPER">
         <FileTextOutlined />
-        <span>套题管理</span>
-        <router-link to="/admin/testpaper">套题管理</router-link>
+        <span>试卷管理</span>
+        <router-link to="/admin/testpaper">试卷管理</router-link>
       </a-menu-item>
       <a-menu-item key="ADMIN_EXAM">
         <TableOutlined />
         <span>考试管理</span>
-        <router-link to="/admin/exam">竞赛管理</router-link>
+        <router-link to="/admin/exam">考试管理</router-link>
       </a-menu-item>
       <a-sub-menu key="ADMIN_USER">
         <template #title>
@@ -52,18 +52,18 @@
           <router-link to="/admin/statistics/question">题目统计</router-link>
         </a-menu-item>
         <a-menu-item key="ADMIN_STATISTICS_TESTPAPER">
-          <span>套题统计</span>
-          <router-link to="/admin/statistics/testpaper">套题统计</router-link>
+          <span>试卷统计</span>
+          <router-link to="/admin/statistics/testpaper">试卷统计</router-link>
         </a-menu-item>
         <a-menu-item key="ADMIN_STATISTICS_EXAM">
-          <span>竞赛统计</span>
-          <router-link to="/admin/statistics/exam">竞赛统计</router-link>
+          <span>考试统计</span>
+          <router-link to="/admin/statistics/exam">考试统计</router-link>
         </a-menu-item>
       </a-sub-menu>
       <a-menu-item key="ADMIN_SETTING">
         <SettingOutlined />
-        <span>设置</span>
-        <router-link to="/admin/setting/base">设置</router-link>
+        <span>个人中心</span>
+        <router-link to="/admin/setting/base">个人中心</router-link>
       </a-menu-item>
     </a-menu>
   </div>
