@@ -25,6 +25,7 @@ export const publish = async (ctx: Context) => {
 
 export const update = async (ctx: Context) => {
   const doc = ctx.request.body;
+  const userId = ctx.session.user._id;
 
   const updateData = {
     title: doc.title,
@@ -48,6 +49,10 @@ export const update = async (ctx: Context) => {
     status: doc.status,
     files: doc.files ?? [],
   };
+  const oldQuestion = await questionModel.findOne({ _id: doc._id });
+  if (String(oldQuestion.creator) != userId) {
+    return (ctx.body = Response(0, "非法更新"));
+  }
 
   const newQuestion = await questionModel.findOneAndUpdate({ _id: doc._id }, { $set: updateData }, { new: true });
 

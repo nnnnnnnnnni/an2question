@@ -29,6 +29,7 @@ export const publish = async (ctx: Context) => {
 
 export const update = async (ctx: Context) => {
   const doc = ctx.request.body;
+  const userId = ctx.session.user._id;
 
   const updateData = {
     title: doc.title,
@@ -42,6 +43,9 @@ export const update = async (ctx: Context) => {
   const installQuestion: {testpaper: ObjectId, question: ObjectId}[] = [];
 
   const oldTestpaper = await testpaperModel.findOne({ _id: doc._id });
+  if(String(oldTestpaper.creator) != userId) {
+    return (ctx.body = Response(0, "非法更新"));
+  }
   const oldQuestions = oldTestpaper.questions.map((question) => String(question));
   doc.questions.forEach((question: string) => {
     if (oldQuestions.includes(question)) {

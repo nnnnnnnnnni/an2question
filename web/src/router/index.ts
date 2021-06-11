@@ -1,4 +1,3 @@
-import { message } from "ant-design-vue";
 import { createRouter, createWebHistory } from "vue-router";
 import http from "../libs/http";
 import store from "../vuex";
@@ -20,6 +19,9 @@ const router = createRouter({
       meta: {
         needLogin: true,
         title: "主页",
+      },
+      redirect: {
+        name: 'ADMIN_QUESTION'
       },
       component: () => import("@/pages/admin/home.vue"),
       children: [
