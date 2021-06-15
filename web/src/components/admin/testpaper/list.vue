@@ -6,16 +6,44 @@
       </span>
     </template>
     <template #choice="{ record }">
-      <b style="color: #f5222d">{{ record.choiceCount }}</b> / {{ record.choiceScore }}
+      <a-statistic>
+        <template #formatter>
+          <span style="color: #f5222d">{{ record.choiceCount }}</span>
+        </template>
+        <template #suffix>
+          <span>/ {{ record.choiceScore }}</span>
+        </template>
+      </a-statistic>
     </template>
     <template #multi="{ record }">
-      <b style="color: #f5222d">{{ record.multiCount }}</b> / {{ record.multiScore }}
+      <a-statistic>
+        <template #formatter>
+          <span style="color: #f5222d">{{ record.multiCount }}</span>
+        </template>
+        <template #suffix>
+          <span>/ {{ record.multiScore }}</span>
+        </template>
+      </a-statistic>
     </template>
     <template #blank="{ record }">
-      <b style="color: #f5222d">{{ record.blankCount }}</b> / {{ record.blankScore }}
+      <a-statistic>
+        <template #formatter>
+          <span style="color: #f5222d">{{ record.blankCount }}</span>
+        </template>
+        <template #suffix>
+          <span>/ {{ record.blankScore }}</span>
+        </template>
+      </a-statistic>
     </template>
     <template #code="{ record }">
-      <b style="color: #f5222d">{{ record.codeCount }}</b> / {{ record.codeScore }}
+      <a-statistic>
+        <template #formatter>
+          <span style="color: #f5222d">{{ record.codeCount }}</span>
+        </template>
+        <template #suffix>
+          <span>/ {{ record.codeScore }}</span>
+        </template>
+      </a-statistic>
     </template>
     <template #allScore="{ record }">
       <b style="color: #f5222d">{{ record.choiceScore + record.multiScore + record.blankScore + record.codeScore }}</b>

@@ -30,6 +30,7 @@ import {
   Card,
   Modal,
   Empty,
+  Statistic
 } from "ant-design-vue";
 message.config({
   maxCount: 5,
@@ -57,6 +58,7 @@ app
   .use(Spin)
   .use(Upload)
   .use(Modal)
+  .use(Statistic)
   .use(Empty)
   .use(notification)
   .use(Store)

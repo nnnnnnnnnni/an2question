@@ -1,6 +1,6 @@
 <template>
   <a-layout style="min-height: 100vh">
-    <a-layout-sider>
+    <a-layout-sider v-model:collapsed="collapsed" collapsed>
       <Menu />
     </a-layout-sider>
     <a-layout>
@@ -16,13 +16,32 @@
 <script lang="ts">
 import Menu from "../../components/admin/menu.vue";
 import Navbar from "../../components/admin/nav.vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 export default defineComponent({
   components: {
     Menu,
     Navbar,
   },
-  setup() {},
+  setup() {
+    const collapsed = ref<boolean>(false);
+    onMounted(() => {
+      if (document.body.clientWidth < 1110) {
+        collapsed.value = true;
+      } else {
+        collapsed.value = false;
+      }
+    });
+    window.addEventListener("resize", (e) => {
+      if (document.body.clientWidth < 1110 && !collapsed.value) {
+        collapsed.value = true;
+      } else if (document.body.clientWidth > 1110 && collapsed.value) {
+        collapsed.value = false;
+      }
+    });
+    return {
+      collapsed,
+    };
+  },
 });
 </script>
 <style scoped>
@@ -54,7 +73,7 @@ export default defineComponent({
 
 @keyframes shake {
   0% {
-    opacity: .3;
+    opacity: 0.3;
     transform: translateX(50px);
   }
   100% {
