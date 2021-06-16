@@ -6,47 +6,23 @@
       </span>
     </template>
     <template #choice="{ record }">
-      <a-statistic>
-        <template #formatter>
-          <span style="color: #f5222d">{{ record.choiceCount }}</span>
-        </template>
-        <template #suffix>
-          <span>/ {{ record.choiceScore }}</span>
-        </template>
-      </a-statistic>
+      <span class="prenumber">{{ record.choiceCount }}</span>
+      <span> / {{ record.choiceScore }}</span>
     </template>
     <template #multi="{ record }">
-      <a-statistic>
-        <template #formatter>
-          <span style="color: #f5222d">{{ record.multiCount }}</span>
-        </template>
-        <template #suffix>
-          <span>/ {{ record.multiScore }}</span>
-        </template>
-      </a-statistic>
+      <span class="prenumber">{{ record.multiCount }}</span>
+      <span> / {{ record.multiScore }}</span>
     </template>
     <template #blank="{ record }">
-      <a-statistic>
-        <template #formatter>
-          <span style="color: #f5222d">{{ record.blankCount }}</span>
-        </template>
-        <template #suffix>
-          <span>/ {{ record.blankScore }}</span>
-        </template>
-      </a-statistic>
+      <span class="prenumber">{{ record.blankCount }}</span>
+      <span> / {{ record.blankScore }}</span>
     </template>
     <template #code="{ record }">
-      <a-statistic>
-        <template #formatter>
-          <span style="color: #f5222d">{{ record.codeCount }}</span>
-        </template>
-        <template #suffix>
-          <span>/ {{ record.codeScore }}</span>
-        </template>
-      </a-statistic>
+      <span class="prenumber">{{ record.codeCount }}</span>
+      <span> / {{ record.codeScore }}</span>
     </template>
     <template #allScore="{ record }">
-      <b style="color: #f5222d">{{ record.choiceScore + record.multiScore + record.blankScore + record.codeScore }}</b>
+      <b class="prenumber">{{ record.choiceScore + record.multiScore + record.blankScore + record.codeScore }}</b>
     </template>
     <template #actionTitle>
       操作(
@@ -174,3 +150,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.prenumber {
+  color: #f5222d;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+</style>

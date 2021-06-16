@@ -8,7 +8,7 @@
       />
       <img src="@/assets/logo_fff.png" alt="" />
     </div>
-    <a-menu theme="dark" v-model:selectedKeys="selectedKeys" mode="inline">
+    <a-menu theme="dark" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys" mode="inline">
       <a-menu-item key="ADMIN_QUESTION">
         <BarsOutlined />
         <span>题目管理</span>
@@ -31,13 +31,13 @@
             <span>人员管理</span>
           </span>
         </template>
-        <a-menu-item key="ADMIN_USER_AUTH">
-          <span>权限管理</span>
-          <router-link to="/admin/user/auth">权限管理</router-link>
-        </a-menu-item>
         <a-menu-item key="ADMIN_USER_MANAGER">
           <span>人员管理</span>
           <router-link to="/admin/user/manager">人员管理</router-link>
+        </a-menu-item>
+        <a-menu-item key="ADMIN_USER_AUTH">
+          <span>权限管理</span>
+          <router-link to="/admin/user/auth">权限管理</router-link>
         </a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="ADMIN_STATISTICS">
@@ -85,15 +85,19 @@ export default defineComponent({
     FileTextOutlined
   },
   setup() {
-    const selectedKeys = ref<string[]>(["ADMIN_QUESTION"]);
+    const selectedKeys = ref<string[]>([]);
+    const openKeys = ref<string[]>([]);
     const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_EXAM", "ADMIN_USER_AUTH", "ADMIN_USER_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_EXAM", "ADMIN_SETTING"]);
     onMounted(() => {
       if (store.state.route) {
         const route = store.state.route.name;
+        const nameArr = route.split("_");
         if (allKeys.value.includes(route)) {
+          if(nameArr.length == 3) {
+            openKeys.value = [`${nameArr[0]}_${nameArr[1]}`]
+          }
           selectedKeys.value = [route];
         } else {
-          const nameArr = route.split("_");
           selectedKeys.value = [`${nameArr[0]}_${nameArr[1]}`];
         }
       }
@@ -102,16 +106,20 @@ export default defineComponent({
     watch(
       () => route.name,
       (key) => {
+        const nameArr = String(key).split("_");
         if (allKeys.value.includes(String(key))) {
+          if(nameArr.length == 3) {
+            openKeys.value = [`${nameArr[0]}_${nameArr[1]}`]
+          }
           selectedKeys.value = [String(key)];
         } else {
-          const nameArr = String(key).split("_");
           selectedKeys.value = [`${nameArr[0]}_${nameArr[1]}`];
         }
       }
     );
     return {
       selectedKeys,
+      openKeys
     };
   },
 });

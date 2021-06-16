@@ -16,7 +16,7 @@
 <script lang="ts">
 import Menu from "../../components/admin/menu.vue";
 import Navbar from "../../components/admin/nav.vue";
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, onBeforeUnmount } from "vue";
 export default defineComponent({
   components: {
     Menu,
@@ -30,13 +30,17 @@ export default defineComponent({
       } else {
         collapsed.value = false;
       }
+      window.addEventListener("resize", (e) => {
+        console.log(1);
+        if (document.body.clientWidth < 1110 && !collapsed.value) {
+          collapsed.value = true;
+        } else if (document.body.clientWidth > 1110 && collapsed.value) {
+          collapsed.value = false;
+        }
+      });
     });
-    window.addEventListener("resize", (e) => {
-      if (document.body.clientWidth < 1110 && !collapsed.value) {
-        collapsed.value = true;
-      } else if (document.body.clientWidth > 1110 && collapsed.value) {
-        collapsed.value = false;
-      }
+    onBeforeUnmount(() => {
+      window.removeEventListener("resize", () => {});
     });
     return {
       collapsed,
