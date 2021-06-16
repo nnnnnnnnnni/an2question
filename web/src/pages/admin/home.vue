@@ -1,7 +1,7 @@
 <template>
   <a-layout style="min-height: 100vh">
     <a-layout-sider v-model:collapsed="collapsed" collapsed>
-      <Menu />
+      <Menu :collapsed="collapsed" />
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="header">

@@ -5,6 +5,7 @@ export interface IOptions {
 export interface IAddOptions {
   name?: string;
   password?: string;
+  count: number
 }
 
 export const columns = [

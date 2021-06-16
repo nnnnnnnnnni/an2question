@@ -71,10 +71,11 @@
 
 <script lang="ts">
 import { BarsOutlined, SettingOutlined, ContainerOutlined, TableOutlined, UsergroupDeleteOutlined, AreaChartOutlined, FileTextOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref, onMounted, watch } from "vue";
+import { defineComponent, ref, onMounted, watch, toRefs } from "vue";
 import { useRoute } from "vue-router";
 import store from "../../vuex";
 export default defineComponent({
+  props: ["collapsed"],
   components: {
     BarsOutlined,
     SettingOutlined,
@@ -84,10 +85,20 @@ export default defineComponent({
     AreaChartOutlined,
     FileTextOutlined
   },
-  setup() {
+  setup(props) {
+    const { collapsed } = toRefs(props)
     const selectedKeys = ref<string[]>([]);
     const openKeys = ref<string[]>([]);
     const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_EXAM", "ADMIN_USER_AUTH", "ADMIN_USER_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_EXAM", "ADMIN_SETTING"]);
+    
+    watch(collapsed, (key) => {
+      if(!key) {
+        const route = String(store.state.route?.name);
+        menuHanle(route)
+      } else {
+        openKeys.value = [];
+      }
+    })
     const menuHanle = (routeKey: string) => {
       const nameArr = routeKey.split("_");
       if (allKeys.value.includes(routeKey)) {

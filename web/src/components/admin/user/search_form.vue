@@ -15,12 +15,27 @@
         </a-space>
       </a-form-item>
     </a-form>
-    <a-modal v-model:visible="visible" title="Basic Modal" @ok="handleAddOk" okText="确认添加" cancelText="取消">
-      <a-form :labelCol="{span: 7}" :wrapperCol="{span: 16, offset: 1}">
-        <a-form-item label="名称/邮箱前缀" :help="addFormState.name? `生成后的样式：${addFormState.name}`: ''">
+    <a-modal v-model:visible="visible" title="批量生成" @ok="handleAddOk" okText="确认添加" cancelText="取消" width="800px">
+      <a-form :labelCol="{ span: 5 }" :wrapperCol="{ span: 18, offset: 1 }">
+        <a-form-item
+          label="名称/邮箱前缀"
+          required
+          :help="addFormState.name ? `生成后的格式: ${addFormState.name}[xxx]@qq.com` : ''"
+        >
           <a-input v-model:value="addFormState.name" allowClear />
         </a-form-item>
-        <a-form-item label="通用密码">
+        <a-form-item
+          label="生成个数"
+          required
+          :help="
+            addFormState.count == 1
+              ? `账号示例: ${addFormState.name}0@qq.com`
+              : `账号示例: ${addFormState.name}0@qq.com - ${addFormState.name}${addFormState.count - 1}@qq.com`
+          "
+        >
+          <a-input-number v-model:value="addFormState.count" allowClear style="width: 100%" />
+        </a-form-item>
+        <a-form-item label="通用密码" required>
           <a-input v-model:value="addFormState.password" allowClear />
         </a-form-item>
       </a-form>
@@ -40,16 +55,18 @@ export default defineComponent({
     });
     const visible = ref<Boolean>(false);
     const addFormState: UnwrapRef<IAddOptions> = reactive({
-      name: undefined,
+      name: '前缀',
       password: undefined,
-    })
+      count: 1,
+    });
+
+    // 打开modal
     const add = () => {
-      const mail = store.state.user?.email;
       visible.value = true;
     };
-    const handleAddOk = () => {
 
-    }
+    // modal-ok
+    const handleAddOk = () => {};
     const search = () => {
       context.emit("search", formState);
     };
@@ -59,7 +76,7 @@ export default defineComponent({
       visible,
       add,
       search,
-      handleAddOk
+      handleAddOk,
     };
   },
   components: {
