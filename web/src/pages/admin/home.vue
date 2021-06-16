@@ -31,7 +31,6 @@ export default defineComponent({
         collapsed.value = false;
       }
       window.addEventListener("resize", (e) => {
-        console.log(1);
         if (document.body.clientWidth < 1110 && !collapsed.value) {
           collapsed.value = true;
         } else if (document.body.clientWidth > 1110 && collapsed.value) {

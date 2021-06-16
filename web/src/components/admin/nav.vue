@@ -7,7 +7,7 @@
       <div class="container-item container-icon" @click="logout">
         <LoginOutlined style="font-size: 20px" />
       </div>
-      <div class="container-item container-icon">
+      <div class="container-item container-icon" @click="goMessage">
         <MessageOutlined style="font-size: 20px" />
       </div>
     </div>
@@ -34,8 +34,12 @@ export default defineComponent({
         }
       });
     };
+    const goMessage = () => {
+      return router.push('/admin/setting/message')
+    }
     return {
       logout,
+      goMessage,
       store,
     };
   },

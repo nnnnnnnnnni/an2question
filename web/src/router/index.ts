@@ -125,15 +125,6 @@ const router = createRouter({
           component: () => import("@/pages/admin/exam/exam_detail.vue"),
         },
         {
-          path: "user/auth",
-          name: "ADMIN_USER_AUTH",
-          meta: {
-            needLogin: true,
-            title: "权限管理",
-          },
-          component: () => import("@/pages/admin/user/auth.vue"),
-        },
-        {
           path: "user/manager",
           name: "ADMIN_USER_MANAGER",
           meta: {
@@ -141,6 +132,15 @@ const router = createRouter({
             title: "人员管理",
           },
           component: () => import("@/pages/admin/user/manager.vue"),
+        },
+        {
+          path: "user/auth",
+          name: "ADMIN_USER_AUTH",
+          meta: {
+            needLogin: true,
+            title: "权限管理",
+          },
+          component: () => import("@/pages/admin/user/auth.vue"),
         },
         {
           path: "statistics/question",
@@ -152,16 +152,16 @@ const router = createRouter({
           component: () => import("@/pages/admin/statistics/question.vue"),
         },
         {
-          path: "statistics/add",
+          path: "statistics/exam",
           name: "ADMIN_STATISTICS_EXAM",
           meta: {
             needLogin: true,
             title: "考试统计",
           },
-          component: () => import("@/pages/admin/statistics/competition.vue"),
+          component: () => import("@/pages/admin/statistics/exam.vue"),
         },
         {
-          path: "statistics/:id",
+          path: "statistics/testpaper",
           name: "ADMIN_STATISTICS_TESTPAPER",
           meta: {
             needLogin: true,

@@ -1,15 +1,25 @@
 <template>
-  <div class='manager'>manager</div>
+  <div class="manager">
+    <div class="form">
+      <SearchForm />
+    </div>
+    <div class="list">
+      list
+    </div>
+  </div>
 </template>
 
-<script lang='ts'>
-import { defineComponent } from 'vue';
+<script lang="ts">
+import { defineComponent } from "vue";
+import SearchForm from "@/components/admin/user/search_form.vue";
 export default defineComponent({
-  setup() {} 
+  components: { SearchForm },
+  setup() {},
 });
 </script>
 
-
 <style scoped>
-
+.form {
+  margin-bottom: 20px;
+}
 </style>

@@ -17,6 +17,14 @@ const bindSchema = new mongoose.Schema(
       type: ObjectId,
       ref: "question",
     },
+    inviter: {
+      type: ObjectId,
+      ref: "user",
+    },
+    bindUser: {
+      type: ObjectId,
+      ref: "user",
+    },
   },
   {
     timestamps: {

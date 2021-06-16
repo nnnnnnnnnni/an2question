@@ -88,33 +88,29 @@ export default defineComponent({
     const selectedKeys = ref<string[]>([]);
     const openKeys = ref<string[]>([]);
     const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_EXAM", "ADMIN_USER_AUTH", "ADMIN_USER_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_EXAM", "ADMIN_SETTING"]);
+    const menuHanle = (routeKey: string) => {
+      const nameArr = routeKey.split("_");
+      if (allKeys.value.includes(routeKey)) {
+        if(nameArr.length == 3) {
+          openKeys.value = [`${nameArr[0]}_${nameArr[1]}`]
+        }
+        selectedKeys.value = [routeKey];
+      } else {
+        selectedKeys.value = [`${nameArr[0]}_${nameArr[1]}`];
+      }
+    }
     onMounted(() => {
       if (store.state.route) {
         const route = store.state.route.name;
-        const nameArr = route.split("_");
-        if (allKeys.value.includes(route)) {
-          if(nameArr.length == 3) {
-            openKeys.value = [`${nameArr[0]}_${nameArr[1]}`]
-          }
-          selectedKeys.value = [route];
-        } else {
-          selectedKeys.value = [`${nameArr[0]}_${nameArr[1]}`];
-        }
+        menuHanle(route);
       }
     });
     const route = useRoute();
     watch(
       () => route.name,
       (key) => {
-        const nameArr = String(key).split("_");
-        if (allKeys.value.includes(String(key))) {
-          if(nameArr.length == 3) {
-            openKeys.value = [`${nameArr[0]}_${nameArr[1]}`]
-          }
-          selectedKeys.value = [String(key)];
-        } else {
-          selectedKeys.value = [`${nameArr[0]}_${nameArr[1]}`];
-        }
+        const route = String(key);
+        menuHanle(route);
       }
     );
     return {
