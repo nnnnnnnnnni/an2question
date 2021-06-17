@@ -1,6 +1,7 @@
 import mongoose, { ObjectId, Document } from "mongoose";
 import { IQuestion } from "./questionSchema";
 import { ITestPaper } from "./testpaperSchema";
+import { IUser } from "./userSchema";
 const { ObjectId } = mongoose.Types;
 
 const bindSchema = new mongoose.Schema(
@@ -38,6 +39,8 @@ export interface IBind extends Document {
   exam?: ObjectId;
   testpaper?: ObjectId | ITestPaper;
   question?: ObjectId | IQuestion;
+  inviter?: ObjectId | IUser;
+  bindUser?: ObjectId | IUser;
   createAt: Date | string | number;
   updateAt: Date | string | number;
 }

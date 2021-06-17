@@ -10,6 +10,7 @@ export interface IResponse extends AxiosResponse {
 }
 
 export const baseURL = import.meta.env.VITE_ENV == "dev" ? "/api" : "/";
+export const isDev = import.meta.env.VITE_ENV == "dev"
 
 const Axios = axios.create({
   baseURL: baseURL,

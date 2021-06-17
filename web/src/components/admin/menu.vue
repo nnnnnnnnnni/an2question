@@ -24,22 +24,11 @@
         <span>考试管理</span>
         <router-link to="/admin/exam">考试管理</router-link>
       </a-menu-item>
-      <a-sub-menu key="ADMIN_USER">
-        <template #title>
-          <span>
-            <UsergroupDeleteOutlined />
-            <span>人员管理</span>
-          </span>
-        </template>
-        <a-menu-item key="ADMIN_USER_MANAGER">
-          <span>人员管理</span>
-          <router-link to="/admin/user/manager">人员管理</router-link>
-        </a-menu-item>
-        <a-menu-item key="ADMIN_USER_AUTH">
-          <span>权限管理</span>
-          <router-link to="/admin/user/auth">权限管理</router-link>
-        </a-menu-item>
-      </a-sub-menu>
+      <a-menu-item key="ADMIN_MANAGER">
+        <UsergroupDeleteOutlined />
+        <span>人员管理</span>
+        <router-link to="/admin/manager">人员管理</router-link>
+      </a-menu-item>
       <a-sub-menu key="ADMIN_STATISTICS">
         <template #title>
           <span>
@@ -89,7 +78,7 @@ export default defineComponent({
     const { collapsed } = toRefs(props)
     const selectedKeys = ref<string[]>([]);
     const openKeys = ref<string[]>([]);
-    const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_EXAM", "ADMIN_USER_AUTH", "ADMIN_USER_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_EXAM", "ADMIN_SETTING"]);
+    const allKeys = ref<String[]>(["ADMIN_QUESTION", "ADMIN_TESTPAPER", "ADMIN_EXAM", "ADMIN_MANAGER", "ADMIN_STATISTICS_QUESTION", "ADMIN_STATISTICS_TESTPAPER", "ADMIN_STATISTICS_EXAM", "ADMIN_SETTING"]);
     
     watch(collapsed, (key) => {
       if(!key) {

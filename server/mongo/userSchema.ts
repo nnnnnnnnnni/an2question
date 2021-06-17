@@ -26,16 +26,17 @@ const userSchema = new mongoose.Schema(
 );
 userSchema.index({ email: 1, phone: 1 });
 
-export interface IUser extends Document {
+export interface IUserSchema {
   avator: string;
   name: string;
   email: string;
   phone?: string;
   password?: string;
   secret: string;
-  createAt: Date | string | number;
-  updateAt: Date | string | number;
+  createAt?: Date | string | number;
+  updateAt?: Date | string | number;
   lastLogin?: Date;
 }
+export interface IUser extends IUserSchema, Document {}
 
 export default mongoose.model<IUser>("user", userSchema);

@@ -125,22 +125,13 @@ const router = createRouter({
           component: () => import("@/pages/admin/exam/exam_detail.vue"),
         },
         {
-          path: "user/manager",
-          name: "ADMIN_USER_MANAGER",
+          path: "manager",
+          name: "ADMIN_MANAGER",
           meta: {
             needLogin: true,
             title: "人员管理",
           },
           component: () => import("@/pages/admin/user/manager.vue"),
-        },
-        {
-          path: "user/auth",
-          name: "ADMIN_USER_AUTH",
-          meta: {
-            needLogin: true,
-            title: "权限管理",
-          },
-          component: () => import("@/pages/admin/user/auth.vue"),
         },
         {
           path: "statistics/question",

@@ -17,13 +17,13 @@ export const userValidation = {
   Logout: {},
   setting: {
     body: {
-      name: Joi.string().required()
-    }
+      name: Joi.string().required(),
+    },
   },
   password: {
     body: {
       newPass: Joi.string().required(),
       oldPass: Joi.string().required(),
-    }
-  }
+    },
+  },
 };

@@ -4,6 +4,7 @@ import UserRoutes from "./userRoutes";
 import testRoutes from "./testRoutes";
 import questionRoutes from "./questionRoute";
 import testpaperRoutes from "./testpaperRoutes";
+import managerRoutes from "./managerRoutes";
 import publicRoutes from "./publicRoutes";
 import { Context, Next } from "koa";
 import { IMiddleware } from "koa-router";
@@ -29,6 +30,7 @@ export default class Routes {
     this.addRoutes(testRoutes);
     this.addRoutes(questionRoutes);
     this.addRoutes(testpaperRoutes);
+    this.addRoutes(managerRoutes);
     this.addRoutes(publicRoutes);
   }
   addRoutes(routes: IRoute[]) {

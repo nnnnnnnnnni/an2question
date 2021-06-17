@@ -4,6 +4,8 @@ import Logout from "../controller/user/logout";
 import Register from "../controller/user/register";
 import Profile from "../controller/user/profile";
 import { setting, password } from "../controller/user/setting";
+import MultiInsert from "../controller/user/multiInsert";
+import ManagerList from "../controller/user/managerList";
 import { userValidation } from "../validation/user";
 
 export default [

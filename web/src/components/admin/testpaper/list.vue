@@ -90,7 +90,6 @@ export default defineComponent({
       count: count.value || 10,
       total: total.value || 0,
     });
-    console.log(list);
     const tableLoading = ref(loading.value);
     watch(loading, () => (tableLoading.value = loading.value));
     const pagination = reactive({

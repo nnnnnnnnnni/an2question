@@ -80,7 +80,7 @@ import { message } from "ant-design-vue";
 import { defineComponent, reactive, UnwrapRef, ref, nextTick, toRaw } from "vue";
 import http from "../../../libs/http";
 import { IOptions, getTypeTag, getLevelTag, IFileItem, IQuestion } from "../question/data";
-import { RuleObject, ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
+import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import router from "../../../router";
 import { useRoute } from "vue-router";
 interface IOptionsExtra extends IOptions {
