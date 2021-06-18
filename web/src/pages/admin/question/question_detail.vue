@@ -3,6 +3,7 @@
     <a-card :title="question.title + ' [ ' + question.score + ' 分 ]'" :headStyle="headerStyle" :bodyStyle="bodyStyle" class="question_detail_card">
       <template #extra>
         <a-space>
+          <a-button type="primary" v-if="isNewInswert" @click="goAdd"> <EditOutlined /> 继续添加 </a-button>
           <a-button type="primary" v-if="question.status != 3" @click="goEdit"> <EditOutlined /> 编辑 </a-button>
           <a-button type="primary" v-if="question.status == 1" @click="publish(2)"> <BranchesOutlined /> 发布 </a-button>
           <a-button type="primary" v-if="question.status == 2" @click="publish(1)"> <DisconnectOutlined /> 取消发布 </a-button>
@@ -51,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { createVNode, defineComponent, onBeforeMount, onMounted, reactive } from "vue";
+import { createVNode, defineComponent, onBeforeMount, reactive, ref } from "vue";
 import { useRoute } from "vue-router";
 import { EditOutlined, BranchesOutlined, DisconnectOutlined, DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import http from "../../../libs/http";
@@ -59,10 +60,11 @@ import { message, Modal } from "ant-design-vue";
 import router from "../../../router";
 export default defineComponent({
   setup() {
-    const { params } = useRoute();
+    const { params, query } = useRoute();
     const question = reactive({
       status: 3,
     });
+    const isNewInswert = ref<Boolean>(Object.keys(query).length > 0);
     const getDetail = () => {
       http.get(`/question/${params.id}`, {}).then((res) => {
         return Object.assign(question, res.data);
@@ -98,6 +100,9 @@ export default defineComponent({
         getDetail();
       });
     };
+    const goAdd = () => {
+      router.push({ name: "ADMIN_QUESTION_ADD" });
+    };
     return {
       id: params.id,
       question,
@@ -108,9 +113,11 @@ export default defineComponent({
         height: "calc(100% - 65px)",
         padding: "0px",
       },
+      isNewInswert,
       handleDelete,
       goEdit,
       publish,
+      goAdd,
     };
   },
   components: {

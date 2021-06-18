@@ -43,6 +43,9 @@ export default defineComponent({
       current: page || 1,
       pageSize: count || 10,
       total: total || 0,
+      showTotal: (total: number) => {
+        return `共 ${total} 人`;
+      },
     });
 
     const tableLoading = ref(loading.value);
@@ -63,7 +66,7 @@ export default defineComponent({
       pageChange,
     };
   },
-  components: { 
+  components: {
     ApiOutlined,
   },
 });

@@ -12,22 +12,22 @@
       <a-menu-item key="ADMIN_QUESTION">
         <BarsOutlined />
         <span>题目管理</span>
-        <router-link to="/admin/question">题目管理</router-link>
+        <router-link to="/admin/question"></router-link>
       </a-menu-item>
       <a-menu-item key="ADMIN_TESTPAPER">
         <FileTextOutlined />
         <span>试卷管理</span>
-        <router-link to="/admin/testpaper">试卷管理</router-link>
+        <router-link to="/admin/testpaper"></router-link>
       </a-menu-item>
       <a-menu-item key="ADMIN_EXAM">
         <TableOutlined />
         <span>考试管理</span>
-        <router-link to="/admin/exam">考试管理</router-link>
+        <router-link to="/admin/exam"></router-link>
       </a-menu-item>
       <a-menu-item key="ADMIN_MANAGER">
         <UsergroupDeleteOutlined />
         <span>人员管理</span>
-        <router-link to="/admin/manager">人员管理</router-link>
+        <router-link to="/admin/manager"></router-link>
       </a-menu-item>
       <a-sub-menu key="ADMIN_STATISTICS">
         <template #title>
@@ -52,7 +52,7 @@
       <a-menu-item key="ADMIN_SETTING">
         <SettingOutlined />
         <span>个人中心</span>
-        <router-link to="/admin/setting/base">个人中心</router-link>
+        <router-link to="/admin/setting/base"></router-link>
       </a-menu-item>
     </a-menu>
   </div>

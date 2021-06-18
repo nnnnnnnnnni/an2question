@@ -11,7 +11,7 @@
       </a-radio-group>
     </a-form-item>
     <a-form-item label="标题" required name="title">
-      <a-input v-model:value="formState.title" :maxlength="15" placeholder='标题最长15位' />
+      <a-input v-model:value="formState.title" :maxlength="15" placeholder="标题最长15位" />
     </a-form-item>
     <a-form-item label="正文" required name="body">
       <div id="body"></div>
@@ -205,6 +205,12 @@ export default defineComponent({
           insertImgFn(res.data[0].path);
         });
       };
+      editor.config.onchange = () => {
+        if(!formState.body) {
+          formState.body = editor.txt.html();
+          formRef.value.validate();
+        }
+      };
       editor.create();
     });
     onBeforeUnmount(() => {
@@ -333,7 +339,7 @@ export default defineComponent({
                 message.success("新增成功! 即将跳转......");
                 loading.value = false;
                 const timer = setTimeout(() => {
-                  router.push(`/admin/question/${res.data._id}`);
+                  router.push(`/admin/question/${res.data._id}?type=newadd`);
                   clearTimeout(timer);
                 }, 500);
               });
@@ -342,7 +348,7 @@ export default defineComponent({
                 message.success("更新成功! 即将跳转......");
                 loading.value = false;
                 const timer = setTimeout(() => {
-                  router.push(`/admin/question/${res.data._id}`);
+                  router.push(`/admin/question/${res.data._id}?type=newadd`);
                   clearTimeout(timer);
                 }, 500);
               });

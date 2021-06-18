@@ -87,6 +87,9 @@ export default defineComponent({
       current: page || 1,
       pageSize: count || 10,
       total: total || 0,
+      showTotal: (total: number) => {
+        return `共 ${total} 题`;
+      },
     });
     const goDetail = (reacrd: IQuestion) => {
       router.push(`/admin/question/${reacrd._id}`);

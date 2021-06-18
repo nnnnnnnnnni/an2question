@@ -96,6 +96,9 @@ export default defineComponent({
       current: page || 1,
       pageSize: count || 10,
       total: total || 0,
+      showTotal: (total: number) => {
+        return `共 ${total} 套`;
+      },
     });
     const goDetail = (reacrd: ITestpaper) => {
       router.push(`/admin/testpaper/${reacrd._id}`);
