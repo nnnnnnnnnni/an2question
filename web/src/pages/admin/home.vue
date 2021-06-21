@@ -55,7 +55,7 @@ export default defineComponent({
   box-shadow: 0 2px 8px #f0f1f2;
 }
 .content {
-  padding: 30px;
+  padding: 20px;
   overflow-x: auto;
   overflow-y: auto;
   height: calc(100vh - 64px);

@@ -24,7 +24,7 @@ export default async (ctx: Context) => {
         _id: { $in: allBindUsers },
         $or: [{ name: { $regex: key, $options: "i" } }, { email: { $regex: key, $options: "i" } }],
       })
-      .select("name avator email phone")
+      .select("name avator email phone createAt")
       .sort({ createAt: -1 })
       .skip((Number(_page) - 1) * Number(_count))
       .limit(Number(_count));
@@ -37,7 +37,7 @@ export default async (ctx: Context) => {
   } else {
     const binds = await bindModel
       .find(conds)
-      .populate("bindUser", "name avator email phone")
+      .populate("bindUser", "name avator email phone createAt")
       .sort({ createAt: -1 })
       .skip((Number(_page) - 1) * Number(_count))
       .limit(Number(_count));

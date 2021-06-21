@@ -1,6 +1,6 @@
 import { IRoute } from "../interface/route";
-import MultiInsert from "../controller/user/multiInsert";
-import ManagerList from "../controller/user/managerList";
+import MultiInsert from "../controller/manager/multiInsert";
+import List from "../controller/manager/list";
 import { managerValidation } from "../validation/manager";
 
 export default [
@@ -14,8 +14,8 @@ export default [
   {
     path: "/manager/list",
     methods: "GET",
-    validation: managerValidation.managerList,
-    Middlewares: [ManagerList],
+    validation: managerValidation.list,
+    Middlewares: [List],
     needLogin: true,
   },
 ] as IRoute[];

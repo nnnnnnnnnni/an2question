@@ -31,7 +31,7 @@ export const columns = [
     align: "center",
   },
   {
-    title: "创建时间",
+    title: "绑定时间",
     key: "createAt",
     dataIndex: "createAt",
     slots: { customRender: "createAt" },

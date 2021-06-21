@@ -8,7 +8,7 @@ export const managerValidation = {
       name: Joi.string().required(),
     },
   },
-  managerList: {
+  list: {
     query: {
       count: Joi.number().required(),
       page: Joi.number().required(),

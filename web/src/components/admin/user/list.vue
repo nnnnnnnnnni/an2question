@@ -14,6 +14,9 @@
       </span>
       <span v-else style="color: #f5222d">暂未设置</span>
     </template>
+    <template #createAt="{ record }">
+      {{ moment(record.createAt).format("YYYY-MM-DD") }}
+    </template>
     <template #action="{ record }">
       <a-button shape="circle" type="danger" @click="openDeleteModal(record)">
         <template #icon>
@@ -27,6 +30,7 @@
 import { ApiOutlined } from "@ant-design/icons-vue";
 import { defineComponent, reactive, toRefs, watch, ref } from "vue";
 import { columns } from "./data";
+import moment from "moment";
 
 export default defineComponent({
   props: ["list", "page", "count", "total", "loading"],
@@ -64,6 +68,7 @@ export default defineComponent({
       openDeleteModal,
       pagination,
       pageChange,
+      moment,
     };
   },
   components: {
