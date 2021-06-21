@@ -1,5 +1,5 @@
-import { IResponse } from "interface/response";
-import { IUser } from "mongo/userSchema";
+import { IResponse } from "../interface/response";
+import { IUser } from "../mongo/userSchema";
 import fs from 'fs';
 import { Redis } from "ioredis";
 import Koa from 'koa'
