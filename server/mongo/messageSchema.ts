@@ -1,19 +1,18 @@
-import mongoose, { ObjectId, Document } from "mongoose";
+import { ObjectId, Document, Schema, model, SchemaTypes } from "mongoose";
 import { IUser } from "./userSchema";
-const { ObjectId } = mongoose.Types;
 
-const messageSchema = new mongoose.Schema(
+const messageSchema = new Schema(
   {
     from: {
-      type: ObjectId,
-      ref: 'user'
+      type: SchemaTypes.ObjectId,
+      ref: "user",
     },
     to: {
-      type: ObjectId,
-      ref: 'user'
+      type: SchemaTypes.ObjectId,
+      ref: "user",
     },
     message: String,
-    needconfirm: Boolean
+    needconfirm: Boolean,
   },
   {
     timestamps: {
@@ -24,12 +23,12 @@ const messageSchema = new mongoose.Schema(
 );
 
 export interface IMessage extends Document {
-  from?: (IUser | ObjectId);
-  to?: (IUser | ObjectId);
+  from?: IUser | ObjectId;
+  to?: IUser | ObjectId;
   message: string;
   needConfirm: boolean;
   createAt: Date | string | number;
   updateAt: Date | string | number;
 }
 
-export default mongoose.model<IMessage>("message", messageSchema);
+export default model<IMessage>("message", messageSchema);

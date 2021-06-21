@@ -1,7 +1,6 @@
-import mongoose, { ObjectId, Document } from "mongoose";
-const { ObjectId } = mongoose.Types;
+import { ObjectId, Document, model, SchemaTypes, Schema } from "mongoose";
 
-const questionSchema = new mongoose.Schema(
+const questionSchema = new Schema(
   {
     title: String,
     body: String,
@@ -39,7 +38,7 @@ const questionSchema = new mongoose.Schema(
       },
     ],
     creator: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "user",
     },
   },
@@ -92,4 +91,4 @@ export interface IQuestion extends Document {
   updateAt: Date | string | number;
 }
 
-export default mongoose.model<IQuestion>("question", questionSchema);
+export default model<IQuestion>("question", questionSchema);

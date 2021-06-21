@@ -1,4 +1,4 @@
-import Koa, { Context, Next } from "koa";
+import Koa, { Context } from "koa";
 import { config } from "./config";
 import { IConfig } from "./interface/config";
 import { IRoute } from "./interface/route";

@@ -1,24 +1,23 @@
-import mongoose, { ObjectId, Document } from "mongoose";
+import { ObjectId, Document, Schema, model, SchemaTypes } from "mongoose";
 import { ITestPaper } from "./testpaperSchema";
 import { IUser } from "./userSchema";
-const { ObjectId } = mongoose.Types;
 
-const bindSchema = new mongoose.Schema(
+const bindSchema = new Schema(
   {
     title: String,
     creator: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "user",
     },
     status: Number,
     type: Number,
     testpaper: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "testpaper",
     },
     participants: [
       {
-        type: ObjectId,
+        type: SchemaTypes.ObjectId,
         ref: "user",
       },
     ],
@@ -43,11 +42,11 @@ export interface IBind extends Document {
   participants: (ObjectId | IUser)[]; // 参赛者
   note: string; // 备注
   creator: ObjectId | IUser; // 比赛创建者
-  times: number;  // 固定时间段的持续时间
+  times: number; // 固定时间段的持续时间
   startAt?: Date | string | number;
   closeAt?: Date | string | number;
   createAt: Date | string | number;
   updateAt: Date | string | number;
 }
 
-export default mongoose.model<IBind>("bind", bindSchema);
+export default model<IBind>("bind", bindSchema);

@@ -1,14 +1,13 @@
-import mongoose, { ObjectId, Document } from "mongoose";
+import { ObjectId, Document, SchemaTypes, model, Schema } from "mongoose";
 import { IQuestion } from "./questionSchema";
 import { IUser } from "./userSchema";
-const { ObjectId } = mongoose.Types;
 
-const testpaperShema = new mongoose.Schema(
+const testpaperShema = new Schema(
   {
     title: String,
     questions: [
       {
-        type: ObjectId,
+        type: SchemaTypes.ObjectId,
         ref: "question",
       },
     ],
@@ -20,7 +19,7 @@ const testpaperShema = new mongoose.Schema(
     ],
     status: Number,
     creator: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: 'user'
     }
   },
@@ -42,4 +41,4 @@ export interface ITestPaper extends Document {
   updateAt: Date | string | number;
 }
 
-export default mongoose.model<ITestPaper>("testpaper", testpaperShema);
+export default model<ITestPaper>("testpaper", testpaperShema);
