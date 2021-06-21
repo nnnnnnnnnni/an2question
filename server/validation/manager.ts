@@ -14,4 +14,9 @@ export const managerValidation = {
       page: Joi.number().required(),
     },
   },
+  unlink: {
+    body: {
+      id: Joi.string().required(),
+    },
+  },
 };

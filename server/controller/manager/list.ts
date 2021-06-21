@@ -32,7 +32,6 @@ export default async (ctx: Context) => {
       _id: { $in: allBindUsers },
       $or: [{ name: { $regex: key, $options: "i" } }, { email: { $regex: key, $options: "i" } }],
     });
-    
     return (ctx.body = Response(1, "", { binds: filterUser, total: total }));
   } else {
     const binds = await bindModel
@@ -45,7 +44,7 @@ export default async (ctx: Context) => {
     const _binds = binds.map((bind) => {
       return {
         createAt: moment(bind.createAt).format("YYYY-MM-DD HH:mm:ss"),
-        ..._.omit(bind.toJSON().bindUser, "_id"),
+        ...bind.toJSON().bindUser,
       };
     });
 

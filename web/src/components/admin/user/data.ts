@@ -38,8 +38,9 @@ export const columns = [
     align: "center",
   },
   {
-    title: '操作',
+    title: '解绑',
     key: "action",
+    dataIndex: "_id",
     slots: { customRender: "action" },
   },
 ];

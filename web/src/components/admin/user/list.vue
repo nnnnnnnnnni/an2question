@@ -3,9 +3,9 @@
     <template #info="{ record }">
       <div class="name-td">
         <a-avatar :src="record.avator"></a-avatar>
-        <span class="name">
+        <div class="name">
           {{ record.name }}
-        </span>
+        </div>
       </div>
     </template>
     <template #phone="{ record }">
@@ -27,10 +27,12 @@
   </a-table>
 </template>
 <script lang="ts">
-import { ApiOutlined } from "@ant-design/icons-vue";
-import { defineComponent, reactive, toRefs, watch, ref } from "vue";
+import { ApiOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import { defineComponent, reactive, toRefs, watch, ref, createVNode } from "vue";
 import { columns } from "./data";
 import moment from "moment";
+import { message, Modal } from "ant-design-vue";
+import http from "../../../libs/http";
 
 export default defineComponent({
   props: ["list", "page", "count", "total", "loading"],
@@ -59,7 +61,25 @@ export default defineComponent({
       emit("pageChange", pagination);
     };
 
-    const openDeleteModal = () => {};
+    const openDeleteModal = (e) => {
+      Modal.confirm({
+        title: "确定要解绑吗?",
+        icon: createVNode(ExclamationCircleOutlined),
+        content: "题目一经解绑,无法恢复,请确认后解绑!",
+        okText: "解绑",
+        okType: "danger",
+        cancelText: "取消",
+        onOk() {
+          http.delete("/manager/unlink", { id: e._id }).then((res) => {
+            message.success(String(res.message));
+            emit("reacrdDelete");
+          });
+        },
+        onCancel() {
+          console.log("Cancel");
+        },
+      });
+    };
     return {
       columns,
       list,
@@ -79,7 +99,6 @@ export default defineComponent({
 
 <style scoped>
 .name {
-  display: inline-block;
   margin-left: 20px;
   width: 200px;
   text-overflow: ellipsis;
