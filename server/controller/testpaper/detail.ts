@@ -1,5 +1,5 @@
 import { Context } from "koa";
-import { IQuestion } from "mongo/questionSchema";
+import { IQuestion } from "../../mongo/questionSchema";
 import Utils from "../../lib/utils";
 const Response = Utils.generateResponse;
 import testpaperModel from "../../mongo/testpaperSchema";

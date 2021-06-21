@@ -1,29 +1,28 @@
-import mongoose, { ObjectId, Document } from "mongoose";
+import { ObjectId, Document, SchemaTypes, Schema, model } from "mongoose";
 import { IQuestion } from "./questionSchema";
 import { ITestPaper } from "./testpaperSchema";
 import { IUser } from "./userSchema";
-const { ObjectId } = mongoose.Types;
 
-const bindSchema = new mongoose.Schema(
+const bindSchema = new Schema(
   {
     exam: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "exam",
     },
     testpaper: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "testpaper",
     },
     question: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "question",
     },
     inviter: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "user",
     },
     bindUser: {
-      type: ObjectId,
+      type: SchemaTypes.ObjectId,
       ref: "user",
     },
   },
@@ -45,4 +44,4 @@ export interface IBind extends Document {
   updateAt: Date | string | number;
 }
 
-export default mongoose.model<IBind>("bind", bindSchema);
+export default model<IBind>("bind", bindSchema);

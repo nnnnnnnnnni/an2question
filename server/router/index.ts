@@ -11,7 +11,7 @@ import { IMiddleware } from "koa-router";
 import { checkJwtAuth, checkCookieAuth } from "../lib/userCheck";
 import Redis from "../redis/index";
 import Utils from "../lib/utils";
-import { IValidation, IValidationField } from "interface/validation";
+import { IValidation, IValidationField } from "../interface/validation";
 import { config } from "../config";
 const Response = Utils.generateResponse;
 

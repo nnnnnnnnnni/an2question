@@ -1,6 +1,6 @@
 import { config } from "../config";
 import crypto from "crypto";
-import { TCode, IResponse } from "interface/response";
+import { TCode, IResponse } from "../interface/response";
 import path from "path";
 import fs from "fs";
 

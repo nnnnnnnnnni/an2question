@@ -14,7 +14,7 @@
               <div>固定时间点: 开始-结束时间，其他时间无法访问</div>
               <div>固定时间段: 设置固定时间长度，任何时候都可以开始考试</div>
             </template>
-            <QuestionCircleOutlined style="color: #e1e1e1" />
+            <QuestionCircleOutlined style="color: #a1a1a1" />
           </a-tooltip>
         </span>
       </a-form-item>

@@ -7,14 +7,12 @@
     "moduleResolution": "node",
     "sourceMap": false,
     "outDir": "dist",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"],
+      "@/*": ["*"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "public",
-    "uploads"
-  ],
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["**/*"],
+  "exclude": ["**/*/config.ts"]
 }

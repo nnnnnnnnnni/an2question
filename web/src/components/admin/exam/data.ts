@@ -28,8 +28,9 @@ export const type: ISelectOptions[] = [
 
 export const status: ISelectOptions[] = [
   { label: "未发布", key: 1, color: "#bfbfbf" },
-  { label: "已发布", key: 2, color: "#52c41a" },
-  { label: "已使用", key: 3, color: "#1890ff" },
+  { label: "待开始", key: 2, color: "#52c41a" },
+  { label: "进行中", key: 3, color: "#1890ff" },
+  { label: "已结束", key: 4, color: "#1890ff" },
 ];
 
 export const getTypeTag = (key: number): ISelectOptions => {
@@ -56,32 +57,6 @@ export const columns = [
     title: "标题",
     key: "title",
     align: "left",
-  },
-  {
-    title: "题型",
-    dataIndex: "type",
-    key: "type",
-    slots: { customRender: "type" },
-    align: "center",
-  },
-  {
-    title: "等级",
-    dataIndex: "level",
-    key: "level",
-    slots: { customRender: "level" },
-    align: "center",
-  },
-  {
-    title: "答题次数",
-    key: "answerTime",
-    dataIndex: "answerTime",
-    align: "center",
-  },
-  {
-    title: "分数",
-    key: "score",
-    dataIndex: "score",
-    align: "center",
   },
   {
     title: "状态",
