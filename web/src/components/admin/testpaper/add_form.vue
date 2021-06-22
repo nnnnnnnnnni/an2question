@@ -258,7 +258,7 @@ export default defineComponent({
               message.success("新增成功! 即将跳转......");
               loading.value = false;
               const timer = setTimeout(() => {
-                router.push(`/admin/testpaper/${res.data._id}`);
+                router.push(`/admin/testpaper/${res.data._id}?type=newadd`);
                 clearTimeout(timer);
               }, 500);
             });
@@ -267,7 +267,7 @@ export default defineComponent({
               message.success("更新成功! 即将跳转......");
               loading.value = false;
               const timer = setTimeout(() => {
-                router.push(`/admin/testpaper/${query}`);
+                router.push(`/admin/testpaper/${query}?type=newadd`);
                 clearTimeout(timer);
               }, 500);
             });

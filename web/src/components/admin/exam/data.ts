@@ -9,21 +9,21 @@ export interface ISelectOptions {
   color?: string;
 }
 
-export interface IFileItem {
-  uid?: string;
-  name?: string;
-  status?: string;
-  response?: string;
-  url?: string;
-  size?: number;
-  preview?: string;
-  originFileObj?: any;
-  file: string | Blob;
+export interface IExam {
+  title?: string;
+  status?: number;
+  type: number;
+  testpaper?: string;
+  participants: string[];
+  note?: string;
+  times?: number;
+  startAt?: Date | string | number;
+  closeAt?: Date | string | number;
 }
 
 export const type: ISelectOptions[] = [
-  { label: "固定时间点", key: 1 },
-  { label: "固定时间段", key: 2 },
+  { label: "固定时间", key: 1 },
+  { label: "固定时长", key: 2 },
 ];
 
 export const status: ISelectOptions[] = [

@@ -5,14 +5,14 @@
         <a-input v-model:value="formState.title" placeholder="标题" style="width: 150px" allowClear />
       </a-form-item>
       <a-form-item>
-        <a-select v-model:value="formState.type" placeholder="考试类型" allowClear style="width: 100px">
+        <a-select v-model:value="formState.type" placeholder="考试类型" allowClear style="width: 150px">
           <a-select-option v-for="item in RType" :key="item.label" :value="item.key">{{ item.label }}</a-select-option>
         </a-select>
         <span style=" padding-left: 5px; cursor: pointer;">
           <a-tooltip :destroyTooltipOnHide='true'>
             <template #title>
-              <div>固定时间点: 开始-结束时间，其他时间无法访问</div>
-              <div>固定时间段: 设置固定时间长度，任何时候都可以开始考试</div>
+              <div>固定时间: 开始-结束时间，其他时间无法访问</div>
+              <div>固定时长: 设置固定时间长度，任何时候都可以开始考试</div>
             </template>
             <QuestionCircleOutlined style="color: #a1a1a1" />
           </a-tooltip>
