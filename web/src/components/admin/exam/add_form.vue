@@ -15,14 +15,39 @@
         <QuestionCircleOutlined style="color: #a1a1a1" />
       </a-tooltip>
     </a-form-item>
-    <a-form-item v-if="formState.type == 1" label="时间段" required>
-      <a-range-picker v-model:value="timeRange" @change="change" :showTime="true" format="YYYY-MM-DD HH:mm" :placeholder="['开始时间', '结束时间']" :locale="locale" style="width: 100%" />
-    </a-form-item>
-    <a-form-item v-else label="时长" required>
+    <a-form-item v-if="formState.type == 1" label="开始时间" required>
       <a-space>
-        <a-input-number v-model:value="formState.times" max="300" />
+        <a-date-picker placeholder="请选择时间" v-model:value="formState.startAt" :showTime="{ minuteStep: 10, format: 'HH:mm' }" format="YYYY-MM-DD HH:mm:00" :locale="locale" @change="dateChange" />
+        <span v-if="formState.closeAt" class="closeAt">结束时间: {{ moment(formState.closeAt).format("YYYY-MM-DD HH:mm:00") }}</span>
+      </a-space>
+    </a-form-item>
+    <a-form-item label="时长" required>
+      <a-space>
+        <a-input-number v-model:value="formState.times" :min="0" :max="300" :step="30" @change="timesChange" />
         <span>分钟</span>
       </a-space>
+    </a-form-item>
+    <a-form-item label="试卷" required>
+      <a-select
+        show-search
+        v-model:value="formState.testpaper"
+        placeholder="输入试卷名称搜索"
+        :allowClear="true"
+        :defaultActive-firstOption="false"
+        :filterOption="false"
+        :notFoundContent="null"
+        @search="handleSearch"
+      >
+        <a-select-option v-for="testpaper in testpapers" :key="testpaper._id">
+          <a-space>
+            <div>{{ testpaper.title }}</div>
+            <a-tag :color="getTypeTag(1).color">单选 {{ testpaper.choiceScore }} / {{ testpaper.choiceCount }}</a-tag>
+            <a-tag :color="getTypeTag(2).color">多选 {{ testpaper.multiScore }} / {{ testpaper.multiCount }}</a-tag>
+            <a-tag :color="getTypeTag(3).color">填空 {{ testpaper.blankScore }} / {{ testpaper.blankCount }}</a-tag>
+            <a-tag :color="getTypeTag(4).color">代码 {{ testpaper.codeScore }} / {{ testpaper.codeCount }}</a-tag>
+          </a-space>
+        </a-select-option>
+      </a-select>
     </a-form-item>
   </a-form>
 </template>
@@ -30,8 +55,11 @@
 import { QuestionCircleOutlined } from "@ant-design/icons-vue";
 import { defineComponent, reactive, ref, UnwrapRef } from "vue";
 import { IExam, type } from "./data";
-import { Moment } from "Moment";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
+import moment from "moment";
+import { ITestpaper } from "../testpaper/data";
+import { getTypeTag } from "../question/data";
+import http from "../../../libs/http";
 export default defineComponent({
   setup() {
     const formRef = ref();
@@ -42,25 +70,71 @@ export default defineComponent({
       testpaper: undefined,
       participants: [],
       note: undefined,
-      times: 0,
+      times: 120,
       startAt: undefined,
       closeAt: undefined,
     });
 
-    const timeRange = ref<Moment[]>([]);
+    const dateChange = (date: any) => {
+      if (date) {
+        const min = moment(date).minutes();
+        console.log(min);
+        formState.startAt = moment(date)
+          .add(-(min % 10), "minutes")
+          .format("YYYY-MM-DD HH:mm:00");
+        formState.closeAt = moment(date)
+          .add(-(min % 10) + formState.times, "minutes")
+          .format("YYYY-MM-DD HH:mm:00");
+      } else {
+        formState.closeAt = undefined;
+      }
+    };
+    const timesChange = (key: any) => {
+      if (formState.startAt && formState.closeAt) {
+        formState.closeAt = moment(formState.startAt).add(key, "minutes").format("YYYY-MM-DD HH:mm:00");
+      }
+    };
 
-    const change = function(dates: any, dateStrings: [string, string]) {
-      console.log(dates, dateStrings)
-    }
+    const testpapers: UnwrapRef<ITestpaper[]> = reactive([]);
+    const requestQuestion = (e: string) => {
+      http
+        .get("/testpaper", {
+          page: 1,
+          count: 10,
+          options: {
+            title: e,
+            status: 5,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.testpapers);
+          return Object.assign(testpapers, res.data.testpapers);
+        });
+    };
+    let timer: any = null;
+    const handleSearch = (e: string) => {
+      if (e != "") {
+        if (timer != null) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          requestQuestion(e);
+        }, 500);
+      }
+    };
 
     return {
       locale,
-      timeRange,
       formRef,
       type,
       formState,
       loading,
-      change,
+      moment,
+      testpapers,
+      dateChange,
+      timesChange,
+      handleSearch,
+      getTypeTag,
     };
   },
   components: {
@@ -70,33 +144,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.dynamic-delete-button {
-  font-size: 20px;
-}
-.file {
-  height: 22px;
-  transition: background-color 0.3s;
-  color: rgba(0, 0, 0, 0.85);
-  margin-top: 8px;
-  line-height: 22px;
-  box-sizing: border-box;
-  padding-left: 4px;
-  position: relative;
-}
-.file .filename {
-  padding-left: 8px;
-  color: #40a9ff;
-}
-.file .delfile {
-  display: none;
-  float: right;
-  margin-right: 6px;
-}
-.file:hover {
-  background-color: #f3f3f3;
-}
-.file:hover .delfile {
-  display: block;
-  cursor: pointer;
+.closeAt {
+  color: #52c41a;
 }
 </style>

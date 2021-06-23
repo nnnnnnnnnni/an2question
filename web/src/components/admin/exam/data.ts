@@ -16,7 +16,7 @@ export interface IExam {
   testpaper?: string;
   participants: string[];
   note?: string;
-  times?: number;
+  times: number;
   startAt?: Date | string | number;
   closeAt?: Date | string | number;
 }
