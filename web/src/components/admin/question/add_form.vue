@@ -1,11 +1,11 @@
 <template>
   <a-form style="width: 800px" :labelCol="{ span: 3 }" :wrapperCol="{ span: 20, offset: 1 }" :model="formState" :rules="formRules" ref="formRef">
-    <a-form-item label="题型" required>
+    <a-form-item label="题型" required name="type">
       <a-radio-group v-model:value="formState.type" @change="typeChange">
         <a-radio v-for="item in type" :key="item.key" :value="item.key">{{ item.label }}</a-radio>
       </a-radio-group>
     </a-form-item>
-    <a-form-item label="等级" required>
+    <a-form-item label="等级" required name="level">
       <a-radio-group v-model:value="formState.level">
         <a-radio v-for="item in level" :key="item.key" :value="item.key">{{ item.label }}</a-radio>
       </a-radio-group>
@@ -42,7 +42,7 @@
         </span>
       </div>
     </a-form-item>
-    <a-form-item :label="formState.type != 4 ? '答案' : '示例'" required>
+    <a-form-item :label="formState.type != 4 ? '答案' : '示例'">
       <a-form-item v-if="formState.type == 1" :wrapperCol="{ span: 24 }" name="options">
         <a-space direction="vertical" style="width: 100%">
           <a-radio-group v-model:value="formState.answer" style="width: 100%">
@@ -145,6 +145,8 @@ export default defineComponent({
 
     // form 规则
     const formRules = {
+      level: [{ required: true, message: "请选择等级", type: "number", trigger: "change" }],
+      type: [{ required: true, message: "请选择类型", type: "number", trigger: "change" }],
       title: [{ required: true, message: "请输入标题", trigger: "change" }],
       body: [{ required: true, message: "请输入正文", trigger: "change" }],
       score: [
@@ -208,7 +210,7 @@ export default defineComponent({
       editor.config.onchange = () => {
         if(!formState.body) {
           formState.body = editor.txt.html();
-          formRef.value.validate();
+          formRef.value.validateFields('body');
         }
       };
       editor.create();
@@ -302,7 +304,7 @@ export default defineComponent({
 
     const onSubmit = (status: number) => {
       formState.status = status;
-      formState.body = editor.txt.html();
+      formState.body = String(editor.txt.html()).trim();
       formRef.value
         .validate()
         .then(async () => {
