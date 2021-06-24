@@ -20,3 +20,23 @@ export const isEmail = (mail: string) => {
 export const isPhone = (phone: string) => {
   return /\d{3}-\d{8}|\d{4}-\{7,8}/.test(phone);
 };
+
+export const getFileType = (fileName: string) => {
+  const arr = fileName.split(".");
+  const suff = arr[arr.length - 1].toUpperCase();
+  if (["DOC", "DOCX"].includes(suff)) {
+    return "doc";
+  } else if (["XLSX", "XLS"].includes(suff)) {
+    return "excel";
+  } else if (["BMP", "JPG", "JPEG", "PNG", "GIF"].includes(suff)) {
+    return "img";
+  } else if (["PDF"].includes(suff)) {
+    return "pdf";
+  } else if (["PPT", "PPTX"].includes(suff)) {
+    return "ppt";
+  } else if (suff === "PSD") {
+    return "psd";
+  } else {
+    return "other";
+  }
+};

@@ -165,10 +165,8 @@ export default defineComponent({
   overflow: auto;
   box-sizing: border-box;
   padding: 24px;
-  font-size: 18px;
 }
 .right .option {
-  font-size: 16px;
   line-height: 30px;
 }
 .right .option_label {
@@ -186,7 +184,7 @@ export default defineComponent({
 .correct {
   font-weight: 600;
   color: #40a9ff;
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 ::-webkit-scrollbar {
   width: 10px;
