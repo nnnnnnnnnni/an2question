@@ -15,7 +15,7 @@ export interface IExam {
   type: number;
   testpaper?: string;
   participants: string[];
-  note?: string;
+  note: string | void;
   times: number;
   startAt?: Date | string | number;
   closeAt?: Date | string | number;
@@ -70,3 +70,6 @@ export const columns = [
     slots: { title: "actionTitle", customRender: "action" },
   },
 ];
+
+
+export const noteStr = '<ol><li>参与本场考试推荐使用&nbsp;<b>Chrome</b>&nbsp;或&nbsp;<b>Microsoft Edge</b>&nbsp;浏览器，请勿使用&nbsp;<b>IE</b>&nbsp;浏览器。</li><li>请确认本场考试的考试时间和考试名称，如果您非本场考试的考生，请主动退出本场考试，劳请配合。</li><li>开始考试前，请确认考试使用网络环境，请在稳定的网络环境下参与考试。</li><li>考试开始后，请勿退出账号后重新登录，以免被怀疑作弊嫌疑。</li><li>考试开始后，请勿做出如：切换Tab页面，最小化本窗口等会使页面失焦的操作。</li><li>考试结束后，根据每次考试的不同，请稍等片刻后或在工作人员的通知后查看比赛结果。</li><li>祝你发挥正常，一切顺利！</li></ol>'

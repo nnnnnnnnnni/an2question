@@ -49,17 +49,21 @@
         </a-select-option>
       </a-select>
     </a-form-item>
+    <a-form-item label="注意事项" required name="note">
+      <div id="note"></div>
+    </a-form-item>
   </a-form>
 </template>
 <script lang="ts">
 import { QuestionCircleOutlined } from "@ant-design/icons-vue";
-import { defineComponent, reactive, ref, UnwrapRef } from "vue";
-import { IExam, type } from "./data";
+import { defineComponent, onMounted, onBeforeUnmount, reactive, ref, UnwrapRef } from "vue";
+import { IExam, type, noteStr } from "./data";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import moment from "moment";
 import { ITestpaper } from "../testpaper/data";
 import { getTypeTag } from "../question/data";
 import http from "../../../libs/http";
+import WangEditor from "wangeditor";
 export default defineComponent({
   setup() {
     const formRef = ref();
@@ -95,6 +99,7 @@ export default defineComponent({
       }
     };
 
+    // 试卷选择
     const testpapers: UnwrapRef<ITestpaper[]> = reactive([]);
     const requestQuestion = (e: string) => {
       http
@@ -123,6 +128,50 @@ export default defineComponent({
       }
     };
 
+    // 正文处用到的文本框
+    let editor: WangEditor;
+    onMounted(() => {
+      editor = new WangEditor("#note");
+      editor.config.menus = ["head", "bold", "italic", "strikeThrough", "indent", "lineHeight", "foreColor", "link", "list", "justify", "emoticon", "table", "code"];
+      editor.config.onchange = () => {
+        formState.note = editor.txt.html();
+        formRef.value.validate(["title"]);
+      };
+      editor.create();
+      editor.txt.html(noteStr);
+    });
+    onBeforeUnmount(() => {
+      editor.destroy();
+    });
+    
+     // 试卷选择
+    const binds: UnwrapRef<ITestpaper[]> = reactive([]);
+    const reuqestUser = (e: string) => {
+      http
+        .get("/testpaper", {
+          page: 1,
+          count: 10,
+          options: {
+            title: e,
+            status: 5,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.binds);
+          return Object.assign(binds, res.data.binds);
+        });
+    };
+    const handleBindsSearch = (e: string) => {
+      if (e != "") {
+        if (timer != null) {
+          clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+          reuqestUser(e);
+        }, 500);
+      }
+    };
+
     return {
       locale,
       formRef,
@@ -130,11 +179,13 @@ export default defineComponent({
       formState,
       loading,
       moment,
-      testpapers,
       dateChange,
       timesChange,
+      testpapers,
       handleSearch,
       getTypeTag,
+      binds,
+      handleBindsSearch,
     };
   },
   components: {
