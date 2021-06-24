@@ -38,15 +38,15 @@
         </template>
         <a-menu-item key="ADMIN_STATISTICS_QUESTION">
           <span>题目统计</span>
-          <router-link to="/admin/statistics/question">题目统计</router-link>
+          <router-link to="/admin/statistics/question"></router-link>
         </a-menu-item>
         <a-menu-item key="ADMIN_STATISTICS_TESTPAPER">
           <span>试卷统计</span>
-          <router-link to="/admin/statistics/testpaper">试卷统计</router-link>
+          <router-link to="/admin/statistics/testpaper"></router-link>
         </a-menu-item>
         <a-menu-item key="ADMIN_STATISTICS_EXAM">
           <span>考试统计</span>
-          <router-link to="/admin/statistics/exam">考试统计</router-link>
+          <router-link to="/admin/statistics/exam"></router-link>
         </a-menu-item>
       </a-sub-menu>
       <a-menu-item key="ADMIN_SETTING">

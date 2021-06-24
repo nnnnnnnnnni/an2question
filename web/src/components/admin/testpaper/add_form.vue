@@ -165,7 +165,6 @@ export default defineComponent({
           questionScores.code += Number(score);
         }
         questionScores.allScore += Number(score);
-        formRef.value.validate();
         nextTick(() => {
           question.value = undefined;
           if (questions.length == 1) questions.length = 0;

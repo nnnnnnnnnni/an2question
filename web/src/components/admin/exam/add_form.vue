@@ -17,7 +17,7 @@
     </a-form-item>
     <a-form-item v-if="formState.type == 1" label="开始时间" required>
       <a-space>
-        <a-date-picker placeholder="请选择时间" v-model:value="formState.startAt" :showTime="{ minuteStep: 10, format: 'HH:mm' }" format="YYYY-MM-DD HH:mm:00" :locale="locale" @change="dateChange" />
+        <a-date-picker placeholder="请选择时间" v-model:value="formState.startAt" :showTime="{ minuteStep: 10, format: 'HH:mm' }" format="YYYY-MM-DD HH:mm:00" :locale="locale" @change="dateChange" :disabledDate="disabledDate" />
         <span v-if="formState.closeAt" class="closeAt">结束时间: {{ moment(formState.closeAt).format("YYYY-MM-DD HH:mm:00") }}</span>
       </a-space>
     </a-form-item>
@@ -52,6 +52,30 @@
     <a-form-item label="注意事项" required name="note">
       <div id="note"></div>
     </a-form-item>
+    <a-form-item label="考试人员" required>
+      <a-select
+        mode="multiple"
+        v-model:value="formState.participants"
+        placeholder="输入用户名称/邮箱搜索"
+        :defaultActive-firstOption="false"
+        :not-found-content="null"
+        :maxTagTextLength="10"
+        @search="handleBindsSearch"
+      >
+        <a-select-option v-for="bind in binds" :key="bind._id">
+          <a-space>
+            <a-avatar :src="bind.avator" size="small" />
+            <span> {{ bind.name }}</span>
+          </a-space>
+        </a-select-option>
+      </a-select>
+    </a-form-item>
+    <a-form-item :wrapperCol="{ span: 13, offset: 11 }">
+      <a-space>
+        <a-button type="primary" @click="onSubmit(1)" :loading="loading">保存</a-button>
+        <a-button type="primary" @click="onSubmit(2)" :loading="loading">发布</a-button>
+      </a-space>
+    </a-form-item>
   </a-form>
 </template>
 <script lang="ts">
@@ -59,10 +83,10 @@ import { QuestionCircleOutlined } from "@ant-design/icons-vue";
 import { defineComponent, onMounted, onBeforeUnmount, reactive, ref, UnwrapRef } from "vue";
 import { IExam, type, noteStr } from "./data";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { ITestpaper } from "../testpaper/data";
 import { getTypeTag } from "../question/data";
-import http from "../../../libs/http";
+import http, { isDev } from "../../../libs/http";
 import WangEditor from "wangeditor";
 export default defineComponent({
   setup() {
@@ -79,6 +103,7 @@ export default defineComponent({
       closeAt: undefined,
     });
 
+    // 时间选择
     const dateChange = (date: any) => {
       if (date) {
         const min = moment(date).minutes();
@@ -98,6 +123,9 @@ export default defineComponent({
         formState.closeAt = moment(formState.startAt).add(key, "minutes").format("YYYY-MM-DD HH:mm:00");
       }
     };
+    const disabledDate = (current: Moment) => {
+      return current && current < moment().add(-1, 'days').endOf("day");
+    };
 
     // 试卷选择
     const testpapers: UnwrapRef<ITestpaper[]> = reactive([]);
@@ -112,7 +140,6 @@ export default defineComponent({
           },
         })
         .then((res) => {
-          console.log(res.data.testpapers);
           return Object.assign(testpapers, res.data.testpapers);
         });
     };
@@ -143,22 +170,24 @@ export default defineComponent({
     onBeforeUnmount(() => {
       editor.destroy();
     });
-    
-     // 试卷选择
+
+    // 用户选择
     const binds: UnwrapRef<ITestpaper[]> = reactive([]);
     const reuqestUser = (e: string) => {
       http
-        .get("/testpaper", {
+        .get("/manager/list", {
           page: 1,
-          count: 10,
-          options: {
-            title: e,
-            status: 5,
-          },
+          count: 20,
+          key: e,
         })
         .then((res) => {
-          console.log(res.data.binds);
-          return Object.assign(binds, res.data.binds);
+          binds.length = 0;
+          binds.push(
+            ...res.data.binds.map((bind: any) => {
+              bind.avator = isDev ? "/api" + bind.avator : bind.avator;
+              return bind;
+            })
+          );
         });
     };
     const handleBindsSearch = (e: string) => {
@@ -169,8 +198,11 @@ export default defineComponent({
         timer = setTimeout(() => {
           reuqestUser(e);
         }, 500);
+      } else {
+        binds.length = 0;
       }
     };
+    const onSubmit = (type: number) => {};
 
     return {
       locale,
@@ -179,6 +211,7 @@ export default defineComponent({
       formState,
       loading,
       moment,
+      disabledDate,
       dateChange,
       timesChange,
       testpapers,
@@ -186,6 +219,7 @@ export default defineComponent({
       getTypeTag,
       binds,
       handleBindsSearch,
+      onSubmit,
     };
   },
   components: {
