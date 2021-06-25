@@ -1,9 +1,9 @@
 <template>
-  <a-form style="width: 800px" :labelCol="{ span: 3 }" :wrapperCol="{ span: 20, offset: 1 }" :model="formState" ref="formRef">
-    <a-form-item label="题型" required>
+  <a-form style="width: 800px" :labelCol="{ span: 3 }" :wrapperCol="{ span: 20, offset: 1 }" :model="formState" :rules="formRules" ref="formRef">
+    <a-form-item label="题型" required name="title">
       <a-input v-model:value="formState.title" :maxlength="15" placeholder="标题最长15位" />
     </a-form-item>
-    <a-form-item label="类型" required>
+    <a-form-item label="类型" required name="type">
       <a-radio-group v-model:value="formState.type">
         <a-radio v-for="item in type" :key="item.key" :value="item.key">{{ item.label }}</a-radio>
       </a-radio-group>
@@ -15,9 +15,17 @@
         <QuestionCircleOutlined style="color: #a1a1a1" />
       </a-tooltip>
     </a-form-item>
-    <a-form-item v-if="formState.type == 1" label="开始时间" required>
+    <a-form-item v-if="formState.type == 1" label="开始时间">
       <a-space>
-        <a-date-picker placeholder="请选择时间" v-model:value="formState.startAt" :showTime="{ minuteStep: 10, format: 'HH:mm' }" format="YYYY-MM-DD HH:mm:00" :locale="locale" @change="dateChange" :disabledDate="disabledDate" />
+        <a-date-picker
+          placeholder="请选择时间"
+          v-model:value="formState.startAt"
+          :showTime="{ minuteStep: 10, format: 'HH:mm' }"
+          format="YYYY-MM-DD HH:mm:00"
+          :locale="locale"
+          @change="dateChange"
+          :disabledDate="disabledDate"
+        />
         <span v-if="formState.closeAt" class="closeAt">结束时间: {{ moment(formState.closeAt).format("YYYY-MM-DD HH:mm:00") }}</span>
       </a-space>
     </a-form-item>
@@ -27,7 +35,7 @@
         <span>分钟</span>
       </a-space>
     </a-form-item>
-    <a-form-item label="试卷" required>
+    <a-form-item label="试卷" required name="testpaper">
       <a-select
         show-search
         v-model:value="formState.testpaper"
@@ -52,7 +60,7 @@
     <a-form-item label="注意事项" required name="note">
       <div id="note"></div>
     </a-form-item>
-    <a-form-item label="考试人员" required>
+    <a-form-item label="考试人员" required name="participants">
       <a-select
         mode="multiple"
         v-model:value="formState.participants"
@@ -88,6 +96,7 @@ import { ITestpaper } from "../testpaper/data";
 import { getTypeTag } from "../question/data";
 import http, { isDev } from "../../../libs/http";
 import WangEditor from "wangeditor";
+import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 export default defineComponent({
   setup() {
     const formRef = ref();
@@ -107,7 +116,6 @@ export default defineComponent({
     const dateChange = (date: any) => {
       if (date) {
         const min = moment(date).minutes();
-        console.log(min);
         formState.startAt = moment(date)
           .add(-(min % 10), "minutes")
           .format("YYYY-MM-DD HH:mm:00");
@@ -124,7 +132,7 @@ export default defineComponent({
       }
     };
     const disabledDate = (current: Moment) => {
-      return current && current < moment().add(-1, 'days').endOf("day");
+      return current && current < moment().add(-1, "days").endOf("day");
     };
 
     // 试卷选择
@@ -162,7 +170,7 @@ export default defineComponent({
       editor.config.menus = ["head", "bold", "italic", "strikeThrough", "indent", "lineHeight", "foreColor", "link", "list", "justify", "emoticon", "table", "code"];
       editor.config.onchange = () => {
         formState.note = editor.txt.html();
-        formRef.value.validate(["title"]);
+        formRef.value.validate("note");
       };
       editor.create();
       editor.txt.html(noteStr);
@@ -202,11 +210,36 @@ export default defineComponent({
         binds.length = 0;
       }
     };
-    const onSubmit = (type: number) => {};
+
+    // form规则
+    const formRules = {
+      title: [{ required: true, message: "请输入标题", trigger: "change" }],
+      type: [{ required: true, message: "请选择类型", type: "number", trigger: "change" }],
+      times: [
+        { required: true, message: "请输入时长", type: "number", trigger: "change" },
+        { min: 0, message: "时长必须大于0", type: "number", trigger: "change" },
+      ],
+      testpaper: [{ required: true, message: "请选择试卷", trigger: "change" }],
+      participants: [{ required: true, message: "请选择考试人员", type: "array", trigger: "change" }],
+      note: [{ required: true, message: "请填写注意事项", trigger: "change", whitespace: true }],
+    };
+
+    // 提交
+    const onSubmit = (type: number) => {
+      formRef.value
+        .validate()
+        .then(() => {
+          console.log(1);
+        })
+        .catch((error: ValidateErrorEntity<IExam>) => {
+          console.log("error", error);
+        });
+    };
 
     return {
       locale,
       formRef,
+      formRules,
       type,
       formState,
       loading,

@@ -3,7 +3,7 @@
     <a-layout-sider v-model:collapsed="collapsed" collapsed>
       <Menu :collapsed="collapsed" />
     </a-layout-sider>
-    <a-layout>
+    <a-layout style="overflow-x: hidden">
       <a-layout-header class="header">
         <Navbar />
       </a-layout-header>
@@ -56,7 +56,7 @@ export default defineComponent({
 }
 .content {
   padding: 20px;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: auto;
   height: calc(100vh - 64px);
   min-width: 900px;

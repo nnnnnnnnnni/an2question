@@ -2,7 +2,7 @@ import { ObjectId, Document, Schema, model, SchemaTypes } from "mongoose";
 import { ITestPaper } from "./testpaperSchema";
 import { IUser } from "./userSchema";
 
-const bindSchema = new Schema(
+const examSchema = new Schema(
   {
     title: String,
     creator: {
@@ -34,7 +34,7 @@ const bindSchema = new Schema(
   }
 );
 
-export interface IBind extends Document {
+export interface IExamSchema {
   title: string; // 标题
   status: number; // 1: 未发布 2: 待开始  3: 进行中  4: 已结束
   type: number; // 1: 固定时间点  2: 固定时间段
@@ -45,8 +45,10 @@ export interface IBind extends Document {
   times: number; // 固定时间段的持续时间
   startAt?: Date | string | number;
   closeAt?: Date | string | number;
-  createAt: Date | string | number;
-  updateAt: Date | string | number;
+  createAt?: Date | string | number;
+  updateAt?: Date | string | number;
 }
 
-export default model<IBind>("bind", bindSchema);
+export interface IExam extends Document, IExamSchema {}
+
+export default model<IExam>("exam", examSchema);

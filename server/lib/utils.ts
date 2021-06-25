@@ -102,4 +102,22 @@ export default class Utils {
       });
     });
   }
+
+  /**
+   * 判断竞赛状态
+   * @param start 时间区间开始
+   * @param close 时间区间结束
+   */
+  public static checkStatus(start: Date | number | string, close: Date | number | string): number {
+    const _start = new Date(start).getTime();
+    const _close = new Date(close).getTime();
+    const now = new Date().getTime();
+    if (now <= _start) {
+      return 2;
+    } else if (now < _close) {
+      return 3;
+    } else {
+      return 4;
+    }
+  }
 }

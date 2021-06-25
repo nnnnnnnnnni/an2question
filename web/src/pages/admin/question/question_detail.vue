@@ -41,7 +41,10 @@
           </a-card>
           <a-card title="附件" style="margin-top: 20px">
             <div class="option" v-if="question.files && question.files.length" v-for="file in question.files" :key="file.name">
-              <a :href="file.path" target="__blank">{{ file.name }}</a>
+              <a-space>
+                <img src="@/assets/file/img.png" alt="" />
+                <a :href="file.path" target="__blank">{{ file.name }}</a>
+              </a-space>
             </div>
             <a-empty v-else description="无附件"></a-empty>
           </a-card>
@@ -168,6 +171,11 @@ export default defineComponent({
 }
 .right .option {
   line-height: 30px;
+}
+.right .option img {
+  display: block;
+  width: 40px;
+  height: 40px;
 }
 .right .option_label {
   display: inline-block;
