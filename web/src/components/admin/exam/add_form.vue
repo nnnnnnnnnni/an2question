@@ -29,11 +29,25 @@
         <span v-if="formState.closeAt" class="closeAt">结束时间: {{ moment(formState.closeAt).format("YYYY-MM-DD HH:mm:00") }}</span>
       </a-space>
     </a-form-item>
-    <a-form-item label="时长" required>
-      <a-space>
-        <a-input-number v-model:value="formState.times" :min="0" :max="300" :step="30" @change="timesChange" />
-        <span>分钟</span>
-      </a-space>
+    <a-form-item label="时长" required name="times" :autoLink="false">
+      <a-input-number
+        v-model:value="formState.times"
+        :min="0"
+        :max="300"
+        :step="30"
+        @change="
+          (key) => {
+            $refs.name.onFieldChange();
+            timesChange(key);
+          }
+        "
+        @blur="
+          () => {
+            $refs.name.onFieldBlur();
+          }
+        "
+      />
+      <span>分钟</span>
     </a-form-item>
     <a-form-item label="试卷" required name="testpaper">
       <a-select
@@ -41,18 +55,19 @@
         v-model:value="formState.testpaper"
         placeholder="输入试卷名称搜索"
         :allowClear="true"
-        :defaultActive-firstOption="false"
         :filterOption="false"
+        :defaultActiveFirstOption="true"
         :notFoundContent="null"
-        @search="handleSearch"
+        @search="handleTestpaperSearch"
+        @change="handleTestpaperChange"
       >
         <a-select-option v-for="testpaper in testpapers" :key="testpaper._id">
           <a-space>
-            <div>{{ testpaper.title }}</div>
-            <a-tag :color="getTypeTag(1).color">单选 {{ testpaper.choiceScore }} / {{ testpaper.choiceCount }}</a-tag>
-            <a-tag :color="getTypeTag(2).color">多选 {{ testpaper.multiScore }} / {{ testpaper.multiCount }}</a-tag>
-            <a-tag :color="getTypeTag(3).color">填空 {{ testpaper.blankScore }} / {{ testpaper.blankCount }}</a-tag>
-            <a-tag :color="getTypeTag(4).color">代码 {{ testpaper.codeScore }} / {{ testpaper.codeCount }}</a-tag>
+            <div>{{ testpaper.title.length > 10 ? `${testpaper.title.slice(0, 10)}...` : testpaper.title }}</div>
+            <a-tag :color="getTypeTag(1).color">单选 {{ testpaper.choiceScore }} 分 / {{ testpaper.choiceCount }} 题</a-tag>
+            <a-tag :color="getTypeTag(2).color">多选 {{ testpaper.multiScore }} 分 / {{ testpaper.multiCount }} 题</a-tag>
+            <a-tag :color="getTypeTag(3).color">填空 {{ testpaper.blankScore }} 分 / {{ testpaper.blankCount }} 题</a-tag>
+            <a-tag :color="getTypeTag(4).color">代码 {{ testpaper.codeScore }} 分 / {{ testpaper.codeCount }} 题</a-tag>
           </a-space>
         </a-select-option>
       </a-select>
@@ -136,31 +151,35 @@ export default defineComponent({
     };
 
     // 试卷选择
-    const testpapers: UnwrapRef<ITestpaper[]> = reactive([]);
+    const testpapers = ref<ITestpaper[]>([]);
     const requestQuestion = (e: string) => {
-      http
-        .get("/testpaper", {
-          page: 1,
-          count: 10,
-          options: {
-            title: e,
-            status: 5,
-          },
-        })
-        .then((res) => {
-          return Object.assign(testpapers, res.data.testpapers);
-        });
+      if (e != "") {
+        http
+          .get("/testpaper", {
+            page: 1,
+            count: 10,
+            options: {
+              title: e,
+              status: 5,
+            },
+          })
+          .then((res) => {
+            testpapers.value = res.data.testpapers;
+          });
+      }
     };
     let timer: any = null;
-    const handleSearch = (e: string) => {
-      if (e != "") {
-        if (timer != null) {
-          clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-          requestQuestion(e);
-        }, 500);
+    const handleTestpaperSearch = (e: string) => {
+      if (timer != null) {
+        clearTimeout(timer);
+        timer = null;
       }
+      timer = setTimeout(() => {
+        requestQuestion(e);
+      }, 500);
+    };
+    const handleTestpaperChange = (e: string) => {
+      console.log(e);
     };
 
     // 正文处用到的文本框
@@ -248,7 +267,8 @@ export default defineComponent({
       dateChange,
       timesChange,
       testpapers,
-      handleSearch,
+      handleTestpaperSearch,
+      handleTestpaperChange,
       getTypeTag,
       binds,
       handleBindsSearch,
