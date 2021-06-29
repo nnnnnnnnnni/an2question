@@ -43,10 +43,8 @@
             <DeleteOutlined />
           </template>
         </a-button>
-        <a-button shape="circle" type="primary" @click="goDetail(record)">
-          <template #icon>
-            <EllipsisOutlined />
-          </template>
+        <a-button shape="circle" type="primary">
+          <router-link :to="`/admin/question/${record._id}`"><EllipsisOutlined /></router-link>
         </a-button>
         <a-button v-if="record.status == 1" type="dashed" shape="circle" @click="publish(record, 2)">
           <template #icon>
@@ -67,7 +65,6 @@ import { EllipsisOutlined, DeleteOutlined, BranchesOutlined, DisconnectOutlined,
 import { message, Modal } from "ant-design-vue";
 import { defineComponent, reactive, toRefs, watch, ref, createVNode } from "vue";
 import http from "../../../libs/http";
-import router from "../../../router";
 import { columns, IQuestion, getLevelTag, getStatusTag, getTypeTag } from "./data";
 
 export default defineComponent({
@@ -91,9 +88,6 @@ export default defineComponent({
         return `共 ${total} 题`;
       },
     });
-    const goDetail = (reacrd: IQuestion) => {
-      router.push(`/admin/question/${reacrd._id}`);
-    };
     const pageChange = (pagination: any, filters: any, sorter: any, data: any) => {
       emit("pageChange", pagination);
     };
@@ -131,7 +125,6 @@ export default defineComponent({
       getTypeTag,
       getStatusTag,
       columns,
-      goDetail,
       openDeleteModal,
       pageChange,
       publish,

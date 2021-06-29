@@ -8,8 +8,8 @@
         <a-select v-model:value="formState.type" placeholder="考试类型" allowClear style="width: 150px">
           <a-select-option v-for="item in RType" :key="item.label" :value="item.key">{{ item.label }}</a-select-option>
         </a-select>
-        <span style=" padding-left: 5px; cursor: pointer;">
-          <a-tooltip :destroyTooltipOnHide='true'>
+        <span style="padding-left: 5px; cursor: pointer">
+          <a-tooltip :destroyTooltipOnHide="true">
             <template #title>
               <div>固定时间: 开始-结束时间，其他时间无法访问</div>
               <div>固定时长: 设置固定时间长度，任何时候都可以开始考试</div>
@@ -31,8 +31,10 @@
           <a-button type="primary" @click="reset">
             <template #icon> <UndoOutlined /></template>清空
           </a-button>
-          <a-button type="primary" @click="add">
-            <template #icon> <PlusOutlined /></template>新增
+          <a-button type="primary">
+            <router-link :to="{ name: 'ADMIN_EXAM_ADD' }">
+              <a-space> <PlusOutlined />新增 </a-space>
+            </router-link>
           </a-button>
         </a-space>
       </a-form-item>
@@ -45,7 +47,6 @@ import { SearchOutlined, UndoOutlined, PlusOutlined, QuestionCircleOutlined } fr
 import { useForm } from "@ant-design-vue/use";
 import { defineComponent, reactive, UnwrapRef } from "vue";
 import { IOptions, type, status } from "./data";
-import router from "../../../router";
 export default defineComponent({
   setup(_, context) {
     const formState: UnwrapRef<IOptions> = reactive({
@@ -56,9 +57,6 @@ export default defineComponent({
     const RType = reactive(type);
     const RStatus = reactive(status);
     const { resetFields } = useForm(formState, reactive([]));
-    const add = () => {
-      router.push({ name: "ADMIN_EXAM_ADD" });
-    };
     const reset = () => {
       resetFields();
     };
@@ -67,7 +65,6 @@ export default defineComponent({
     };
     return {
       formState,
-      add,
       reset,
       search,
       RType,
@@ -83,5 +80,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

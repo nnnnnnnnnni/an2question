@@ -27,8 +27,10 @@
           <a-button type="primary" @click="reset">
             <template #icon> <UndoOutlined /></template>清空
           </a-button>
-          <a-button type="primary" @click="add">
-            <template #icon> <PlusOutlined /></template>新增
+          <a-button type="primary">
+            <router-link :to="{ name: 'ADMIN_QUESTION_ADD' }">
+              <a-space> <PlusOutlined />新增 </a-space>
+            </router-link>
           </a-button>
         </a-space>
       </a-form-item>
@@ -41,7 +43,6 @@ import { SearchOutlined, UndoOutlined, PlusOutlined } from "@ant-design/icons-vu
 import { useForm } from "@ant-design-vue/use";
 import { defineComponent, reactive, UnwrapRef, toRaw } from "vue";
 import { IOptions, level, type, status } from "./data";
-import router from "../../../router";
 export default defineComponent({
   setup(_, context) {
     const formState: UnwrapRef<IOptions> = reactive({
@@ -54,9 +55,6 @@ export default defineComponent({
     const RType = reactive(type);
     const RStatus = reactive(status);
     const { resetFields } = useForm(formState, reactive([]));
-    const add = () => {
-      router.push({ name: "ADMIN_QUESTION_ADD" });
-    };
     const reset = () => {
       resetFields();
     };
@@ -65,7 +63,6 @@ export default defineComponent({
     };
     return {
       formState,
-      add,
       reset,
       search,
       RLevel,

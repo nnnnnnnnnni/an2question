@@ -15,7 +15,7 @@
         <QuestionCircleOutlined style="color: #a1a1a1" />
       </a-tooltip>
     </a-form-item>
-    <a-form-item v-if="formState.type == 1" label="开始时间">
+    <a-form-item v-if="formState.type == 1" label="开始时间" name="startAt" ref="startAt" :autoLink="false">
       <a-space>
         <a-date-picker
           placeholder="请选择时间"
@@ -23,31 +23,42 @@
           :showTime="{ minuteStep: 10, format: 'HH:mm' }"
           format="YYYY-MM-DD HH:mm:00"
           :locale="locale"
-          @change="dateChange"
+          @change="
+            (e) => {
+              $refs.times.onFieldChange(), dateChange(e);
+            }
+          "
+          @blur="
+            () => {
+              $refs.times.onFieldBlur();
+            }
+          "
           :disabledDate="disabledDate"
         />
         <span v-if="formState.closeAt" class="closeAt">结束时间: {{ moment(formState.closeAt).format("YYYY-MM-DD HH:mm:00") }}</span>
       </a-space>
     </a-form-item>
-    <a-form-item label="时长" required name="times" :autoLink="false">
-      <a-input-number
-        v-model:value="formState.times"
-        :min="0"
-        :max="300"
-        :step="30"
-        @change="
-          (key) => {
-            $refs.name.onFieldChange();
-            timesChange(key);
-          }
-        "
-        @blur="
-          () => {
-            $refs.name.onFieldBlur();
-          }
-        "
-      />
-      <span>分钟</span>
+    <a-form-item label="时长" required ref="times" name="times" :autoLink="false">
+      <a-space>
+        <a-input-number
+          v-model:value="formState.times"
+          :min="0"
+          :max="300"
+          :step="30"
+          @change="
+            (key) => {
+              $refs.times.onFieldChange();
+              timesChange(key);
+            }
+          "
+          @blur="
+            () => {
+              $refs.times.onFieldBlur();
+            }
+          "
+        />
+        <span>分钟</span>
+      </a-space>
     </a-form-item>
     <a-form-item label="试卷" required name="testpaper">
       <a-select
@@ -59,7 +70,6 @@
         :defaultActiveFirstOption="true"
         :notFoundContent="null"
         @search="handleTestpaperSearch"
-        @change="handleTestpaperChange"
       >
         <a-select-option v-for="testpaper in testpapers" :key="testpaper._id">
           <a-space>
@@ -111,7 +121,7 @@ import { ITestpaper } from "../testpaper/data";
 import { getTypeTag } from "../question/data";
 import http, { isDev } from "../../../libs/http";
 import WangEditor from "wangeditor";
-import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
+import { RuleObject, ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 export default defineComponent({
   setup() {
     const formRef = ref();
@@ -127,6 +137,31 @@ export default defineComponent({
       closeAt: undefined,
     });
 
+    // form规则
+    const formRules = {
+      title: [{ required: true, message: "请输入标题", trigger: "change" }],
+      type: [{ required: true, message: "请选择类型", type: "number", trigger: "change" }],
+      times: [
+        { required: true, message: "请输入时长", type: "number", trigger: "change" },
+        { min: 0, message: "时长必须大于0", type: "number", trigger: "change" },
+      ],
+      startAt: [
+        {
+          validator: (rule: RuleObject, value: any) => {
+            if (formState.type == 1 && !value) {
+              return Promise.reject("请选择开始时间");
+            } else {
+              return Promise.resolve();
+            }
+          },
+          trigger: "change",
+        },
+      ],
+      testpaper: [{ required: true, message: "请选择试卷", trigger: "change" }],
+      participants: [{ required: true, message: "请选择考试人员", type: "array", trigger: "change" }],
+      note: [{ required: true, message: "请填写注意事项", trigger: "change", whitespace: true }],
+    };
+
     // 时间选择
     const dateChange = (date: any) => {
       if (date) {
@@ -140,6 +175,7 @@ export default defineComponent({
       } else {
         formState.closeAt = undefined;
       }
+      formRef.value.validateFields('startAt')
     };
     const timesChange = (key: any) => {
       if (formState.startAt && formState.closeAt) {
@@ -177,9 +213,6 @@ export default defineComponent({
       timer = setTimeout(() => {
         requestQuestion(e);
       }, 500);
-    };
-    const handleTestpaperChange = (e: string) => {
-      console.log(e);
     };
 
     // 正文处用到的文本框
@@ -230,19 +263,6 @@ export default defineComponent({
       }
     };
 
-    // form规则
-    const formRules = {
-      title: [{ required: true, message: "请输入标题", trigger: "change" }],
-      type: [{ required: true, message: "请选择类型", type: "number", trigger: "change" }],
-      times: [
-        { required: true, message: "请输入时长", type: "number", trigger: "change" },
-        { min: 0, message: "时长必须大于0", type: "number", trigger: "change" },
-      ],
-      testpaper: [{ required: true, message: "请选择试卷", trigger: "change" }],
-      participants: [{ required: true, message: "请选择考试人员", type: "array", trigger: "change" }],
-      note: [{ required: true, message: "请填写注意事项", trigger: "change", whitespace: true }],
-    };
-
     // 提交
     const onSubmit = (type: number) => {
       formRef.value
@@ -268,7 +288,6 @@ export default defineComponent({
       timesChange,
       testpapers,
       handleTestpaperSearch,
-      handleTestpaperChange,
       getTypeTag,
       binds,
       handleBindsSearch,
