@@ -3,6 +3,19 @@
     <a-form-item label="题型" required name="title">
       <a-input v-model:value="formState.title" :maxlength="15" placeholder="标题最长15位" />
     </a-form-item>
+    <a-form-item label="可见范围" required name="visible">
+      <a-radio-group v-model:value="formState.visible">
+        <a-radio v-for="item in visible" :key="item.key" :value="item.key">{{ item.label }}</a-radio>
+      </a-radio-group>
+      <a-tooltip :destroyTooltipOnHide="true">
+        <template #title>
+          <div>参与人可见: 下方考试人员才可以看到这次考试</div>
+          <div>绑定人可见: 【人员管理】中绑定的人员才可以看到这次考试</div>
+          <div>所有人可见: 本系统所有人员可见</div>
+        </template>
+        <QuestionCircleOutlined style="color: #a1a1a1" />
+      </a-tooltip>
+    </a-form-item>
     <a-form-item label="类型" required name="type">
       <a-radio-group v-model:value="formState.type">
         <a-radio v-for="item in type" :key="item.key" :value="item.key">{{ item.label }}</a-radio>
@@ -114,7 +127,7 @@
 <script lang="ts">
 import { QuestionCircleOutlined } from "@ant-design/icons-vue";
 import { defineComponent, onMounted, onBeforeUnmount, reactive, ref, UnwrapRef } from "vue";
-import { IExam, type, noteStr } from "./data";
+import { IExam, type, noteStr, visible } from "./data";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import moment, { Moment } from "moment";
 import { ITestpaper } from "../testpaper/data";
@@ -129,6 +142,7 @@ export default defineComponent({
     const formState: UnwrapRef<IExam> = reactive({
       title: undefined,
       type: 1,
+      visible: 1,
       testpaper: undefined,
       participants: [],
       note: undefined,
@@ -141,6 +155,7 @@ export default defineComponent({
     const formRules = {
       title: [{ required: true, message: "请输入标题", trigger: "change" }],
       type: [{ required: true, message: "请选择类型", type: "number", trigger: "change" }],
+      visible: [{ required: true, message: "请选择可见范围", type: "number", trigger: "change" }],
       times: [
         { required: true, message: "请输入时长", type: "number", trigger: "change" },
         { min: 0, message: "时长必须大于0", type: "number", trigger: "change" },
@@ -283,6 +298,7 @@ export default defineComponent({
       formState,
       loading,
       moment,
+      visible,
       disabledDate,
       dateChange,
       timesChange,

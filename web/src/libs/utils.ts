@@ -32,10 +32,10 @@ export const getFileType = (fileName: string) => {
     return "img";
   } else if (["PDF"].includes(suff)) {
     return "pdf";
+  } else if (["ZIP", "RAR"].includes(suff)) {
+    return "zip";
   } else if (["PPT", "PPTX"].includes(suff)) {
     return "ppt";
-  } else if (suff === "PSD") {
-    return "psd";
   } else {
     return "other";
   }

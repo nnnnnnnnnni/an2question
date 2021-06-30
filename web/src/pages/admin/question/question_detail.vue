@@ -42,7 +42,7 @@
           <a-card title="附件" style="margin-top: 20px">
             <div class="option" v-if="question.files && question.files.length" v-for="file in question.files" :key="file.name">
               <a-space>
-                <img src="@/assets/file/img.png" alt="" />
+                <img :src="file.icon" alt="" />
                 <a :href="file.path" target="__blank">{{ file.name }}</a>
               </a-space>
             </div>
@@ -61,15 +61,36 @@ import { EditOutlined, BranchesOutlined, DisconnectOutlined, DeleteOutlined, Exc
 import http from "../../../libs/http";
 import { message, Modal } from "ant-design-vue";
 import router from "../../../router";
+import { getFileType } from "../../../libs/utils";
+import docPng from "@/assets/file/doc.png";
+import excelPng from "@/assets/file/excel.png";
+import imgPng from "@/assets/file/img.png";
+import otherPng from "@/assets/file/other.png";
+import pdfPng from "@/assets/file/pdf.png";
+import pptPng from "@/assets/file/ppt.png";
+import zipPng from "@/assets/file/zip.png";
 export default defineComponent({
   setup() {
     const { params, query } = useRoute();
     const question = reactive({
       status: 3,
     });
+    const fileType = {
+      doc: docPng,
+      excel: excelPng,
+      img: imgPng,
+      other: otherPng,
+      pdf: pdfPng,
+      ppt: pptPng,
+      zip: zipPng,
+    };
     const isNewInswert = ref<Boolean>(Object.keys(query).length > 0);
     const getDetail = () => {
       http.get(`/question/${params.id}`, {}).then((res) => {
+        res.data.files.map((file: any) => {
+          file.icon = fileType[getFileType(file.path)];
+          return file;
+        });
         return Object.assign(question, res.data);
       });
     };

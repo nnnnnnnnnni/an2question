@@ -11,6 +11,7 @@ const examSchema = new Schema(
     },
     status: Number,
     type: Number,
+    visible: Number,
     testpaper: {
       type: SchemaTypes.ObjectId,
       ref: "testpaper",
@@ -38,6 +39,7 @@ export interface IExamSchema {
   title: string; // 标题
   status: number; // 1: 未发布 2: 待开始  3: 进行中  4: 已结束
   type: number; // 1: 固定时间点  2: 固定时间段
+  visible: number; // 1: 参与人可见  2: 绑定人可见  3: 所有人可见
   testpaper: ITestPaper | ObjectId; // 所用试卷
   participants: (ObjectId | IUser)[]; // 参赛者
   note: string; // 备注

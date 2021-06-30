@@ -131,6 +131,8 @@ export const columns = [
   },
   {
     key: "action",
-    slots: { title: "actionTitle", customRender: "action" },
+    title: "操作",
+    slots: { customRender: "action" },
+    align: "center",
   },
 ];

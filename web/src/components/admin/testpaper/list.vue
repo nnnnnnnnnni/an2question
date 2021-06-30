@@ -24,27 +24,6 @@
     <template #allScore="{ record }">
       <b class="prenumber">{{ record.choiceScore + record.multiScore + record.blankScore + record.codeScore }}</b>
     </template>
-    <template #actionTitle>
-      操作(
-      <a-space>
-        <a-tooltip>
-          <template #title>删除</template>
-          <span class="circle"> <DeleteOutlined style="color: #ff7875" /> </span>
-        </a-tooltip>
-        <a-tooltip>
-          <template #title>跳转详情页</template>
-          <span class="circle"> <EllipsisOutlined style="color: #1890ff" /> </span>
-        </a-tooltip>
-        <a-tooltip>
-          <template #title>发布</template>
-          <span class="circle"> <BranchesOutlined style="color: #52c41a" /> </span>
-        </a-tooltip>
-        <a-tooltip>
-          <template #title>取消发布</template>
-          <span class="circle"> <DisconnectOutlined style="color: #f5222d" /> </span> </a-tooltip
-        >)
-      </a-space>
-    </template>
     <template #action="{ record }">
       <a-space>
         <a-button :disabled="record.status == 3" shape="circle" type="danger" @click="openDeleteModal(record)">
@@ -60,9 +39,9 @@
             <BranchesOutlined style="color: #52c41a" />
           </template>
         </a-button>
-        <a-button v-if="record.status == 2" type="dashed" shape="circle" @click="publish(record, 1)">
+        <a-button v-else type="dashed" :disabled="record.status == 3" shape="circle" @click="publish(record, 1)">
           <template #icon>
-            <DisconnectOutlined style="color: #f5222d" />
+            <DisconnectOutlined />
           </template>
         </a-button>
       </a-space>
