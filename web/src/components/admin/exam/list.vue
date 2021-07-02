@@ -1,21 +1,40 @@
 <template>
   <a-table :columns="columns" rowKey="_id" :dataSource="data.data" :loading="tableLoading" :pagination="pagination" @change="pageChange">
+    <template #type="{ text }">
+      {{ getTypeTag(text).label }}
+    </template>
+    <template #visible="{ text }">
+      {{ getVisibleTag(text).label }}
+    </template>
+    <template #startAt="{ record }">
+      <emplate v-if="record.type == 1">{{ moment(record.startAt).format("YYYY-MM-DD HH:mm:ss") }}</emplate>
+      <emplate v-else> - </emplate>
+    </template>
+    <template #testpaper="{ text }">
+      {{ text.title }}
+    </template>
+    <template #participants="{ text }">
+      {{ text.length }}
+    </template>
+    <template #status="{ text }">
+      <a-tag :color="getStatusTag(text).color">{{ getStatusTag(text).label }}</a-tag>
+    </template>
     <template #action="{ record }">
       <a-space>
-        <a-button :disabled="record.status == 3" shape="circle" type="danger" @click="openDeleteModal(record)">
+        <a-button :disabled="record.status != 1" shape="circle" type="danger" @click="openDeleteModal(record)">
           <template #icon>
             <DeleteOutlined />
           </template>
         </a-button>
         <a-button shape="circle" type="primary">
-          <router-link :to="`/admin/question/${record._id}`"><EllipsisOutlined /></router-link>
+          <router-link :to="`/admin/exam/${record._id}`"><EllipsisOutlined /></router-link>
         </a-button>
         <a-button v-if="record.status == 1" type="dashed" shape="circle" @click="publish(record, 2)">
           <template #icon>
             <BranchesOutlined style="color: #52c41a" />
           </template>
         </a-button>
-        <a-button v-else :disabled="record.status == 3" type="dashed" shape="circle" @click="publish(record, 1)">
+        <a-button v-else :disabled="record.status != 2" type="dashed" shape="circle" @click="publish(record, 1)">
           <template #icon>
             <DisconnectOutlined />
           </template>
@@ -29,7 +48,8 @@ import { EllipsisOutlined, DeleteOutlined, BranchesOutlined, DisconnectOutlined,
 import { message, Modal } from "ant-design-vue";
 import { defineComponent, reactive, toRefs, watch, ref, createVNode } from "vue";
 import http from "../../../libs/http";
-import { columns, IExam, getStatusTag, getTypeTag } from "./data";
+import { columns, IExam, getStatusTag, getTypeTag, getVisibleTag } from "./data";
+import moment from "moment";
 
 export default defineComponent({
   props: ["list", "page", "count", "total", "loading"],
@@ -86,8 +106,10 @@ export default defineComponent({
       tableLoading,
       pagination,
       getTypeTag,
+      getVisibleTag,
       getStatusTag,
       columns,
+      moment,
       openDeleteModal,
       pageChange,
       publish,

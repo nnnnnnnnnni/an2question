@@ -1,9 +1,7 @@
 <template>
   <a-table :columns="columns" rowKey="_id" :dataSource="data.data" :loading="tableLoading" :pagination="pagination" @change="pageChange">
     <template #status="{ text }">
-      <span>
-        <a-tag :color="getStatusTag(text).color">{{ getStatusTag(text).label }}</a-tag>
-      </span>
+      <a-tag :color="getStatusTag(text).color">{{ getStatusTag(text).label }}</a-tag>
     </template>
     <template #choice="{ record }">
       <span class="prenumber">{{ record.choiceCount }}</span>
@@ -26,7 +24,7 @@
     </template>
     <template #action="{ record }">
       <a-space>
-        <a-button :disabled="record.status == 3" shape="circle" type="danger" @click="openDeleteModal(record)">
+        <a-button :disabled="record.status != 1" shape="circle" type="danger" @click="openDeleteModal(record)">
           <template #icon>
             <DeleteOutlined />
           </template>

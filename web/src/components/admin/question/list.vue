@@ -17,7 +17,7 @@
     </template>
     <template #action="{ record }">
       <a-space>
-        <a-button :disabled="record.status == 3" shape="circle" type="danger" @click="openDeleteModal(record)">
+        <a-button :disabled="record.status != 1" shape="circle" type="danger" @click="openDeleteModal(record)">
           <template #icon>
             <DeleteOutlined />
           </template>

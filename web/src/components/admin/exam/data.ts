@@ -1,6 +1,7 @@
 export interface IOptions {
   title?: string;
   status?: number;
+  type?: number;
 }
 
 export interface ISelectOptions {
@@ -74,6 +75,47 @@ export const columns = [
     title: "标题",
     key: "title",
     align: "left",
+  },
+  {
+    dataIndex: "type",
+    title: "类型",
+    key: "type",
+    align: "center",
+    slots: { customRender: "type" },
+  },
+  {
+    dataIndex: "visible",
+    title: "可见",
+    key: "visible",
+    slots: { customRender: "visible" },
+    align: "center",
+  },
+  {
+    dataIndex: "startAt",
+    title: "开始时间",
+    key: "startAt",
+    slots: { customRender: "startAt" },
+    align: "center",
+  },
+  {
+    dataIndex: "times",
+    title: "考试时长/分钟",
+    key: "times",
+    align: "center",
+  },
+  {
+    dataIndex: "testpaper",
+    title: "试卷",
+    key: "testpaper",
+    align: "center",
+    slots: { customRender: "testpaper" },
+  },
+  {
+    dataIndex: "participants",
+    title: "参与人数",
+    key: "participants",
+    align: "center",
+    slots: { customRender: "participants" },
   },
   {
     title: "状态",
