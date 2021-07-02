@@ -98,7 +98,7 @@
     <a-form-item label="注意事项" required name="note">
       <div id="note"></div>
     </a-form-item>
-    <a-form-item label="考试人员" required name="participants">
+    <a-form-item label="考试人员" required name="participants" v-if="formState.visible != 3">
       <a-select
         mode="multiple"
         v-model:value="formState.participants"
@@ -126,7 +126,7 @@
 </template>
 <script lang="ts">
 import { QuestionCircleOutlined } from "@ant-design/icons-vue";
-import { defineComponent, onMounted, onBeforeUnmount, reactive, ref, UnwrapRef } from "vue";
+import { defineComponent, onMounted, onBeforeUnmount, reactive, ref, UnwrapRef, toRaw } from "vue";
 import { IExam, type, noteStr, visible } from "./data";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import moment, { Moment } from "moment";
@@ -135,10 +135,14 @@ import { getTypeTag } from "../question/data";
 import http, { isDev } from "../../../libs/http";
 import WangEditor from "wangeditor";
 import { RuleObject, ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
+import { clearObj } from "../../../libs/utils";
+import { message } from "ant-design-vue";
+import router from "../../../router";
 export default defineComponent({
   setup() {
     const formRef = ref();
     const loading = ref(false);
+    const mode = ref(1); // 1: add | 2: edit
     const formState: UnwrapRef<IExam> = reactive({
       title: undefined,
       type: 1,
@@ -190,7 +194,7 @@ export default defineComponent({
       } else {
         formState.closeAt = undefined;
       }
-      formRef.value.validateFields('startAt')
+      formRef.value.validateFields("startAt");
     };
     const timesChange = (key: any) => {
       if (formState.startAt && formState.closeAt) {
@@ -280,10 +284,33 @@ export default defineComponent({
 
     // 提交
     const onSubmit = (type: number) => {
+      if (formState.type == 2) {
+        formState.startAt = undefined;
+        formState.closeAt = undefined;
+      }
+      formState.status = type;
       formRef.value
         .validate()
         .then(() => {
-          console.log(1);
+          if (mode.value == 1) {
+            http.post("/exam", toRaw(formState)).then((res) => {
+              message.success("新增成功! 即将跳转......");
+              loading.value = false;
+              const timer = setTimeout(() => {
+                router.push(`/admin/exam/${res.data._id}?type=newadd`);
+                clearTimeout(timer);
+              }, 500);
+            });
+          } else {
+            http.put("/exam", toRaw(formState)).then((res) => {
+              message.success("更新成功! 即将跳转......");
+              loading.value = false;
+              const timer = setTimeout(() => {
+                router.push(`/admin/exam/${res.data._id}?type=newadd`);
+                clearTimeout(timer);
+              }, 500);
+            });
+          }
         })
         .catch((error: ValidateErrorEntity<IExam>) => {
           console.log("error", error);

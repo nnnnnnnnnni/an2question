@@ -53,4 +53,6 @@ export interface IExamSchema {
 
 export interface IExam extends Document, IExamSchema {}
 
-export default model<IExam>("exam", examSchema);
+const examModel = model<IExam>("exam", examSchema);
+
+export default examModel

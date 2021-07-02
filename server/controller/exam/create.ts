@@ -1,6 +1,6 @@
-import { IExam, IExamSchema } from "@/mongo/examSchema";
+import examModel, { IExam, IExamSchema } from "../../mongo/examSchema";
+import bindModel from "../../mongo/bindSchema";
 import { Context } from "koa";
-import { model } from "mongoose";
 import utils from "../../lib/utils";
 const Response = utils.generateResponse;
 
@@ -10,7 +10,7 @@ export default async (ctx: Context) => {
   const insertData: IExamSchema = {
     title: title ?? "",
     type: type ?? 1,
-    visible: visible?? 1,
+    visible: visible ?? 1,
     testpaper: testpaper,
     participants: participants && participants.length ? participants : [],
     times: times,
@@ -23,5 +23,10 @@ export default async (ctx: Context) => {
     insertData.closeAt = closeAt;
   }
 
-  console.log(insertData);
+  const newExam = await examModel.create(insertData);
+  await bindModel.create({
+    exam: newExam._id,
+    testpaper: testpaper,
+  });
+  return ctx.body = Response(1, '创建成功', newExam)
 };

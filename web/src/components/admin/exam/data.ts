@@ -10,6 +10,7 @@ export interface ISelectOptions {
 }
 
 export interface IExam {
+  _id?: string;
   title?: string;
   status?: number;
   type: number;
@@ -31,7 +32,7 @@ export const visible: ISelectOptions[] = [
   { label: "参与人可见", key: 1 },
   { label: "绑定人可见", key: 2 },
   { label: "所有人可见", key: 3 },
-]
+];
 
 export const status: ISelectOptions[] = [
   { label: "未发布", key: 1, color: "#bfbfbf" },

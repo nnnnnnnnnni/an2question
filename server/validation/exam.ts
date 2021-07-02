@@ -14,4 +14,10 @@ export const examValidation = {
       note: Joi.string().required(),
     },
   },
+  list: {
+    query: {
+      count: Joi.number().required(),
+      page: Joi.number().required(),
+    },
+  },
 };
