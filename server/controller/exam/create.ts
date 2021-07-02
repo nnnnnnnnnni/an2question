@@ -2,6 +2,7 @@ import examModel, { IExam, IExamSchema } from "../../mongo/examSchema";
 import bindModel from "../../mongo/bindSchema";
 import { Context } from "koa";
 import utils from "../../lib/utils";
+import testpaperModel from "../../mongo/testpaperSchema";
 const Response = utils.generateResponse;
 
 export default async (ctx: Context) => {
@@ -28,5 +29,6 @@ export default async (ctx: Context) => {
     exam: newExam._id,
     testpaper: testpaper,
   });
-  return ctx.body = Response(1, '创建成功', newExam)
+  await testpaperModel.updateOne({ _id: testpaper }, { $set: { status: 3 } });
+  return (ctx.body = Response(1, "创建成功", newExam));
 };

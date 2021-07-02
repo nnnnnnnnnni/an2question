@@ -19,7 +19,19 @@ export default async (ctx: Context) => {
     .find(conds)
     .sort({ createAt: -1 })
     .skip((Number(_page) - 1) * Number(_count))
-    .limit(Number(_count));
+    .limit(Number(_count))
+    .populate("testpaper", "title");
+
+  const promiseArr = [];
+
+  exams.forEach((exam) => {
+    if (exam.type == 2) {
+      const newStatus = Utils.checkStatus(exam.startAt, exam.closeAt);
+      if (exam.status != newStatus) {
+        promiseArr.push(examModel.updateOne({ _id: exam._id }, { $set: { status: newStatus } }));
+      }
+    }
+  });
 
   const total = await examModel.countDocuments(conds);
 
