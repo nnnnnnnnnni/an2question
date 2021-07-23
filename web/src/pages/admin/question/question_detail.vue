@@ -1,55 +1,54 @@
 <template>
   <div class="question_detail">
-    <a-card :title="question.title + ' [ ' + question.score + ' 分 ]'" :headStyle="headerStyle" :bodyStyle="bodyStyle" class="question_detail_card">
-      <template #extra>
-        <a-space>
-          <a-button type="primary" v-if="isNewInswert" @click="goAdd"> <EditOutlined /> 继续添加 </a-button>
-          <a-button type="primary" v-if="question.status != 3" @click="goEdit"> <EditOutlined /> 编辑 </a-button>
-          <a-button type="primary" v-if="question.status == 1" @click="publish(2)"> <BranchesOutlined /> 发布 </a-button>
-          <a-button type="primary" v-if="question.status == 2" @click="publish(1)"> <DisconnectOutlined /> 取消发布 </a-button>
-          <a-button type="danger" v-if="question.status != 3" @click="handleDelete"> <DeleteOutlined /> 删除 </a-button>
-        </a-space>
-      </template>
-      <div class="body">
-        <div class="left">
-          <div class="container">
-            <div v-html="question.body"></div>
-          </div>
-        </div>
-        <div class="right">
-          <a-card title="答案选项" v-if="question.type == 1 || question.type == 2">
+    <a-card>
+      <a-descriptions :title="question.title" :column="2" layout="vertical">
+        <a-descriptions-item label="题目描述" :span="2">
+          <div v-html="question.body" />
+        </a-descriptions-item>
+        <a-descriptions-item label="答案选项" v-if="question.type == 1 || question.type == 2">
+          <div class="options">
             <div class="option" :class="{ correct: question.answer.includes(option.key) }" v-for="option in question.options" :key="option.key">
               <span class="option_label">{{ option.key }}</span>
               <span class="option_value">{{ option.val }}</span>
             </div>
-          </a-card>
-          <a-card title="答案" v-if="question.type == 3" style="margin-top: 20px">
-            <div class="option correct">{{ question.answer }}</div>
-          </a-card>
-          <a-card title="判题因素" v-if="question.type == 3" style="margin-top: 20px">
+          </div>
+        </a-descriptions-item>
+        <a-descriptions-item label="答案" v-if="question.type == 3">
+          <div class="option correct">{{ question.answer }}</div>
+        </a-descriptions-item>
+        <a-descriptions-item label="附件列表">
+          <div class="options">
+            <div class="option" v-if="question.files && question.files.length" v-for="file in question.files" :key="file.name">
+              <a :href="file.path" target="__blank">{{ file.name }}</a>
+            </div>
+            <a-empty v-else description="无附件"></a-empty>
+          </div>
+        </a-descriptions-item>
+        <a-descriptions-item label="判题因素" v-if="question.type == 3" :span="1">
+          <dic class="options">
             <div class="option correct" v-if="question.factor.isCase">是否区分大小写</div>
             <div class="option correct" v-if="question.factor.isSpace">是否区分空格</div>
             <div class="option correct" v-if="question.factor.isWidth">是否区分全半角</div>
             <div class="option correct" v-if="question.factor.isKeywords">是否按点得分</div>
             <a-empty v-if="!question.factor.isCase && !question.factor.isSpace && !question.factor.isWidth && !question.factor.isKeywords" description="无特殊判定"></a-empty>
-          </a-card>
-          <a-card title="示例" v-if="question.type == 4" style="margin-top: 20px">
-            <div class="option" v-for="(example, i) in question.examples" :key="i">
-              <pre class="example">{{ example.input }}</pre>
-              <pre class="example">{{ example.output }}</pre>
-            </div>
-          </a-card>
-          <a-card title="附件" style="margin-top: 20px">
-            <div class="option" v-if="question.files && question.files.length" v-for="file in question.files" :key="file.name">
-              <a-space>
-                <img :src="file.icon" alt="" />
-                <a :href="file.path" target="__blank">{{ file.name }}</a>
-              </a-space>
-            </div>
-            <a-empty v-else description="无附件"></a-empty>
-          </a-card>
-        </div>
-      </div>
+          </dic>
+        </a-descriptions-item>
+        <a-descriptions-item label="示例" v-if="question.type == 4">
+          <div class="option" v-for="(example, i) in question.examples" :key="i">
+            <pre class="example">{{ example.input }}</pre>
+            <pre class="example">{{ example.output }}</pre>
+          </div>
+        </a-descriptions-item>
+        <template #extra>
+          <a-space>
+            <a-button type="primary" v-if="isNewInswert" @click="goAdd"> <EditOutlined /> 继续添加 </a-button>
+            <a-button type="primary" v-if="question.status != 3" @click="goEdit"> <EditOutlined /> 编辑 </a-button>
+            <a-button type="primary" v-if="question.status == 1" @click="publish(2)"> <BranchesOutlined /> 发布 </a-button>
+            <a-button type="primary" v-if="question.status == 2" @click="publish(1)"> <DisconnectOutlined /> 取消发布 </a-button>
+            <a-button type="danger" v-if="question.status != 3" @click="handleDelete"> <DeleteOutlined /> 删除 </a-button>
+          </a-space>
+        </template>
+      </a-descriptions>
     </a-card>
   </div>
 </template>
@@ -164,45 +163,24 @@ export default defineComponent({
   height: 100%;
   overflow: hidden;
 }
-.question_detail_card {
-  height: 100%;
-}
-.question_detail_card .body {
-  height: 100%;
-  display: flex;
-  box-sizing: border-box;
-}
-.question_detail_card .body .left {
-  flex: 3;
-  overflow: auto;
-  padding: 24px;
-}
-.question_detail_card .body .left .container {
-  border-radius: 5px;
-  box-sizing: border-box;
+.options {
   width: 100%;
-  padding: 12px;
-  box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.3);
-}
-.question_detail_card .body .right {
-  flex: 2;
-  overflow: auto;
   box-sizing: border-box;
-  padding: 24px;
+  padding: 0px 20px 0px 10px;
 }
-.right .option {
+.options .option {
   line-height: 30px;
 }
-.right .option img {
+.options .option img {
   display: block;
   width: 40px;
   height: 40px;
 }
-.right .option_label {
+.options .option_label {
   display: inline-block;
   padding-right: 10px;
 }
-.right .option .example {
+.options .option .example {
   width: 48%;
   margin: 10px 1%;
   padding: 4px;

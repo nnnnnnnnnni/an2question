@@ -20,4 +20,20 @@ export const examValidation = {
       page: Joi.number().required(),
     },
   },
+  publish: {
+    body: {
+      id: Joi.string().required(),
+      status: Joi.number().required()
+    },
+  },
+  detail: {
+    params: {
+      id: Joi.string().required()
+    }
+  },
+  delete: {
+    body: {
+      id: Joi.string().required(),
+    },
+  },
 };

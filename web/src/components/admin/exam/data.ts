@@ -99,9 +99,10 @@ export const columns = [
   },
   {
     dataIndex: "times",
-    title: "考试时长/分钟",
+    title: "考试时长",
     key: "times",
     align: "center",
+    slots: { customRender: "times" },
   },
   {
     dataIndex: "testpaper",

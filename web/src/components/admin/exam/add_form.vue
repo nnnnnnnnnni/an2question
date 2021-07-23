@@ -1,6 +1,6 @@
 <template>
   <a-form style="width: 800px" :labelCol="{ span: 3 }" :wrapperCol="{ span: 20, offset: 1 }" :model="formState" :rules="formRules" ref="formRef">
-    <a-form-item label="题型" required name="title">
+    <a-form-item label="标题" required name="title">
       <a-input v-model:value="formState.title" :maxlength="15" placeholder="标题最长15位" />
     </a-form-item>
     <a-form-item label="可见范围" required name="visible">

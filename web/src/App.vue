@@ -57,7 +57,8 @@ pre code {
 /* ul ol 样式 */
 ul,
 ol {
-  margin: 10px 0 10px 20px;
+  margin: 0;
+  padding-left: 20px;
 }
 .center {
  text-align: center;

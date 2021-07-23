@@ -116,6 +116,15 @@ const router = createRouter({
           component: () => import("@/pages/admin/exam/exam_add.vue"),
         },
         {
+          path: "exam/edit",
+          name: "ADMIN_EXAM_EDIT",
+          meta: {
+            needLogin: true,
+            title: "考试编辑",
+          },
+          component: () => import("@/pages/admin/exam/exam_add.vue"),
+        },
+        {
           path: "exam/:id",
           name: "ADMIN_EXAM_DETAIL",
           meta: {

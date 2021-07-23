@@ -32,6 +32,7 @@ import {
   Empty,
   Statistic,
   DatePicker,
+  Descriptions
 } from "ant-design-vue";
 message.config({
   maxCount: 5,
@@ -61,6 +62,7 @@ app
   .use(Modal)
   .use(Statistic)
   .use(DatePicker)
+  .use(Descriptions)
   .use(Empty)
   .use(notification)
   .use(Store)

@@ -7,11 +7,12 @@
       {{ getVisibleTag(text).label }}
     </template>
     <template #startAt="{ record }">
-      <emplate v-if="record.type == 1">{{ moment(record.startAt).format("YYYY-MM-DD HH:mm:ss") }}</emplate>
-      <emplate v-else> - </emplate>
+      <template v-if="record.type == 1">{{ moment(record.startAt).format("YYYY-MM-DD HH:mm:ss") }}</template>
+      <template v-else> - </template>
     </template>
+    <template #times="{ text }"> {{ text }} 分钟 </template>
     <template #testpaper="{ text }">
-      {{ text.title }}
+      <router-link :to="`/admin/testpaper/${text._id}`">{{ text.title }}</router-link>
     </template>
     <template #participants="{ text }">
       {{ text.length }}
@@ -44,7 +45,7 @@
   </a-table>
 </template>
 <script lang="ts">
-import { EllipsisOutlined, DeleteOutlined, BranchesOutlined, DisconnectOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import { EllipsisOutlined, DeleteOutlined, BranchesOutlined, DisconnectOutlined, ExclamationCircleOutlined, FieldTimeOutlined } from "@ant-design/icons-vue";
 import { message, Modal } from "ant-design-vue";
 import { defineComponent, reactive, toRefs, watch, ref, createVNode } from "vue";
 import http from "../../../libs/http";
@@ -84,7 +85,7 @@ export default defineComponent({
         okType: "danger",
         cancelText: "取消",
         onOk() {
-          http.delete("/question", { id: reacrd._id }).then((res) => {
+          http.delete("/exam", { id: reacrd._id }).then((res) => {
             message.success(String(res.message));
             emit("reacrdDelete");
           });
@@ -96,7 +97,7 @@ export default defineComponent({
     };
 
     const publish = (reacrd: IExam, status: number) => {
-      http.put("/question/publish", { id: reacrd._id, status: status }).then((res) => {
+      http.put("/exam/publish", { id: reacrd._id, status: status }).then((res) => {
         message.success(`[${reacrd.title}] ${status == 2 ? "" : "取消"}发布成功!`);
         reacrd.status = status;
       });
@@ -120,6 +121,7 @@ export default defineComponent({
     DeleteOutlined,
     BranchesOutlined,
     DisconnectOutlined,
+    FieldTimeOutlined,
   },
 });
 </script>

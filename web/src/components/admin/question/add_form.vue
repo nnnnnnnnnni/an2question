@@ -208,9 +208,9 @@ export default defineComponent({
         });
       };
       editor.config.onchange = () => {
-        if(!formState.body) {
+        if (!formState.body) {
           formState.body = editor.txt.html();
-          formRef.value.validateFields('body');
+          formRef.value.validateFields("body");
         }
       };
       editor.create();
@@ -289,7 +289,7 @@ export default defineComponent({
     };
 
     // 填空题placeholder
-    const placeholder = ref<string>(`关键字答案填写方式: "答案A,答案A分值.答案B,答案B分值." 例如: windows,10.linux,5.(关键词windows得分5分,linux得分五分)`);
+    const placeholder = ref<string>(`关键字答案填写方式: "答案A,答案A分值.答案B,答案B分值."\n例如: windows,10.linux,5.(关键词windows得分5分,linux得分五分)`);
 
     // 代码示例
     const removeCodeExample = (item: any) => {
