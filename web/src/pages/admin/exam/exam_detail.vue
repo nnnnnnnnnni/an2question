@@ -10,10 +10,12 @@
           <template v-else> -- </template>
         </a-descriptions-item>
         <a-descriptions-item label="时长">{{ exam.times }} 分钟</a-descriptions-item>
-        <a-descriptions-item label="试卷"> {{ exam.testpaper }} </a-descriptions-item>
+        <a-descriptions-item label="试卷">
+          <router-link :to="`/admin/testpaper/${exam.testpaperId}`">{{ exam.testpaper }}</router-link>
+        </a-descriptions-item>
         <a-descriptions-item label="考试人员">
           <template v-for="item in exam.participants">
-            <a-tooltip :title="item.name" placement="top">
+            <a-tooltip :title="item.name.length > 20 ? `${item.name.slice(0, 20)}...` : item.name" placement="top">
               <a-avatar :src="`${item.avator ? '/api' : ''}${item.avator}`" style="margin-right: 10px" />
             </a-tooltip>
           </template>
@@ -50,6 +52,7 @@ export default defineComponent({
       http.get(`/exam/${params.id}`, {}).then((res) => {
         Object.assign(res.data, {
           testpaper: res.data.testpaper.title,
+          testpaperId: res.data.testpaper._id,
         });
         return Object.assign(exam, res.data);
       });
@@ -99,7 +102,7 @@ export default defineComponent({
       getVisibleTag,
       getTypeTag,
       exam,
-      isNewInswert
+      isNewInswert,
     };
   },
   components: {

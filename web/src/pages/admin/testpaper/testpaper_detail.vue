@@ -144,13 +144,12 @@ export default defineComponent({
   transition: all 0.3s;
   cursor: pointer;
   margin: 4px 0px;
-  background-color: #efefef;
 }
 .questions .question .score {
   float: right;
 }
 .questions .question:hover {
-  background-color: #e3e3e3;
+  background-color: #efefef;
 }
 .options {
   width: 100%;
